@@ -1,0 +1,77 @@
+name: Build Quill Docs APK
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      KEYSTORE_B64: ${{ secrets.KEYSTORE_BASE64 }}
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rebuild folders from flat files
+        run: |
+          shopt -s nullglob
+          for f in app__*; do
+            dest="${f//__//}"
+            mkdir -p "$(dirname "$dest")"
+            mv "$f" "$dest"
+          done
+          if [ -f ic_launcher.png ]; then
+            for d in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+              mkdir -p "app/src/main/res/mipmap-$d"
+              cp ic_launcher.png "app/src/main/res/mipmap-$d/ic_launcher.png"
+              cp ic_launcher_round.png "app/src/main/res/mipmap-$d/ic_launcher_round.png"
+            done
+          fi
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.9
+
+      - name: Decode signing key (if provided)
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.keystore"
+            echo "KEYSTORE_PATH=$RUNNER_TEMP/release.keystore" >> "$GITHUB_ENV"
+            echo "APK_TYPE=release" >> "$GITHUB_ENV"
+          else
+            echo "No signing secrets found - building a debug APK instead."
+            echo "APK_TYPE=debug" >> "$GITHUB_ENV"
+          fi
+
+      - name: Build APK
+        run: |
+          if [ "$APK_TYPE" = "release" ]; then gradle assembleRelease --no-daemon; else gradle assembleDebug --no-daemon; fi
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: QuillDocs-apk
+          path: app/build/outputs/apk/${{ env.APK_TYPE }}/QuillDocs-${{ env.APK_TYPE }}.apk
+
+      - name: Publish to Releases (latest)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest "app/build/outputs/apk/$APK_TYPE/QuillDocs-$APK_TYPE.apk" \
+            --title "Quill Docs (latest build)" \
+            --notes "Installable $APK_TYPE APK built from the latest commit."
