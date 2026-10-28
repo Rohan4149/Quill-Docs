@@ -174,6 +174,9 @@ public class MainActivity extends Activity {
         }
 
         @JavascriptInterface
+        public String bridgeInfo() { return "print+share v2"; }
+
+        @JavascriptInterface
         public int getVersionCode() {
             try {
                 android.content.pm.PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -256,6 +259,10 @@ public class MainActivity extends Activity {
                     if (printWeb != null) { try { printWeb.destroy(); } catch (Exception ignored) {} }
                     final WebView pw = new WebView(MainActivity.this);
                     printWeb = pw;
+                    try {
+                        pw.setAlpha(0.01f);
+                        ((android.view.ViewGroup) getWindow().getDecorView()).addView(pw, new android.view.ViewGroup.LayoutParams(1, 1));
+                    } catch (Exception ignored) {}
                     pw.getSettings().setJavaScriptEnabled(false);
                     pw.getSettings().setAllowFileAccess(false);
                     pw.setWebViewClient(new WebViewClient() {
@@ -274,19 +281,20 @@ public class MainActivity extends Activity {
                                         @Override public void onWrite(PageRange[] p, ParcelFileDescriptor fd, CancellationSignal c, WriteResultCallback cb) { base.onWrite(p, fd, c, cb); }
                                         @Override public void onFinish() {
                                             base.onFinish();
+                                            try { ((android.view.ViewGroup) getWindow().getDecorView()).removeView(pw); } catch (Exception ignored) {}
                                             try { if (printWeb == pw) { pw.destroy(); printWeb = null; } } catch (Exception ignored) {}
                                         }
                                     };
                                     pm.print(t, ad, new PrintAttributes.Builder().build());
                                 } catch (Exception e) {
-                                    toast("Printing is not available");
+                                    toast("Print failed: " + e);
                                 }
                             }, 700);
                         }
                     });
                     pw.loadDataWithBaseURL("https://appassets.androidplatform.net/", html, "text/html", "UTF-8", null);
                 } catch (Exception e) {
-                    toast("Printing is not available");
+                    toast("Print failed: " + e);
                 }
             });
         }
@@ -310,9 +318,14 @@ public class MainActivity extends Activity {
                     in.putExtra(Intent.EXTRA_SUBJECT, safe);
                     in.setClipData(ClipData.newRawUri(safe, uri));
                     in.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivity(Intent.createChooser(in, "Share " + safe));
+                    Intent ch = Intent.createChooser(in, "Share " + safe);
+                    try {
+                        for (android.content.pm.ResolveInfo ri : getPackageManager().queryIntentActivities(in, 0))
+                            grantUriPermission(ri.activityInfo.packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    } catch (Exception ignored) {}
+                    startActivity(ch);
                 } catch (Exception e) {
-                    toast("Could not share file");
+                    toast("Share failed: " + e);
                 }
             });
         }

@@ -8824,7 +8824,7 @@ async function wdShareAs(kind){
       if(SB){var rd=new FileReader();var b64=await new Promise(function(ok){rd.onload=function(){ok(String(rd.result).split(',')[1])};rd.readAsDataURL(blob)});SB.shareFile(name,mime,b64);return}
       if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:fname()});return}
     }catch(e){if(e&&e.name==='AbortError')return}
-    dl(blob,name);toast('Sharing is not supported here, so the file was saved instead');
+    dl(blob,name);toast(window.QuillAndroid?'Share needs the newest APK (old build installed). File saved instead':'Sharing is not supported here, so the file was saved instead');
   }catch(e){alert('Could not share: '+(e&&e.message?e.message:e))}
 }
 function wdShareOpen(){var o=$('wdShSheet');o.classList.add('open');o.setAttribute('aria-hidden','false')}
@@ -8833,6 +8833,7 @@ async function wdShareDoc(){wdShareAs('pdf')}
 function wdIsWebView(){var u=navigator.userAgent||'';return /; wv\)|Version\/\d+\.\d+ Chrome|Android.*\bwv\b/.test(u)||!!window.AndroidBridge||(/Android/.test(u)&&!window.chrome)}
 function printDoc(){
   var _nat=!!(window.QuillAndroid&&typeof QuillAndroid.printPage==='function');
+  if(window.QuillAndroid&&typeof QuillAndroid.printHtml!=='function'){toast('This app build is outdated: install the newest APK to print');return}
   if(wdIsWebView()&&!_nat){toast('Printing is not supported in the app, saving a PDF instead');return exportPdfImages()}
   var sheet=document.createElement('div');sheet.id='wdPrintSheet';sheet.className='wdc';sheet.innerHTML=(window.wdViewHtml?window.wdViewHtml(cleanHtml()):cleanHtml())+(window.wdInkHtml?window.wdInkHtml():'');
   var st=document.createElement('style');st.id='wdPageStyle';st.textContent=pageCss();
@@ -8857,7 +8858,7 @@ function printDoc(){
     var fl=[].map.call(document.head.querySelectorAll('link[rel="stylesheet"]'),function(l){return /^https:\/\/fonts\.googleapis\.com/.test(l.href)?'<link rel="stylesheet" href="'+l.href+'">':''}).join('');
     var ph='<!doctype html><html><head><meta charset="utf-8"><title>'+esc(fname())+'</title>'+fl+'<style>html,body{margin:0;padding:0;background:#fff}#wdPrintSheet{display:block;color:#000;background:#fff}\n'+wdcCss()+'\n'+st.textContent+'</style></head><body>'+sheet.outerHTML+'</body></html>';
     QuillAndroid.printHtml(fname(),ph);return;
-  }catch(e){wdErr('native print',e,true)}}
+  }catch(e){wdErr('native print',e,true);toast('Print failed: '+(e&&e.message?e.message:e));return}}
   document.head.appendChild(st);document.body.appendChild(sheet);
   var old=document.title;document.title=fname();document.documentElement.classList.add('wd-printing');
   var done=function(){document.documentElement.classList.remove('wd-printing');sheet.remove();st.remove();document.title=old;window.removeEventListener('afterprint',done)};
