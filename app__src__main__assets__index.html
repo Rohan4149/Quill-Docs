@@ -16303,11 +16303,12 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 <script>
 /* ---- In-app update check (Android app only): compares the installed version with the latest GitHub release ---- */
 (function(){
-  var QA=window.QuillAndroid; if(!QA||typeof QA.getVersionCode!=='function') return;
-  var REPO='Rohan4149/Quill-Docs', cur=parseInt(QA.getVersionCode(),10)||0;
-  window.qdVersionName=String(QA.getVersionName?QA.getVersionName():'');
+  var QA=window.QuillAndroid||{}, NATIVE=typeof QA.getVersionCode==='function';
+  var REPO='Rohan4149/Quill-Docs', cur=NATIVE?(parseInt(QA.getVersionCode(),10)||0):0;
+  window.qdVersionName=String(NATIVE&&QA.getVersionName?QA.getVersionName():'');
   function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
   function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  function openLink(u){try{if(QA.openUrl){QA.openUrl(u);return}}catch(e){} try{window.open(u,'_blank')||(location.href=u)}catch(e){location.href=u}}
   function say(t){try{if(window.PF&&PF.toast){PF.toast(t);return}}catch(e){} try{alert(t)}catch(e){}}
   function banner(vn,url,code){
     var old=document.getElementById('qdUpd'); if(old) old.remove();
@@ -16317,7 +16318,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
       +'<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.95em">Update available'+(vn?' · v'+vn.replace(/[<>&]/g,''):'')+'</div><div style="font-size:.78em;opacity:.7;margin-top:1px">Install it over the current app — your documents are kept.</div></div>'
       +'<button type="button" data-u style="border:0;background:var(--accent,#6366f1);color:#fff;font-weight:800;border-radius:999px;padding:9px 16px;font-size:.85em;cursor:pointer">Update</button>'
       +'<button type="button" data-l aria-label="Later" style="border:0;background:transparent;color:inherit;opacity:.6;font-size:1.2em;cursor:pointer;padding:4px 6px">✕</button>';
-    b.querySelector('[data-u]').onclick=function(){try{QA.openUrl(url)}catch(e){window.open(url,'_blank')} b.remove()};
+    b.querySelector('[data-u]').onclick=function(){openLink(url); b.remove()};
     b.querySelector('[data-l]').onclick=function(){lsSet('qd_skip',String(code));b.remove()};
     document.body.appendChild(b);
   }
@@ -16341,19 +16342,24 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
     var b=document.getElementById('sdUpd');
     if(!b){
       var st=document.createElement('style');
-      st.textContent='#sdUpd{flex:1;min-width:0;height:44px;border-radius:14px;border:0;background:rgba(128,128,128,.16);color:var(--text);display:flex;align-items:center;gap:10px;padding:0 12px;font:inherit;font-weight:700;font-size:.84em;cursor:pointer;text-align:left;position:relative}#sdUpd:hover{background:rgba(128,128,128,.28)}#sdUpd svg{width:20px;height:20px;flex:0 0 auto}#sdUpd .t{min-width:0;display:flex;flex-direction:column;line-height:1.2}#sdUpd .t small{font-weight:600;opacity:.65;font-size:.82em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#sdUpd.new{background:var(--accent,#6366f1);color:#fff}#sdUpd.new small{opacity:.9}#sdUpd.new::after{content:"";position:absolute;top:7px;right:9px;width:9px;height:9px;border-radius:50%;background:#f43f5e;border:2px solid #fff;box-sizing:content-box}';
+      st.textContent='#sdUpd{flex:0 0 auto;margin:0 0 0 auto;width:44px;height:44px;border-radius:14px;border:0;background:rgba(128,128,128,.16);color:var(--text);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;position:relative;padding:0}#sdUpd:hover{background:rgba(128,128,128,.28)}#sdUpd svg{width:22px;height:22px}#sdUpd.new{background:var(--accent,#6366f1);color:#fff}#sdUpd.new::after{content:"";position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;background:#f43f5e;border:2px solid var(--card,#fff);box-sizing:content-box}';
       document.head.appendChild(st);
       b=document.createElement('button'); b.type='button'; b.id='sdUpd';
-      b.onclick=function(){ if(upd){try{QA.openUrl(upd.url)}catch(e){window.open(upd.url,'_blank')}} else check(true); };
+      b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V5M7.5 9.5 12 5l4.5 4.5M5 19h14"/></svg>';
+      b.onclick=function(){
+        if(upd){openLink(upd.url)}
+        else if(NATIVE){check(true)}
+        else{openLink('https://github.com/'+REPO+'/releases/latest')}
+      };
       foot.appendChild(b);
     }
-    var ico='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V5M7.5 9.5 12 5l4.5 4.5M5 19h14"/></svg>';
-    if(upd){ b.className='new'; b.innerHTML=ico+'<span class="t"><span>Update available'+(upd.vn?' · v'+upd.vn.replace(/[<>&]/g,''):'')+'</span><small>Tap to download</small></span>'; b.title='Download the new version'; }
-    else{ b.className=''; b.innerHTML=ico+'<span class="t"><span>Check for updates</span><small>Version '+String(window.qdVersionName||'').replace(/[<>&]/g,'')+(checked?' · up to date':'')+'</small></span>'; b.title='Check for updates'; }
+    var tip=upd?('Update available'+(upd.vn?' · v'+upd.vn:'')+' — tap to download'):(NATIVE?('Check for updates · v'+window.qdVersionName+(checked?' (up to date)':'')):'Get the Android app / latest release');
+    b.className=upd?'new':''; b.title=tip; b.setAttribute('aria-label',tip);
   }
   var checked=false;
   window.qdCheckUpdate=function(m){check(!!m)};
   paintSd();
+  if(!NATIVE) return;
   setTimeout(function(){check(false)},4000);
   setInterval(function(){check(false)},6*3600*1000);
 })();
