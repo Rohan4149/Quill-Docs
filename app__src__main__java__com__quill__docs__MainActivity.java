@@ -3,10 +3,13 @@ package com.quill.docs;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +21,8 @@ import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
+import android.webkit.MimeTypeMap;
 import android.util.Base64;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -35,6 +40,7 @@ import android.widget.Toast;
 import androidx.webkit.WebViewAssetLoader;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
@@ -44,6 +50,7 @@ public class MainActivity extends Activity {
     private static final int FILE_CHOOSER = 1001;
 
     private WebView web;
+    private WebView printWeb;
     private ValueCallback<Uri[]> filePathCallback;
 
     @Override
@@ -242,6 +249,75 @@ public class MainActivity extends Activity {
         }
 
         @JavascriptInterface
+        public void printHtml(final String title, final String html) {
+            runOnUiThread(() -> {
+                try {
+                    final String t = (title == null || title.isEmpty()) ? "Document" : title;
+                    if (printWeb != null) { try { printWeb.destroy(); } catch (Exception ignored) {} }
+                    final WebView pw = new WebView(MainActivity.this);
+                    printWeb = pw;
+                    pw.getSettings().setJavaScriptEnabled(false);
+                    pw.getSettings().setAllowFileAccess(false);
+                    pw.setWebViewClient(new WebViewClient() {
+                        boolean started = false;
+                        @Override
+                        public void onPageFinished(final WebView v, String u) {
+                            if (started) return;
+                            started = true;
+                            v.postDelayed(() -> {
+                                try {
+                                    PrintManager pm = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+                                    final PrintDocumentAdapter base = v.createPrintDocumentAdapter(t);
+                                    PrintDocumentAdapter ad = new PrintDocumentAdapter() {
+                                        @Override public void onStart() { base.onStart(); }
+                                        @Override public void onLayout(PrintAttributes o, PrintAttributes n, CancellationSignal c, LayoutResultCallback cb, Bundle e) { base.onLayout(o, n, c, cb, e); }
+                                        @Override public void onWrite(PageRange[] p, ParcelFileDescriptor fd, CancellationSignal c, WriteResultCallback cb) { base.onWrite(p, fd, c, cb); }
+                                        @Override public void onFinish() {
+                                            base.onFinish();
+                                            try { if (printWeb == pw) { pw.destroy(); printWeb = null; } } catch (Exception ignored) {}
+                                        }
+                                    };
+                                    pm.print(t, ad, new PrintAttributes.Builder().build());
+                                } catch (Exception e) {
+                                    toast("Printing is not available");
+                                }
+                            }, 700);
+                        }
+                    });
+                    pw.loadDataWithBaseURL("https://appassets.androidplatform.net/", html, "text/html", "UTF-8", null);
+                } catch (Exception e) {
+                    toast("Printing is not available");
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public void shareFile(final String name, final String mime, final String base64) {
+            runOnUiThread(() -> {
+                try {
+                    byte[] bytes = Base64.decode(base64, Base64.DEFAULT);
+                    String safe = (name == null || name.isEmpty()) ? "document" : name.replaceAll("[\\\\/:*?\"<>|]", "-");
+                    File dir = new File(getCacheDir(), "share");
+                    dir.mkdirs();
+                    File[] old = dir.listFiles();
+                    if (old != null) for (File o : old) o.delete();
+                    File f = new File(dir, safe);
+                    try (FileOutputStream os = new FileOutputStream(f)) { os.write(bytes); }
+                    Uri uri = Uri.parse("content://" + getPackageName() + ".share/" + Uri.encode(safe));
+                    Intent in = new Intent(Intent.ACTION_SEND);
+                    in.setType((mime == null || mime.isEmpty()) ? "application/octet-stream" : mime);
+                    in.putExtra(Intent.EXTRA_STREAM, uri);
+                    in.putExtra(Intent.EXTRA_SUBJECT, safe);
+                    in.setClipData(ClipData.newRawUri(safe, uri));
+                    in.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(Intent.createChooser(in, "Share " + safe));
+                } catch (Exception e) {
+                    toast("Could not share file");
+                }
+            });
+        }
+
+        @JavascriptInterface
         public void saveBase64(String base64, String mime, String name) {
             try {
                 saveBytes(Base64.decode(base64, Base64.DEFAULT), mime, name);
@@ -249,6 +325,33 @@ public class MainActivity extends Activity {
                 toast("Could not save file");
             }
         }
+    }
+
+    /** Lets other apps read the file being shared (kept in the app's cache/share folder). */
+    public static class ShareProvider extends android.content.ContentProvider {
+        private File fileFor(Uri uri) {
+            File dir = new File(getContext().getCacheDir(), "share");
+            return new File(dir, new File(String.valueOf(uri.getLastPathSegment())).getName());
+        }
+        @Override public boolean onCreate() { return true; }
+        @Override public Cursor query(Uri uri, String[] p, String s, String[] a, String o) {
+            File f = fileFor(uri);
+            MatrixCursor c = new MatrixCursor(new String[]{OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE});
+            c.addRow(new Object[]{f.getName(), f.length()});
+            return c;
+        }
+        @Override public String getType(Uri uri) {
+            String n = fileFor(uri).getName();
+            int i = n.lastIndexOf('.');
+            String m = i >= 0 ? MimeTypeMap.getSingleton().getMimeTypeFromExtension(n.substring(i + 1).toLowerCase()) : null;
+            return m == null ? "application/octet-stream" : m;
+        }
+        @Override public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
+            return ParcelFileDescriptor.open(fileFor(uri), ParcelFileDescriptor.MODE_READ_ONLY);
+        }
+        @Override public Uri insert(Uri uri, ContentValues v) { return null; }
+        @Override public int delete(Uri uri, String s, String[] a) { return 0; }
+        @Override public int update(Uri uri, ContentValues v, String s, String[] a) { return 0; }
     }
 
     private void saveBytes(byte[] bytes, String mime, String name) throws Exception {

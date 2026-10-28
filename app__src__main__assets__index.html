@@ -5043,6 +5043,10 @@ function renderDocsTab(body){
           if(isWd){ if(!window.wdLibAct){ say('Editor is not ready yet'); return; } await wdLibAct(id, kind); return; }
           const body = docText();
           if(kind === 'share'){
+            if(window.QuillAndroid && typeof QuillAndroid.shareFile === 'function'){
+              const u8 = new TextEncoder().encode(body); let bin = ''; for(let i = 0; i < u8.length; i += 8192) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 8192));
+              QuillAndroid.shareFile(safe + '.md', 'text/markdown', btoa(bin)); return;
+            }
             const f = new File([body], safe + '.md', {type: 'text/markdown'});
             if(navigator.canShare && navigator.share && navigator.canShare({files: [f]})) await navigator.share({files: [f], title: safe});
             else if(navigator.share) await navigator.share({title: safe, text: body});
@@ -5050,6 +5054,11 @@ function renderDocsTab(body){
             return;
           }
           if(kind === 'print'){
+            if(window.QuillAndroid && typeof QuillAndroid.printHtml === 'function'){
+              const bx0 = document.createElement('div'); bx0.innerHTML = renderMd(body || '') || '<p></p>';
+              QuillAndroid.printHtml(safe, '<!doctype html><html><head><meta charset="utf-8"><title>' + nEsc(safe) + '</title><style>@page{margin:18mm}body{font:12pt/1.6 Calibri,Arial,sans-serif;color:#111;margin:0}h1,h2,h3{line-height:1.25}img{max-width:100%}table{border-collapse:collapse}td,th{border:1px solid #bbb;padding:4px 8px}pre{white-space:pre-wrap}</style></head><body><h1>' + nEsc(title) + '</h1>' + bx0.innerHTML + '</body></html>');
+              return;
+            }
             if(window.QuillAndroid && typeof QuillAndroid.printPage === 'function'){
               const sh = document.createElement('div'); sh.id = 'wdPrintSheet'; sh.className = 'wdc';
               const bx = document.createElement('div'); bx.innerHTML = renderMd(body || '') || '<p></p>';
@@ -8811,7 +8820,8 @@ async function wdShareAs(kind){
     var blob=(raw.type===mime||(kind==='html'||kind==='txt')&&raw.type)?raw:new Blob([raw],{type:mime});
     var f=new File([blob],name,{type:blob.type||mime});
     try{
-      if(window.AndroidBridge&&typeof AndroidBridge.shareFile==='function'){var rd=new FileReader();var b64=await new Promise(function(ok){rd.onload=function(){ok(String(rd.result).split(',')[1])};rd.readAsDataURL(blob)});AndroidBridge.shareFile(name,mime,b64);return}
+      var SB=(window.QuillAndroid&&typeof QuillAndroid.shareFile==='function')?QuillAndroid:(window.AndroidBridge&&typeof AndroidBridge.shareFile==='function')?AndroidBridge:null;
+      if(SB){var rd=new FileReader();var b64=await new Promise(function(ok){rd.onload=function(){ok(String(rd.result).split(',')[1])};rd.readAsDataURL(blob)});SB.shareFile(name,mime,b64);return}
       if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:fname()});return}
     }catch(e){if(e&&e.name==='AbortError')return}
     dl(blob,name);toast('Sharing is not supported here, so the file was saved instead');
@@ -8843,6 +8853,11 @@ function printDoc(){
       var _S=hfSlots(_h),_al={l:'left',c:'center',r:'right'};['t','b'].forEach(function(z){['l','c','r'].forEach(function(a){var tx=_S[z][a].filter(function(t){return t!=='{p}'&&t!=='{n}'&&t!=='{c}'&&t!=='{s}'}).join('');if(tx.trim())sheet.insertAdjacentHTML('afterbegin','<div style="'+_f+(z==='t'?'top:-'+Math.max(4,_m[0]-6):'bottom:-'+Math.max(4,_m[2]-6))+'mm;text-align:'+_al[a]+'">'+esc(tx)+'</div>')})});
 
       if(_h.num&&_h.num!=='none')toast('Page numbers in print need Chrome/Edge. Header and footer text will still print.')}}catch(_){}
+  if(_nat&&typeof QuillAndroid.printHtml==='function'){try{
+    var fl=[].map.call(document.head.querySelectorAll('link[rel="stylesheet"]'),function(l){return /^https:\/\/fonts\.googleapis\.com/.test(l.href)?'<link rel="stylesheet" href="'+l.href+'">':''}).join('');
+    var ph='<!doctype html><html><head><meta charset="utf-8"><title>'+esc(fname())+'</title>'+fl+'<style>html,body{margin:0;padding:0;background:#fff}#wdPrintSheet{display:block;color:#000;background:#fff}\n'+wdcCss()+'\n'+st.textContent+'</style></head><body>'+sheet.outerHTML+'</body></html>';
+    QuillAndroid.printHtml(fname(),ph);return;
+  }catch(e){wdErr('native print',e,true)}}
   document.head.appendChild(st);document.body.appendChild(sheet);
   var old=document.title;document.title=fname();document.documentElement.classList.add('wd-printing');
   var done=function(){document.documentElement.classList.remove('wd-printing');sheet.remove();st.remove();document.title=old;window.removeEventListener('afterprint',done)};

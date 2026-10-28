@@ -13,6 +13,12 @@
         android:usesCleartextTraffic="false"
         android:theme="@style/AppTheme">
 
+        <provider
+            android:name=".MainActivity$ShareProvider"
+            android:authorities="${applicationId}.share"
+            android:exported="false"
+            android:grantUriPermissions="true" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
