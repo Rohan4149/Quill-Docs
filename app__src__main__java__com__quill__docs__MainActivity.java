@@ -135,6 +135,31 @@ public class MainActivity extends Activity {
 
     private class Bridge {
         @JavascriptInterface
+        public int getVersionCode() {
+            try {
+                android.content.pm.PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+                return Build.VERSION.SDK_INT >= 28 ? (int) pi.getLongVersionCode() : pi.versionCode;
+            } catch (Exception e) { return 0; }
+        }
+
+        @JavascriptInterface
+        public String getVersionName() {
+            try { return getPackageManager().getPackageInfo(getPackageName(), 0).versionName; }
+            catch (Exception e) { return ""; }
+        }
+
+        @JavascriptInterface
+        public void openUrl(String u) {
+            try {
+                if (u != null && u.startsWith("https://")) {
+                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(u));
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                }
+            } catch (Exception ignored) {}
+        }
+
+        @JavascriptInterface
         public void saveBase64(String base64, String mime, String name) {
             try {
                 saveBytes(Base64.decode(base64, Base64.DEFAULT), mime, name);
