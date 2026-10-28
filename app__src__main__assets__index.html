@@ -5047,6 +5047,18 @@ function renderDocsTab(body){
             return;
           }
           if(kind === 'print'){
+            if(window.QuillAndroid && typeof QuillAndroid.printPage === 'function'){
+              const sh = document.createElement('div'); sh.id = 'wdPrintSheet'; sh.className = 'wdc';
+              const bx = document.createElement('div'); bx.innerHTML = renderMd(body || '') || '<p></p>';
+              sh.innerHTML = '<h1>' + nEsc(title) + '</h1>' + bx.innerHTML;
+              const stl = document.createElement('style'); stl.textContent = '@page{margin:18mm}';
+              document.head.appendChild(stl); document.body.appendChild(sh);
+              const od = document.title; document.title = safe; document.documentElement.classList.add('wd-printing');
+              const fin = () => { document.documentElement.classList.remove('wd-printing'); sh.remove(); stl.remove(); document.title = od; window.__printDone = null; };
+              window.__printDone = fin; setTimeout(fin, 600000);
+              setTimeout(() => { try { QuillAndroid.printPage(safe); } catch(e) { fin(); say('Printing is not available here'); } }, 300);
+              return;
+            }
             const f = document.createElement('iframe'); f.setAttribute('aria-hidden', 'true'); f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;';
             const box = document.createElement('div'); box.innerHTML = renderMd(body || '') || '<p></p>';
             f.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><title>' + nEsc(safe) + '</title><style>@page{margin:18mm}body{font:12pt/1.6 Calibri,Arial,sans-serif;color:#111;margin:0}h1,h2,h3{line-height:1.25}img{max-width:100%}table{border-collapse:collapse}td,th{border:1px solid #bbb;padding:4px 8px}pre{white-space:pre-wrap}</style></head><body><h1>' + nEsc(title) + '</h1>' + box.innerHTML + '</body></html>';
@@ -8807,7 +8819,8 @@ function wdShareClose(){var o=$('wdShSheet');if(!o)return;o.classList.remove('op
 async function wdShareDoc(){wdShareAs('pdf')}
 function wdIsWebView(){var u=navigator.userAgent||'';return /; wv\)|Version\/\d+\.\d+ Chrome|Android.*\bwv\b/.test(u)||!!window.AndroidBridge||(/Android/.test(u)&&!window.chrome)}
 function printDoc(){
-  if(wdIsWebView()){toast('Printing is not supported in the app, saving a PDF instead');return exportPdfImages()}
+  var _nat=!!(window.QuillAndroid&&typeof QuillAndroid.printPage==='function');
+  if(wdIsWebView()&&!_nat){toast('Printing is not supported in the app, saving a PDF instead');return exportPdfImages()}
   var sheet=document.createElement('div');sheet.id='wdPrintSheet';sheet.className='wdc';sheet.innerHTML=(window.wdViewHtml?window.wdViewHtml(cleanHtml()):cleanHtml())+(window.wdInkHtml?window.wdInkHtml():'');
   var st=document.createElement('style');st.id='wdPageStyle';st.textContent=pageCss();
   try{var _cv=sheet.querySelector(':scope>.wd-cover:not(.wd-pb)');if(_cv&&D.view!=='web'){var _d=dims();_cv.style.margin='0';_cv.style.maxWidth='none';_cv.style.width=_d.w+'mm';_cv.style.height=(_d.h-1)+'mm';[].slice.call(_cv.children).forEach(function(c){if(!c.classList.contains('cv-l')&&c.style.height)c.style.height='100%'});st.textContent+='@page :first{margin:0}'}}catch(e){wdErr('cover print margins',e,true)}
@@ -8830,7 +8843,7 @@ function printDoc(){
   var old=document.title;document.title=fname();document.documentElement.classList.add('wd-printing');
   var done=function(){document.documentElement.classList.remove('wd-printing');sheet.remove();st.remove();document.title=old;window.removeEventListener('afterprint',done)};
   window.addEventListener('afterprint',done);
-  setTimeout(function(){try{window.print()}catch(e){done();toast('Printing is not available, saving a PDF instead');exportPdfImages()}},300);
+  setTimeout(function(){try{if(_nat){window.__printDone=done;setTimeout(done,600000);QuillAndroid.printPage(fname())}else window.print()}catch(e){done();toast('Printing is not available, saving a PDF instead');exportPdfImages()}},300);
 }
 function exportHtml(){
   var d=dims(),m=D.page.m;

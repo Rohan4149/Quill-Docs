@@ -3,10 +3,17 @@ package com.quill.docs;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CancellationSignal;
+import android.os.ParcelFileDescriptor;
+import android.print.PageRange;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintManager;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -134,6 +141,29 @@ public class MainActivity extends Activity {
     }
 
     private class Bridge {
+        @JavascriptInterface
+        public void printPage(final String title) {
+            runOnUiThread(() -> {
+                try {
+                    final String t = (title == null || title.isEmpty()) ? "Document" : title;
+                    PrintManager pm = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+                    final PrintDocumentAdapter base = web.createPrintDocumentAdapter(t);
+                    PrintDocumentAdapter ad = new PrintDocumentAdapter() {
+                        @Override public void onStart() { base.onStart(); }
+                        @Override public void onLayout(PrintAttributes o, PrintAttributes n, CancellationSignal c, LayoutResultCallback cb, Bundle e) { base.onLayout(o, n, c, cb, e); }
+                        @Override public void onWrite(PageRange[] p, ParcelFileDescriptor fd, CancellationSignal c, WriteResultCallback cb) { base.onWrite(p, fd, c, cb); }
+                        @Override public void onFinish() {
+                            base.onFinish();
+                            if (web != null) web.evaluateJavascript("window.__printDone&&window.__printDone()", null);
+                        }
+                    };
+                    pm.print(t, ad, new PrintAttributes.Builder().build());
+                } catch (Exception e) {
+                    toast("Printing is not available");
+                }
+            });
+        }
+
         @JavascriptInterface
         public int getVersionCode() {
             try {
