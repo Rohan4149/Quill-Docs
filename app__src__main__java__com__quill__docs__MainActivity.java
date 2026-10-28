@@ -2,9 +2,11 @@ package com.quill.docs;
 
 import android.app.Activity;
 import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -187,6 +189,56 @@ public class MainActivity extends Activity {
                     startActivity(i);
                 }
             } catch (Exception ignored) {}
+        }
+
+        @JavascriptInterface
+        public void installApk(final String url) {
+            runOnUiThread(() -> {
+                try {
+                    if (url == null || !url.startsWith("https://github.com/Rohan4149/Quill-Docs/")) {
+                        toast("Update link not allowed");
+                        return;
+                    }
+                    if (Build.VERSION.SDK_INT >= 26 && !getPackageManager().canRequestPackageInstalls()) {
+                        toast("Allow installs from Quill Docs, then tap Update again");
+                        Intent st = new Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + getPackageName()));
+                        st.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(st);
+                        return;
+                    }
+                    final DownloadManager dm = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                    DownloadManager.Request rq = new DownloadManager.Request(Uri.parse(url));
+                    rq.setTitle("Quill Docs update");
+                    rq.setMimeType("application/vnd.android.package-archive");
+                    rq.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                    rq.setDestinationInExternalFilesDir(MainActivity.this, Environment.DIRECTORY_DOWNLOADS, "QuillDocs-update.apk");
+                    final long id = dm.enqueue(rq);
+                    BroadcastReceiver r = new BroadcastReceiver() {
+                        @Override
+                        public void onReceive(Context c, Intent i) {
+                            if (i.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1) != id) return;
+                            try { unregisterReceiver(this); } catch (Exception ignored) {}
+                            Uri apk = dm.getUriForDownloadedFile(id);
+                            if (apk == null) { toast("Update download failed"); return; }
+                            Intent in = new Intent(Intent.ACTION_VIEW);
+                            in.setDataAndType(apk, "application/vnd.android.package-archive");
+                            in.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(in);
+                        }
+                    };
+                    if (Build.VERSION.SDK_INT >= 33)
+                        registerReceiver(r, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), Context.RECEIVER_EXPORTED);
+                    else
+                        registerReceiver(r, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+                    toast("Downloading update\u2026");
+                } catch (Exception e) {
+                    try {
+                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(i);
+                    } catch (Exception ignored) {}
+                }
+            });
         }
 
         @JavascriptInterface
