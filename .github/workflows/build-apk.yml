@@ -41,8 +41,6 @@ jobs:
           java-version: 17
 
       - uses: android-actions/setup-android@v3
-        with:
-          packages: ''
 
       - uses: gradle/actions/setup-gradle@v4
         with:
@@ -73,7 +71,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          VC=$(grep -oP 'versionCode\s+\K[0-9]+' app/build.gradle)
+          VN=$(grep -oP 'versionName\s+"\K[^"]+' app/build.gradle)
           gh release delete latest --yes --cleanup-tag || true
           gh release create latest "app/build/outputs/apk/$APK_TYPE/QuillDocs-$APK_TYPE.apk" \
-            --title "Quill Docs (latest build)" \
-            --notes "Installable $APK_TYPE APK built from the latest commit."
+            --title "Quill Docs v$VN (latest build)" \
+            --notes "Installable $APK_TYPE APK built from the latest commit.
+
+          versionCode=$VC
+          versionName=$VN"
