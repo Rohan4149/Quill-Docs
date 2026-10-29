@@ -263,15 +263,18 @@ public class MainActivity extends Activity {
                         pw.setAlpha(0.01f);
                         ((android.view.ViewGroup) getWindow().getDecorView()).addView(pw, new android.view.ViewGroup.LayoutParams(1, 1));
                     } catch (Exception ignored) {}
-                    pw.getSettings().setJavaScriptEnabled(false);
+                    /* JS is on only so the page can report when its fonts have loaded; no bridge is attached to this view */
+                    pw.getSettings().setJavaScriptEnabled(true);
                     pw.getSettings().setAllowFileAccess(false);
+                    pw.getSettings().setAllowContentAccess(false);
+                    pw.getSettings().setTextZoom(100);
                     pw.setWebViewClient(new WebViewClient() {
                         boolean started = false;
                         @Override
                         public void onPageFinished(final WebView v, String u) {
                             if (started) return;
                             started = true;
-                            v.postDelayed(() -> {
+                            final Runnable go = () -> {
                                 try {
                                     PrintManager pm = (PrintManager) getSystemService(Context.PRINT_SERVICE);
                                     final PrintDocumentAdapter base = v.createPrintDocumentAdapter(t);
@@ -289,7 +292,17 @@ public class MainActivity extends Activity {
                                 } catch (Exception e) {
                                     toast("Print failed: " + e);
                                 }
-                            }, 700);
+                            };
+                            final int[] tries = {0};
+                            final Runnable[] poll = new Runnable[1];
+                            poll[0] = () -> {
+                                v.evaluateJavascript("document.documentElement.getAttribute('data-fr')", val -> {
+                                    boolean ready = val != null && val.contains("1");
+                                    if (ready || ++tries[0] > 40) v.postDelayed(go, 250);
+                                    else v.postDelayed(poll[0], 150);
+                                });
+                            };
+                            v.postDelayed(poll[0], 200);
                         }
                     });
                     pw.loadDataWithBaseURL("https://appassets.androidplatform.net/", html, "text/html", "UTF-8", null);
