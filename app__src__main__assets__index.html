@@ -6639,7 +6639,7 @@ setupAutoRefresh();
   <div class="hd rd-keep">FILE</div>
   <button type="button" id="wdExpBtn" class="rd-keep"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span class="tx"><b>Export</b> <small>Save a copy to this device</small></span></button>
   <button type="button" id="wdKShare" class="rd-keep"><svg viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span class="tx"><b>Share</b> <small>PDF, Word, web page or text</small></span></button>
-  <button type="button" id="wdKPrint"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2"/><rect x="6" y="14" width="12" height="7"/></svg><span class="tx"><b>Print</b> <small>Open the print dialog</small></span></button>
+  <button type="button" id="wdKPrint" class="rd-keep"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2"/><rect x="6" y="14" width="12" height="7"/></svg><span class="tx"><b>Print</b> <small>Open the print dialog</small></span></button>
   <button type="button" id="wdLibBtn"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span class="tx"><b>My documents</b></span></button>
 </div>
 <div class="wd-menu wd-pro" id="wdExpMenu">
@@ -8854,7 +8854,7 @@ async function wdShareAs(kind){
 }
 function wdShareOpen(){var o=$('wdShSheet');o.classList.add('open');o.setAttribute('aria-hidden','false')}
 function wdShareClose(){var o=$('wdShSheet');if(!o)return;o.classList.remove('open');o.setAttribute('aria-hidden','true')}
-async function wdShareDoc(){wdShareAs('pdf')}
+async function wdShareDoc(){return wdShareAs('pdf')}
 function wdIsWebView(){var u=navigator.userAgent||'';return /; wv\)|Version\/\d+\.\d+ Chrome|Android.*\bwv\b/.test(u)||!!window.AndroidBridge||(/Android/.test(u)&&!window.chrome)}
 var _gfCssC={},_gfDataC={};
 function wdFetchData(url){
@@ -9213,9 +9213,7 @@ async function exportPdfImages(ret){
   finally{host.remove();if(wasWeb){D.view='web';applyLayout()}}
 }
 async function doExport(kind){
-  closeMenus();
-  try{if($('wdOverlay').classList.contains('wd-reading')&&(kind==='print'||kind==='dup'||kind==='del'))return}catch(_){}
-  await saveNow();
+  closeMenus();await saveNow();
   try{
     if(kind==='print')await printDoc();
     else if(kind==='pdf')await exportPdfImages();
