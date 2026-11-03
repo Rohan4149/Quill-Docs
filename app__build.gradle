@@ -10,8 +10,8 @@ android {
         applicationId "com.quill.docs"
         minSdk 24
         targetSdk 34
-        versionCode 9
-        versionName "1.10"
+        versionCode 10
+        versionName "1.11"
     }
 
     signingConfigs {
