@@ -5898,6 +5898,7 @@ function paintPageKebab(){
   if(T === 'docs') items.push(['☑ Select documents', () => { try { docSel.start(); } catch(e) {} }]);
   if(_conn && T !== 'help') items.push(['↻ Refresh', () => refreshNow()]);
   
+  if(window.qsOpen) items.push(['\u2601\uFE0F ' + (window.qsLabel ? window.qsLabel() : 'Account & sync'), () => window.qsOpen()]);
   if(window.QuillAndroid && window.qdCheckUpdate) items.push(['⬆ Check for updates · v' + (window.qdVersionName || ''), () => window.qdCheckUpdate(true)]);
   if(T === 'docs') items.push(['❓ Help', () => openAreaHelp('docs')]);
   items.push(['⚙️ Settings', () => openSettings(), 'pk-sep']);
@@ -5914,6 +5915,7 @@ function paintPageKebab(){
         : lk.indexOf('refresh') === 0 ? '<path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v5h-5"/>'
         : lk.indexOf('help') === 0 ? '<circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.6 2.2c-.8.4-1.2 1-1.2 1.8"/><path d="M12 17h.01"/>'
         : lk.indexOf('settings') === 0 ? '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>'
+        : (lk.indexOf('account') === 0 || lk.indexOf('sign in') === 0) ? '<path d="M18 10a6 6 0 0 0-11.5-1.5A4.5 4.5 0 0 0 7 17.5h10.5A3.5 3.5 0 0 0 18 10z"/>'
         : lk.indexOf('open') === 0 ? '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'
         : lk.indexOf('backup') === 0 ? '<path d="M5 3h11l3 3v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v5h8V3M7 21v-7h10v7"/>'
         : '<circle cx="12" cy="12" r="2"/>';
@@ -7272,7 +7274,23 @@ function fnReset(list){
   [].forEach.call(list.querySelectorAll(':scope>p[data-fnpos]'),function(q){['position','left','top','width'].forEach(function(k){q.style.removeProperty(k)});q.removeAttribute('data-fnpos')});
   list.classList.remove('wd-pgmode')}
 function fnSame(a,b){if(a.length!==b.length)return false;for(var i=0;i<a.length;i++)if(Math.abs((a[i]||0)-(b[i]||0))>1)return false;return true}
+/* a whole document wrapped in one quote/box cannot be split into pages: lift its paragraphs out so margins and page breaks work */
+function wdUnwrapDoc(){
+  try{
+    var top=[].filter.call(ed.children,function(k){return !k.classList.contains('wd-fns')&&!k.classList.contains('wd-pb')&&k.tagName!=='BR'});
+    if(top.length!==1)return;var b=top[0];
+    if(!/^(BLOCKQUOTE|DIV|SECTION|ARTICLE)$/.test(b.tagName)||b.classList.contains('wd-cover'))return;
+    var kids=[].filter.call(b.children,function(k){return /^(P|H[1-6]|UL|OL|TABLE|PRE|BLOCKQUOTE|DIV|HR)$/.test(k.tagName)});
+    if(kids.length<4||b.querySelector('.wd-cover'))return;
+    var dir=b.getAttribute('dir'),al=b.style&&b.style.textAlign;
+    while(b.firstChild){var c=b.firstChild;if(c.nodeType===1){if(dir&&!c.getAttribute('dir'))c.setAttribute('dir',dir);if(al&&!c.style.textAlign)c.style.textAlign=al}ed.insertBefore(c,b)}
+    b.remove();
+    try{changed()}catch(_){}
+    try{toast('Removed an extra quote box around the whole document so pages and margins work')}catch(_){}
+  }catch(e){try{wdErr('unwrap failed',e)}catch(_){}}
+}
 function paginate(){
+  wdUnwrapDoc();
   var list=ed.querySelector(':scope>.wd-fns'),refs=list?ed.querySelectorAll('sup.wd-fnref'):[];
   if(!list||!refs.length||!D||D.view==='web'){if(list)fnReset(list);FN_RES=[];return paginateOnce()}
   var ps=[].slice.call(list.querySelectorAll(':scope>p[data-i]'));
@@ -8594,8 +8612,9 @@ function autoRtl(root){
   });
 }
 function copyCss(from,to){
-  var cs=from.style;if(!cs||!cs.length)return;var s='';
+  var cs=from.style||{length:0,getPropertyValue:function(){return ''}},s='';
   OKCSS.forEach(function(p){var v=cs.getPropertyValue(p);if(!v)return;if(p==='color'&&/^(rgb\(0, ?0, ?0\)|#000(000)?|windowtext)$/i.test(v.trim()))return;if(p==='background-color'&&/^(transparent|white|#fff(fff)?|rgb\(255, ?255, ?255\))$/i.test(v.trim()))return;if(p==='font-size'&&/px$/.test(v))v=Math.round(parseFloat(v)*0.75*2)/2+'pt';s+=p+':'+v+';'});
+  var al=from.getAttribute&&from.getAttribute('align');if(al&&/^(left|right|center|justify)$/i.test(al)&&!/text-align/.test(s))s+='text-align:'+al.toLowerCase()+';';
   if(s)to.setAttribute('style',s);
 }
 /* ---------- paste options: choose how copied content is entered ---------- */
@@ -9502,6 +9521,8 @@ window.wdMoveDoc=async function(id,folder){var d=await dbGet(id);if(!d)return;d.
 window.wdOpen=function(id){return openDoc(id)};
 /* Share / export a document straight from the document list: the editor opens invisibly, does the job, then closes again */
 window.wdRenameDoc=async function(id,title){var d=await dbGet(id);if(!d)return false;d.title=title;d.updated=Date.now();await dbPut(d);return true};
+window.__wdStore={all:dbAll,get:dbGet,raw:function(o){return tx('readwrite',function(s){return s.put(o)})},del:dbDel,open:function(){return D&&D.id||null},
+  refresh:function(){libCache=null;try{if(window.wdDashChanged)window.wdDashChanged()}catch(_){}try{if(typeof wdDashRefresh==='function')wdDashRefresh(true)}catch(_){}}};
 window.wdDupDoc=async function(id){
   try{
     if(D&&D.id===id&&dirty)await saveNow();
@@ -16598,6 +16619,851 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
   if(document.readyState==='complete')init();else window.addEventListener('load',init);
   setTimeout(init,1500);
 })();
+</script>
+<script id="qSyncJs">
+/* Quill Docs - account + cloud sync.  Sign-in uses Firebase Authentication's REST API (no SDK),
+   documents sync through the Cloudflare Worker (quill-api). Works the same in the browser and in the APK. */
+(function(){
+'use strict';
+
+/* ======================= CORE (no DOM) ======================= */
+function qsCore(E){
+  var IDT='https://identitytoolkit.googleapis.com/v1/', TOK='https://securetoken.googleapis.com/v1/token';
+  var ls=E.ls, F=E.fetch, S=E.store, A=null, busy=false, again=false, listeners=[];
+  var status={state:'idle',msg:'',last:0};
+
+  function lsj(k,d){try{var v=ls.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+  function lss(k,v){try{ls.setItem(k,JSON.stringify(v))}catch(e){}}
+  function jwt(t){var p=String(t).split('.')[1].replace(/-/g,'+').replace(/_/g,'/');while(p.length%4)p+='=';return JSON.parse(decodeURIComponent(escape(atob(p))))}
+  function mkErr(msg,code,status){var e=new Error(msg);e.code=code||'';if(status)e.status=status;return e}
+  function netErr(){return mkErr('No internet connection.','NETWORK')}
+  function authErr(m){return mkErr(m||'Please sign in again.','AUTH',401)}
+
+  function friendly(code){
+    var c=String(code||'').split(/[ :]/)[0];
+    var map={
+      EMAIL_EXISTS:'An account with this email already exists. Try signing in.',
+      INVALID_LOGIN_CREDENTIALS:'Wrong email or password.',INVALID_PASSWORD:'Wrong email or password.',EMAIL_NOT_FOUND:'Wrong email or password.',
+      INVALID_EMAIL:'That email address does not look right.',MISSING_EMAIL:'Please enter your email address.',MISSING_PASSWORD:'Please enter your password.',
+      WEAK_PASSWORD:'Password is too weak. Use at least 8 characters.',
+      TOO_MANY_ATTEMPTS_TRY_LATER:'Too many attempts. Please wait a few minutes and try again.',
+      USER_DISABLED:'This account has been disabled.',
+      OPERATION_NOT_ALLOWED:'This sign-in method is not turned on in Firebase yet.',
+      CREDENTIAL_TOO_OLD_LOGIN_AGAIN:'For safety, sign out, sign in again, then retry.',
+      INVALID_IDP_RESPONSE:'Google sign-in could not be verified. Please try again.',
+      INVALID_OOB_CODE:'That link is no longer valid.'
+    };
+    return map[c]||('Something went wrong ('+(c||'unknown')+').');
+  }
+
+  async function post(url,init){
+    var r;try{r=await F(url,init)}catch(e){throw netErr()}
+    var j;try{j=await r.json()}catch(e){j={}}
+    return {ok:r.ok,status:r.status,j:j};
+  }
+  async function idt(path,body){
+    var r=await post(IDT+path+'?key='+E.key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!r.ok){var m=(r.j.error&&r.j.error.message)||('http '+r.status);throw mkErr(friendly(m),String(m).split(/[ :]/)[0],r.status)}
+    return r.j;
+  }
+
+  /* ---- session ---- */
+  function load(){A=lsj('qs_auth',null)}
+  function save(){if(A)lss('qs_auth',A);else{try{ls.removeItem('qs_auth')}catch(e){}}}
+  function fromResp(r,provider){
+    var p=jwt(r.idToken);
+    A={uid:p.user_id||p.sub,email:p.email||r.email||'',rt:r.refreshToken,idt:r.idToken,exp:p.exp*1000,verified:!!p.email_verified,provider:provider||(p.firebase&&p.firebase.sign_in_provider)||''};
+    save();return user();
+  }
+  function user(){if(!A)load();return A?{uid:A.uid,email:A.email,verified:A.verified,provider:A.provider}:null}
+
+  async function token(){
+    if(!A)load();if(!A)return null;
+    if(A.exp-60000>E.now())return A.idt;
+    var r=await post(TOK+'?key='+E.key,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'grant_type=refresh_token&refresh_token='+encodeURIComponent(A.rt)});
+    if(!r.ok){
+      var m=(r.j.error&&r.j.error.message)||'';
+      if(/INVALID_REFRESH_TOKEN|TOKEN_EXPIRED|USER_NOT_FOUND|USER_DISABLED/.test(m)){A=null;save();throw authErr('Your sign-in expired. Please sign in again.')}
+      throw mkErr('Could not refresh your sign-in. Try again later.','REFRESH');
+    }
+    A.idt=r.j.id_token;A.rt=r.j.refresh_token||A.rt;var p=jwt(A.idt);A.exp=p.exp*1000;A.verified=!!p.email_verified;save();
+    return A.idt;
+  }
+
+  async function signUp(email,pw){
+    var j=await idt('accounts:signUp',{email:email,password:pw,returnSecureToken:true});
+    var u=fromResp(j,'password');try{await sendVerify()}catch(e){}return u;
+  }
+  async function signIn(email,pw){return fromResp(await idt('accounts:signInWithPassword',{email:email,password:pw,returnSecureToken:true}),'password')}
+  async function google(googleIdToken){
+    return fromResp(await idt('accounts:signInWithIdp',{postBody:'id_token='+encodeURIComponent(googleIdToken)+'&providerId=google.com',requestUri:'http://localhost',returnIdpCredential:true,returnSecureToken:true}),'google.com');
+  }
+  async function reset(email){
+    try{await idt('accounts:sendOobCode',{requestType:'PASSWORD_RESET',email:email})}
+    catch(e){if(e.code!=='EMAIL_NOT_FOUND')throw e}   /* never reveal whether an address has an account */
+    return true;
+  }
+  async function sendVerify(){var t=await token();if(!t)throw authErr();await idt('accounts:sendOobCode',{requestType:'VERIFY_EMAIL',idToken:t});return true}
+  function signOut(){A=null;save();setStatus('idle','')}
+
+  /* ---- server calls ---- */
+  async function api(method,path,body){
+    var t=await token();if(!t)throw authErr('Not signed in');
+    var r=await post(E.api+path,{method:method,headers:Object.assign({Authorization:'Bearer '+t},body?{'Content-Type':'application/json'}:{}),body:body?JSON.stringify(body):undefined});
+    if(!r.ok){var e=mkErr(r.j.error||('Server error '+r.status),'SERVER',r.status);e.body=r.j;throw e}
+    return r.j;
+  }
+  async function usage(){return api('GET','/api/usage')}
+
+  async function deleteAccount(){
+    var t=await token();if(!t)throw authErr();
+    await idt('accounts:delete',{idToken:t});            /* Firebase first: if it refuses, nothing is lost */
+    try{await api('DELETE','/api/account')}catch(e){}   /* token stays valid until it expires */
+    var uid=A&&A.uid;A=null;save();if(uid){try{ls.removeItem('qs_st_'+uid)}catch(e){}}
+    setStatus('idle','');return true;
+  }
+
+  /* ---- status ---- */
+  function setStatus(state,msg){
+    status={state:state,msg:msg||'',last:state==='ok'?E.now():status.last};
+    if(state==='ok')lss('qs_last',status.last);
+    listeners.forEach(function(f){try{f(status)}catch(e){}});
+  }
+  function getStatus(){if(!status.last)status.last=lsj('qs_last',0);return status}
+  function onStatus(f){listeners.push(f)}
+
+  /* ---- sync ----
+     state per account: { since: last server time seen, docs: { id: updated-value known to be identical on server } } */
+  async function applyRemote(id,openId,st){
+    var one=await api('GET','/api/docs/'+encodeURIComponent(id));
+    if(one.deleted){if(id!==openId){await S.del(id);delete st.docs[id];return true}return false}
+    var rec=JSON.parse(one.data);rec.id=id;if(typeof rec.updated!=='number')rec.updated=one.updated;
+    await S.raw(rec);st.docs[id]=rec.updated;return true;
+  }
+
+  async function sync(){
+    if(!A)load();if(!A)return {skipped:true};
+    if(busy){again=true;return {busy:true}}
+    if(lsj('qs_mode','cloud')==='drive'){busy=true;setStatus('syncing','Syncing with Google Drive\u2026');try{return await driveSync()}finally{busy=false;if(again){again=false;setTimeout(function(){sync()},500)}}}
+    busy=true;setStatus('syncing','Syncing\u2026');
+    var changed=false,problems=[];
+    try{
+      var uid=A.uid,key='qs_st_'+uid,st=lsj(key,{since:0,docs:{}});st.docs=st.docs||{};
+      var lr=await api('GET','/api/docs?since='+Math.max(0,(st.since||0)-5000));
+      var openId=S.open(),locals=await S.all(),lm={};locals.forEach(function(d){lm[d.id]=d});
+      var maxSrv=st.since||0;
+
+      /* 1) pull */
+      for(var i=0;i<lr.docs.length;i++){
+        var m=lr.docs[i],l=lm[m.id];if(m.srv>maxSrv)maxSrv=m.srv;
+        if(m.deleted){
+          if(l&&l.updated<=m.updated&&m.id!==openId){await S.del(m.id);delete lm[m.id];changed=true}
+          if(!lm[m.id])delete st.docs[m.id];
+          continue;
+        }
+        if(l&&l.updated>m.updated)continue;                                   /* ours is newer: pushed below */
+        if(l&&l.updated===m.updated){st.docs[m.id]=m.updated;continue}
+        if(!l&&st.docs[m.id]!==undefined&&st.docs[m.id]>=m.updated)continue;   /* deleted here on purpose: told to the server below */
+        if(m.id===openId)continue;                                             /* being edited right now */
+        if(await applyRemote(m.id,openId,st))changed=true;
+      }
+
+      /* 2) push */
+      locals=await S.all();lm={};locals.forEach(function(d){lm[d.id]=d});
+      for(var k=0;k<locals.length;k++){
+        var d=locals[k];
+        if(typeof d.updated!=='number'||!d.updated){d.updated=E.now();await S.raw(d)}
+        if(st.docs[d.id]===d.updated)continue;
+        try{
+          await api('PUT','/api/docs/'+encodeURIComponent(d.id),{title:d.title||'',updated:d.updated,data:JSON.stringify(d)});
+          st.docs[d.id]=d.updated;
+        }catch(e){
+          if(e.status===409){if(await applyRemote(d.id,openId,st))changed=true}
+          else if(e.status===413){problems.push((d.title||'A document')+': '+e.message)}
+          else throw e;
+        }
+      }
+
+      /* 3) tell the server about documents deleted on this device (with a safety brake against mass deletes) */
+      var gone=Object.keys(st.docs).filter(function(id){return !lm[id]}),known=Object.keys(st.docs).length;
+      if(gone.length&&gone.length>Math.max(3,known*0.5)){
+        problems.push('Paused: '+gone.length+' documents look missing on this device, so they were not deleted in the cloud.');
+      }else{
+        for(var g=0;g<gone.length;g++){
+          try{await api('DELETE','/api/docs/'+encodeURIComponent(gone[g])+'?updated='+E.now());delete st.docs[gone[g]]}
+          catch(e){if(e.status===409){delete st.docs[gone[g]];maxSrv=0}else throw e}
+        }
+      }
+
+      st.since=maxSrv;lss(key,st);
+      if(changed&&S.refresh)S.refresh();
+      if(problems.length)setStatus('warn',problems[0]);else setStatus('ok','Synced');
+      autoBackup();
+      return {ok:true,changed:changed,problems:problems};
+    }catch(e){
+      if(e.code==='NETWORK')setStatus('offline','Offline. Will sync when you are back online.');
+      else if(e.code==='AUTH')setStatus('error',e.message);
+      else setStatus('error',e.message||'Sync failed');
+      return {ok:false,error:e};
+    }finally{
+      busy=false;
+      if(again){again=false;setTimeout(function(){sync()},500)}
+    }
+  }
+
+  /* ---- backup file (no account needed) ---- */
+  var ID_RE=/^[A-Za-z0-9_.:-]{1,100}$/;
+  async function buildBackup(){var docs=await S.all();return {app:'quill-docs',version:1,created:E.now(),count:docs.length,docs:docs}}
+  async function restoreBackup(obj){
+    if(!obj||obj.app!=='quill-docs'||!Array.isArray(obj.docs))throw mkErr('That file is not a Quill Docs backup.','BADFILE');
+    var local={};(await S.all()).forEach(function(d){local[d.id]=d});
+    var r={added:0,updated:0,skipped:0,invalid:0};
+    for(var i=0;i<obj.docs.length;i++){
+      var d=obj.docs[i];
+      if(!d||typeof d!=='object'||typeof d.id!=='string'||!ID_RE.test(d.id)){r.invalid++;continue}
+      var l=local[d.id];
+      if(!l){d.updated=E.now();await S.raw(d);r.added++}                       /* missing here: bring it back (and make it win over an old deletion) */
+      else if((Number(d.updated)||0)>(Number(l.updated)||0)){await S.raw(d);r.updated++}
+      else r.skipped++;
+    }
+    if((r.added||r.updated)&&S.refresh)S.refresh();
+    return r;
+  }
+  async function sig(){var d=await S.all();return d.length+':'+d.reduce(function(m,x){return Math.max(m,Number(x.updated)||0)},0)}
+
+  /* ---- Google Drive backup (hidden app folder in the person's own Drive) ---- */
+  var GD=null,gdErr='';
+  function gdKey(){return 'qs_gd_'+(A&&A.uid)}
+  function gdLoad(){if(!A)load();GD=A?lsj(gdKey(),null):null;return GD}
+  function gdSave(){if(!A)return;if(GD)lss(gdKey(),GD);else{try{ls.removeItem(gdKey())}catch(e){}}}
+  function gdState(){gdLoad();return GD?{connected:true,last:GD.last||0,auto:GD.auto!==false,error:gdErr}:{connected:false}}
+  async function gdStart(){return api('POST','/api/gdrive/start',{})}
+  async function gdPoll(device){
+    var r=await api('POST','/api/gdrive/poll',{device_code:device});
+    if(r.status==='ok'){GD={rt:r.refresh_token,at:r.access_token,exp:E.now()+(r.expires_in||3600)*1000,auto:true,last:0};gdSave();gdErr=''}
+    return r;
+  }
+  async function gdToken(){
+    gdLoad();if(!GD)throw mkErr('Google Drive is not connected.','GD');
+    if(GD.at&&GD.exp-60000>E.now())return GD.at;
+    var r;
+    try{r=await api('POST','/api/gdrive/token',{refresh_token:GD.rt})}
+    catch(e){if(e.status===400&&e.body&&e.body.error==='revoked'){GD=null;gdSave();throw mkErr('Google Drive access was removed. Please connect again.','GD')}throw e}
+    GD.at=r.access_token;GD.exp=E.now()+(r.expires_in||3600)*1000;gdSave();return GD.at;
+  }
+  async function gdFetch(url,init){
+    var at=await gdToken();init=init||{};init.headers=Object.assign({Authorization:'Bearer '+at},init.headers||{});
+    var r;try{r=await F(url,init)}catch(e){throw netErr()}
+    if(!r.ok){var j={};try{j=await r.json()}catch(e){}throw mkErr((j.error&&j.error.message)||('Google Drive error '+r.status),'GD',r.status)}
+    return r;
+  }
+  async function gdFind(){
+    var r=await gdFetch('https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&orderBy=modifiedTime%20desc&pageSize=1&fields='+encodeURIComponent('files(id,modifiedTime,size)')+'&q='+encodeURIComponent("name='quill-backup.json'"));
+    var j=await r.json();return (j.files&&j.files[0])||null;
+  }
+  function multipart(meta,body){var b='quillbnd'+E.now();return {ct:'multipart/related; boundary='+b,body:'--'+b+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(meta)+'\r\n--'+b+'\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--'+b+'--'}}
+  async function gdBackup(){
+    var bk=await buildBackup(),data=JSON.stringify(bk),f=await gdFind(),m;
+    if(f){m=multipart({},data);await gdFetch('https://www.googleapis.com/upload/drive/v3/files/'+f.id+'?uploadType=multipart',{method:'PATCH',headers:{'Content-Type':m.ct},body:m.body})}
+    else{m=multipart({name:'quill-backup.json',parents:['appDataFolder']},data);await gdFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:{'Content-Type':m.ct},body:m.body})}
+    gdLoad();if(GD){GD.last=E.now();GD.sig=await sig();gdSave()}gdErr='';
+    return {count:bk.count};
+  }
+  async function gdRestore(){
+    var f=await gdFind();if(!f)throw mkErr('No backup found in your Google Drive yet.','GD');
+    var r=await gdFetch('https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(f.id)+'?alt=media'),obj;
+    try{obj=await r.json()}catch(e){throw mkErr('The backup in Google Drive could not be read.','BADFILE')}
+    return restoreBackup(obj);
+  }
+  async function gdInfo(){var f=await gdFind();return f?{time:f.modifiedTime,size:Number(f.size)||0}:null}
+  function gdSetAuto(on){gdLoad();if(GD){GD.auto=!!on;gdSave()}}
+  async function gdDisconnect(){
+    gdLoad();var rt=GD&&GD.rt;GD=null;gdSave();gdErr='';
+    if(rt){try{await F('https://oauth2.googleapis.com/revoke?token='+encodeURIComponent(rt),{method:'POST'})}catch(e){}}
+  }
+  /* ---- Google Drive SYNC: every document is its own file in the hidden app folder of the person's Drive ---- */
+  var UP='https://www.googleapis.com/upload/drive/v3/files',DV='https://www.googleapis.com/drive/v3/files';
+  async function dsList(){
+    var out={},tok='';
+    do{
+      var r=await gdFetch(DV+'?spaces=appDataFolder&pageSize=1000&fields='+encodeURIComponent('nextPageToken,files(id,name,appProperties)')+(tok?'&pageToken='+encodeURIComponent(tok):''));
+      var j=await r.json();tok=j.nextPageToken||'';
+      (j.files||[]).forEach(function(f){var m=/^doc-(.+)\.json$/.exec(f.name);if(!m)return;var p=f.appProperties||{};out[m[1]]={fid:f.id,u:Number(p.u)||0,d:p.d==='1'}});
+    }while(tok);
+    return out;
+  }
+  async function dsPut(id,fid,body,u,del){
+    var props={u:String(u),d:del?'1':'0'},m;
+    if(fid){m=multipart({appProperties:props},body);await gdFetch(UP+'/'+encodeURIComponent(fid)+'?uploadType=multipart&fields=id',{method:'PATCH',headers:{'Content-Type':m.ct},body:m.body});return fid}
+    m=multipart({name:'doc-'+id+'.json',parents:['appDataFolder'],appProperties:props},body);
+    var r=await gdFetch(UP+'?uploadType=multipart&fields=id',{method:'POST',headers:{'Content-Type':m.ct},body:m.body});
+    return (await r.json()).id;
+  }
+  async function driveSync(){
+    var changed=false;
+    try{
+      gdLoad();if(!GD)throw mkErr('Connect Google Drive on the Backup tab first.','GD');
+      var key='qs_ds_'+A.uid,st=lsj(key,{docs:{}});st.docs=st.docs||{};
+      var rem=await dsList(),openId=S.open(),locals=await S.all(),lm={},ids=Object.keys(rem),i;
+      locals.forEach(function(d){lm[d.id]=d});
+      /* 1) pull */
+      for(i=0;i<ids.length;i++){
+        var id=ids[i],r=rem[id],l=lm[id];
+        if(r.d){
+          if(l&&l.updated<=r.u&&id!==openId){await S.del(id);delete lm[id];changed=true}
+          if(!lm[id])delete st.docs[id];
+          continue;
+        }
+        if(l&&l.updated>r.u)continue;                                          /* ours is newer: pushed below */
+        if(l&&l.updated===r.u){st.docs[id]=r.u;continue}
+        if(!l&&st.docs[id]!==undefined&&st.docs[id]>=r.u)continue;             /* deleted here on purpose */
+        if(id===openId)continue;                                               /* being edited right now */
+        var x=await gdFetch(DV+'/'+encodeURIComponent(r.fid)+'?alt=media'),rec;
+        try{rec=await x.json()}catch(e){continue}
+        if(!rec||typeof rec!=='object')continue;
+        rec.id=id;if(typeof rec.updated!=='number')rec.updated=r.u;
+        await S.raw(rec);st.docs[id]=rec.updated;lm[id]=rec;changed=true;
+      }
+      /* 2) push */
+      locals=await S.all();lm={};locals.forEach(function(d){lm[d.id]=d});
+      for(i=0;i<locals.length;i++){
+        var d=locals[i];
+        if(typeof d.updated!=='number'||!d.updated){d.updated=E.now();await S.raw(d)}
+        if(st.docs[d.id]===d.updated)continue;
+        var r2=rem[d.id];if(r2&&!r2.d&&r2.u>d.updated)continue;
+        var fid=await dsPut(d.id,r2&&r2.fid,JSON.stringify(d),d.updated,false);
+        st.docs[d.id]=d.updated;rem[d.id]={fid:fid,u:d.updated,d:false};
+      }
+      /* 3) deletions made on this device become tombstones (same safety brake as cloud sync) */
+      var gone=Object.keys(st.docs).filter(function(k){return !lm[k]}),known=Object.keys(st.docs).length,warn='';
+      if(gone.length&&gone.length>Math.max(3,known*0.5)){warn='Paused: '+gone.length+' documents look missing on this device, so they were not deleted in Google Drive.'}
+      else for(i=0;i<gone.length;i++){
+        var rr=rem[gone[i]];
+        if(rr&&!rr.d)await dsPut(gone[i],rr.fid,'{}',E.now(),true);
+        delete st.docs[gone[i]];
+      }
+      lss(key,st);
+      if(changed&&S.refresh)S.refresh();
+      gdLoad();if(GD){GD.last=E.now();gdSave()}gdErr='';
+      if(warn)setStatus('warn',warn);else setStatus('ok','Synced with Google Drive');
+      return {ok:true,changed:changed,problems:warn?[warn]:[]};
+    }catch(e){
+      if(e.code==='NETWORK')setStatus('offline','Offline. Will sync when you are back online.');
+      else setStatus('error',e.message||'Sync failed');
+      return {ok:false,error:e};
+    }
+  }
+
+  /* once a day, and only when something changed */
+  async function autoBackup(){
+    try{
+      gdLoad();if(!GD||GD.auto===false)return false;
+      if(GD.last&&E.now()-GD.last<86400000)return false;
+      var s=await sig();if(GD.last&&s===GD.sig)return false;
+      await gdBackup();return true;
+    }catch(e){gdErr=e.message||'Backup failed';return false}
+  }
+
+  /* ---- owner tools (the server refuses everyone else) ---- */
+  async function adminOverview(){return api('GET','/api/admin/overview')}
+  async function adminSetQuota(uid,mb){return api('PUT','/api/admin/quota',{uid:uid,quota_mb:mb})}
+
+  return {user:user,signUp:signUp,signIn:signIn,google:google,reset:reset,sendVerify:sendVerify,signOut:signOut,deleteAccount:deleteAccount,
+          token:token,usage:usage,sync:sync,getStatus:getStatus,onStatus:onStatus,_state:function(uid){return lsj('qs_st_'+uid,null)},
+          buildBackup:buildBackup,restoreBackup:restoreBackup,
+          mode:function(){return lsj('qs_mode','cloud')},setMode:function(m){lss('qs_mode',m==='drive'?'drive':'cloud')},
+          gd:{state:gdState,start:gdStart,poll:gdPoll,backup:gdBackup,restore:gdRestore,info:gdInfo,setAuto:gdSetAuto,disconnect:gdDisconnect,autoBackup:autoBackup},
+          adminOverview:adminOverview,adminSetQuota:adminSetQuota};
+}
+
+/* export for tests */
+if(typeof module!=='undefined'&&module.exports){module.exports={qsCore:qsCore}}
+if(typeof window==='undefined'||!window.document)return;
+
+
+/* ======================= BROWSER WIRING + UI ======================= */
+var FB_KEY='AIzaSyAXfu9EujrHRNn9vf6icUHctIOGaivNT64';
+var API_URL='https://quill-api.rohan464149.workers.dev';
+var GOOGLE_CLIENT_ID='';   /* Firebase > Authentication > Sign-in method > Google > Web SDK configuration > Web client ID */
+
+var lsx=null;try{lsx=window.localStorage}catch(e){}
+if(!lsx)lsx={getItem:function(){return null},setItem:function(){},removeItem:function(){}};
+var store={
+  all:function(){return window.__wdStore?window.__wdStore.all():Promise.resolve([])},
+  raw:function(o){return window.__wdStore.raw(o)},
+  del:function(id){return window.__wdStore.del(id)},
+  open:function(){return window.__wdStore?window.__wdStore.open():null},
+  refresh:function(){try{window.__wdStore.refresh()}catch(e){}}
+};
+var QS=qsCore({fetch:function(u,o){return window.fetch(u,o)},ls:lsx,store:store,key:FB_KEY,api:API_URL,now:function(){return Date.now()}});
+window.QS=QS;
+
+function isWebView(){var u=navigator.userAgent||'';return !!window.QuillAndroid||/; wv\)/.test(u)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function rnd(){var a=new Uint8Array(16);crypto.getRandomValues(a);return Array.prototype.map.call(a,function(b){return ('0'+b.toString(16)).slice(-2)}).join('')}
+function lsj2(k){try{return lsx.getItem(k)}catch(e){return null}}
+function repaint(){try{if(typeof window.paintPageKebab==='function')window.paintPageKebab()}catch(e){}}
+function fmtT(ts){if(!ts)return 'not yet';try{return new Date(ts).toLocaleString([], {hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'})}catch(e){return 'just now'}}
+function fmtMB(n){n=Number(n)||0;if(n>=1073741824)return (n/1073741824).toFixed(1)+' GB';return (n/1048576).toFixed(n<10485760?1:0)+' MB'}
+
+/* ---- scheduling ---- */
+var tm=0;
+function soon(ms){if(!QS.user())return;clearTimeout(tm);tm=setTimeout(function(){if(navigator.onLine!==false)QS.sync()},ms||8000)}
+window.qsSoon=soon;
+function startLoop(){
+  if(startLoop.on)return;startLoop.on=true;
+  setInterval(function(){if(!document.hidden&&QS.user()&&navigator.onLine!==false)QS.sync()},120000);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)soon(1500)});
+  window.addEventListener('online',function(){soon(1000)});
+  window.addEventListener('focus',function(){soon(2500)});
+}
+/* save/rename/move/delete/restore/duplicate all end up here */
+(function hook(){
+  var prev=window.__docsAfterSave;
+  window.__docsAfterSave=function(){try{if(prev)prev.apply(this,arguments)}catch(e){}soon(8000)};
+  ['wdRenameDoc','wdMoveDoc','wdDelDoc','wdDupDoc'].forEach(function(n){
+    var f=window[n];if(typeof f!=='function'||f.__qs)return;
+    var w=function(){var r=f.apply(this,arguments);Promise.resolve(r).then(function(){soon(3000)},function(){});return r};w.__qs=1;window[n]=w;
+  });
+  var rs=window.wdRestoreDoc;
+  if(typeof rs==='function'&&!rs.__qs){var w2=function(r){try{if(r&&typeof r==='object')r.updated=Date.now()}catch(e){}var x=rs.apply(this,arguments);Promise.resolve(x).then(function(){soon(3000)},function(){});return x};w2.__qs=1;window.wdRestoreDoc=w2}
+})();
+
+/* ---- styles ---- */
+var st=document.createElement('style');
+st.textContent='#qsDlg{position:fixed;inset:0;z-index:99998;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(8,10,18,.6);font-family:inherit}'
++'#qsDlg .qs-c{width:100%;max-width:420px;max-height:92vh;overflow:auto;background:var(--card,#fff);color:var(--text,#111);border:1px solid rgba(99,102,241,.4);border-radius:22px;padding:18px;box-shadow:0 24px 60px rgba(0,0,0,.45)}'
++'#qsDlg .qs-h{display:flex;align-items:center;gap:12px;margin-bottom:12px}#qsDlg .qs-h b{display:block;font-size:1.05em}#qsDlg small{display:block;font-size:.8em;opacity:.7;margin-top:2px;line-height:1.35}'
++'#qsDlg .qs-ic{width:42px;height:42px;border-radius:14px;background:rgba(99,102,241,.16);color:var(--accent,#6366f1);display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-size:20px}'
++'#qsDlg .qs-x{margin-left:auto;width:38px;height:38px;border-radius:12px;border:0;background:rgba(128,128,128,.16);color:inherit;font-size:16px;cursor:pointer}'
++'#qsDlg .qs-seg{display:flex;gap:6px;padding:4px;border-radius:14px;background:rgba(128,128,128,.14);margin-bottom:12px}'
++'#qsDlg .qs-seg button{flex:1;height:38px;border:0;border-radius:10px;background:transparent;color:inherit;font-weight:700;cursor:pointer}#qsDlg .qs-seg button.on{background:var(--accent,#6366f1);color:#fff}'
++'#qsDlg input[type=email],#qsDlg input[type=password],#qsDlg input[type=text]{width:100%;height:46px;border-radius:12px;border:1px solid rgba(128,128,128,.35);background:rgba(128,128,128,.1);color:inherit;padding:0 14px;font-size:16px;margin-bottom:10px;outline:0}#qsDlg input:focus{border-color:var(--accent,#6366f1)}'
++'#qsDlg .qs-pw{position:relative}#qsDlg .qs-pw button{position:absolute;right:6px;top:5px;height:36px;padding:0 10px;border:0;border-radius:9px;background:transparent;color:var(--accent,#6366f1);font-weight:700;cursor:pointer}#qsDlg .qs-pw input{padding-right:70px}'
++'#qsDlg .qs-msg{min-height:20px;font-size:.85em;margin:6px 2px 4px;line-height:1.4}#qsDlg .qs-msg.err{color:var(--danger,#f43f5e)}#qsDlg .qs-msg.ok{color:var(--ok,#34d399)}'
++'#qsDlg .qs-b{width:100%;height:46px;border-radius:999px;border:1px solid rgba(128,128,128,.35);background:transparent;color:inherit;font-weight:800;font-size:15px;cursor:pointer;margin-top:8px}'
++'#qsDlg .qs-b.pri{background:var(--accent,#6366f1);border-color:transparent;color:#fff}#qsDlg .qs-b.dng{color:var(--danger,#f43f5e)}#qsDlg .qs-b:disabled{opacity:.6;cursor:default}'
++'#qsDlg .qs-l{display:block;margin:10px auto 0;border:0;background:transparent;color:var(--accent,#6366f1);font-weight:700;cursor:pointer;padding:6px}'
++'#qsDlg .qs-or{text-align:center;font-size:.8em;opacity:.6;margin:12px 0 4px}#qsDlg .qs-n{font-size:.78em;opacity:.65;line-height:1.45;margin-top:12px}'
++'#qsDlg .qs-me{display:flex;align-items:center;gap:12px;margin-bottom:12px}#qsDlg .qs-av{width:44px;height:44px;border-radius:50%;background:var(--accent,#6366f1);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex:0 0 auto}'
++'#qsDlg .qs-s{border-radius:14px;background:rgba(128,128,128,.12);padding:12px 14px;font-size:.88em;line-height:1.5;margin-bottom:4px}'
++'#qsDlg .qs-sec{font-weight:800;font-size:.82em;letter-spacing:.04em;text-transform:uppercase;opacity:.7;margin:16px 2px 4px}'
++'#qsDlg .qs-bar{height:8px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;margin-top:8px}#qsDlg .qs-bar i{display:block;height:100%;background:var(--accent,#6366f1);border-radius:99px}'
++'#qsDlg .qs-code{font-size:1.7em;font-weight:800;letter-spacing:.12em;text-align:center;margin:8px 0;font-family:ui-monospace,monospace}'
++'#qsDlg .qs-u{border-top:1px solid rgba(128,128,128,.25);padding:10px 2px}#qsDlg .qs-u b{word-break:break-all}'
++'#qsDlg .qs-ur{display:flex;gap:6px;margin-top:6px}#qsDlg .qs-ur input{flex:1;min-width:0;height:38px;border-radius:10px;border:1px solid rgba(128,128,128,.35);background:rgba(128,128,128,.1);color:inherit;padding:0 10px;font-size:15px}'
++'#qsDlg .qs-ur button{height:38px;padding:0 12px;border-radius:10px;border:1px solid rgba(128,128,128,.35);background:transparent;color:inherit;font-weight:700;cursor:pointer}'
++'#qsDlg label.qs-ck{display:flex;gap:10px;align-items:center;margin-top:10px;font-size:.9em}#qsDlg label.qs-ck input{width:20px;height:20px}';
+document.head.appendChild(st);
+
+var st2=document.createElement('style');
+st2.textContent='#qsDlg .qs-c{position:relative}#qsDlg .qs-xa{position:absolute;top:12px;right:12px}'
++'#qsDlg .qs-brand{text-align:center;padding:14px 0 18px}#qsDlg .qs-brand b{display:block;font-size:1.4em;margin-top:2px}#qsDlg .qs-brand small{opacity:.7;margin-top:6px}'
++'#qsDlg .qs-logo{width:58px;height:58px;margin:0 auto 12px;border-radius:19px;background:linear-gradient(135deg,var(--accent,#6366f1),var(--accent2,#8b5cf6));color:#fff;font:400 30px var(--serif,Georgia,serif);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(99,102,241,.38)}'
++'#qsDlg .qs-lb{display:flex;justify-content:space-between;align-items:center;font-size:.8em;font-weight:700;opacity:.85;margin:4px 2px 6px}'
++'#qsDlg .qs-lb label{font-size:inherit;font-weight:inherit;margin:0}'
++'#qsDlg .qs-lb button{border:0;background:transparent;color:var(--accent,#6366f1);font-weight:700;font-size:1em;cursor:pointer;padding:2px 0}'
++'#qsDlg .qs-div{display:flex;align-items:center;gap:12px;margin:18px 0 6px;font-size:.8em;opacity:.6}#qsDlg .qs-div:before,#qsDlg .qs-div:after{content:"";flex:1;height:1px;background:rgba(128,128,128,.45)}'
++'#qsDlg .qs-gb{display:flex;align-items:center;justify-content:center;gap:10px}'
++'#qsDlg .qs-sw{text-align:center;margin-top:18px;font-size:.92em;opacity:.95}#qsDlg .qs-sw button{border:0;background:transparent;color:var(--accent,#6366f1);font-weight:800;font-size:1em;cursor:pointer;padding:6px 4px}'
++'#qsDlg .qs-b.pri{box-shadow:0 8px 20px rgba(99,102,241,.3)}';
+document.head.appendChild(st2);
+
+/* ---- dialog ---- */
+var dlg=null,mode='in',tab='acct',usageTxt='',isAdminUser=false,gdUi={phase:'idle',dev:null,cancel:false};
+function close(){gdUi.cancel=true;if(dlg){dlg.remove();dlg=null}}
+function msg(t,kind){var m=dlg&&dlg.querySelector('.qs-msg');if(m){m.className='qs-msg'+(kind?' '+kind:'');m.textContent=t||''}}
+function head(sub){return '<div class="qs-h"><div class="qs-ic">\u2601</div><div><b>Account &amp; sync</b><small>'+sub+'</small></div><button type="button" class="qs-x" aria-label="Close">\u2715</button></div>'}
+function headAuth(){
+  var inn=mode==='in';
+  return '<button type="button" class="qs-x qs-xa" aria-label="Close">\u2715</button><div class="qs-brand"><div class="qs-logo">Q</div><b>'+(inn?'Welcome back':'Create your account')+'</b><small>'+(inn?'Sign in to sync and back up your documents.':'Sync and back up your documents on all your devices.')+'</small></div>';
+}
+function body(){return dlg&&dlg.querySelector('#qsBody')}
+
+function paintTabs(){
+  var el=dlg&&dlg.querySelector('#qsTabs');if(!el)return;
+  if(!QS.user()){el.innerHTML='';return}
+  var t=[['acct','Account']];if(QS.user())t.push(['backup','Backup']);if(isAdminUser&&QS.user())t.push(['admin','Admin']);
+  el.innerHTML='<div class="qs-seg">'+t.map(function(x){return '<button type="button" data-t="'+x[0]+'" class="'+(tab===x[0]?'on':'')+'">'+x[1]+'</button>'}).join('')+'</div>';
+}
+function render(){
+  if(!dlg)return;
+  var c=dlg.querySelector('.qs-c'),u=QS.user();
+  if(!u&&(tab==='admin'||tab==='backup'))tab='acct';
+  c.innerHTML=(u?head('Your documents sync automatically'):headAuth())+'<div id="qsTabs"></div><div id="qsBody"></div>';
+  paintTabs();
+  if(tab==='backup')renderBackup();else if(tab==='admin')renderAdmin();else renderAcct();
+}
+
+/* ---------- Account tab ---------- */
+function renderAcct(){
+  var c=body(),u=QS.user();
+  if(!u){
+    var inn=mode==='in';
+    c.innerHTML='<label class="qs-lb" for="qsE">Email</label>'
+     +'<input id="qsE" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="you@example.com">'
+     +'<div class="qs-lb"><label for="qsP">Password</label>'+(inn?'<button type="button" data-fg>Forgot password?</button>':'')+'</div>'
+     +'<div class="qs-pw"><input id="qsP" type="password" autocomplete="'+(inn?'current-password':'new-password')+'" placeholder="'+(inn?'Your password':'At least 8 characters')+'"><button type="button" data-eye>Show</button></div>'
+     +'<div class="qs-msg"></div>'
+     +'<button type="button" class="qs-b pri" data-go>'+(inn?'Sign in':'Create account')+'</button>'
+     +'<div class="qs-div">or continue with</div>'
+     +'<button type="button" class="qs-b qs-gb" data-g><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.7 6c4.5-4.2 6.9-10.3 6.9-17.7z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.5-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.700-6c-2.2 1.500-5 2.3-8.2 2.3-6.300 0-11.6-4.100-13.5-9.8l-7.9 6.1C6.5 42.6 14.600 48 24 48z"/></svg><span>Google</span></button>'
+     +'<div class="qs-sw">'+(inn?'New to Quill Docs? <button type="button" data-m="up">Create account</button>':'Already have an account? <button type="button" data-m="in">Sign in</button>')+'</div>'
+     +'<div class="qs-n" style="text-align:center">The app works without an account. Sign in to sync and back up your documents.</div>';
+    var e=c.querySelector('#qsE');if(e&&!e.value)e.value=lsj2('qs_email')||'';
+    return;
+  }
+  c.innerHTML='<div class="qs-me"><div class="qs-av">'+esc((u.email||'?').charAt(0).toUpperCase())+'</div><div style="min-width:0"><b style="word-break:break-all">'+esc(u.email)+'</b><small>'+(u.verified||u.provider==='google.com'?'Email verified':'Email not verified yet \u00b7 <a href="#" data-rv style="color:var(--accent,#6366f1)">Resend link</a>')+'</small></div></div>'
+   +'<div class="qs-sec">Sync method</div><div class="qs-seg"><button type="button" data-smode="cloud" class="'+(QS.mode()==='cloud'?'on':'')+'">Quill cloud</button><button type="button" data-smode="drive" class="'+(QS.mode()==='drive'?'on':'')+'">Google Drive</button></div>'
+   +'<small>'+(QS.mode()==='drive'?'Each document is a file in a hidden folder of your own Google Drive. Uses your Google storage, not ours.':'Fast default. Uses your Quill cloud storage limit.')+'</small>'
+   +'<div class="qs-s" id="qsS" style="margin-top:10px"></div><div class="qs-msg"></div>'
+   +'<button type="button" class="qs-b pri" data-sync>Sync now</button>'
+   +'<button type="button" class="qs-b" data-out>Sign out</button>'
+   +'<button type="button" class="qs-b dng" data-del>Delete account</button>'
+   +'<div class="qs-n">Sign out keeps your documents on this device. Delete account removes your cloud copy and your login; documents on this device stay.</div>';
+  paintStat(QS.getStatus());loadUsage();
+}
+function paintStat(s){
+  var el=dlg&&dlg.querySelector('#qsS');if(!el)return;
+  var line=s.state==='syncing'?'Syncing\u2026':(s.state==='error'||s.state==='warn')?'\u26A0 '+esc(s.msg):s.state==='offline'?'Offline. Will sync when you are back online.':'Last synced: '+fmtT(s.last);
+  el.innerHTML=line+'<br><span id="qsU" style="opacity:.8">'+esc(usageTxt)+'</span><div class="qs-bar" id="qsBar" style="display:none"><i></i></div>';
+  paintBar();
+}
+var usageNums=null;
+function paintBar(){var b=dlg&&dlg.querySelector('#qsBar');if(!b||!usageNums)return;b.style.display='';b.firstChild.style.width=Math.min(100,Math.round(100*usageNums.used/Math.max(1,usageNums.quota)))+'%'}
+function loadUsage(){
+  if(!QS.user())return;
+  QS.usage().then(function(r){
+    usageNums=r;isAdminUser=!!r.admin;
+    usageTxt=r.count+(r.count===1?' document':' documents')+' \u00b7 '+fmtMB(r.used)+' of '+fmtMB(r.quota)+' used'+(r.plan==='custom'?' (your plan)':'');
+    var el=dlg&&dlg.querySelector('#qsU');if(el)el.textContent=usageTxt;paintBar();paintTabs();
+  }).catch(function(){});
+}
+QS.onStatus(function(s){paintStat(s);if(s.state==='ok'&&dlg&&tab==='acct')loadUsage()});
+
+async function go(){
+  var email=(dlg.querySelector('#qsE').value||'').trim(),pw=dlg.querySelector('#qsP').value||'',b=dlg.querySelector('[data-go]');
+  if(!email||email.indexOf('@')<1){msg('Please enter your email address.','err');return}
+  if(!pw){msg('Please enter your password.','err');return}
+  if(mode==='up'&&pw.length<8){msg('Use at least 8 characters for your password.','err');return}
+  b.disabled=true;msg(mode==='in'?'Signing in\u2026':'Creating your account\u2026');
+  try{
+    var u=mode==='in'?await QS.signIn(email,pw):await QS.signUp(email,pw);
+    try{lsx.setItem('qs_email',email)}catch(e){}
+    await afterLogin(u,mode==='up');
+  }catch(e){msg(e.message,'err');b.disabled=false}
+}
+async function afterLogin(u,fresh){
+  var owner=lsj2('qs_owner');
+  if(owner&&owner!==u.uid){
+    var n=0;try{n=(await store.all()).length}catch(e){}
+    if(n&&!window.confirm('This device already has '+n+' document(s) from another account. Signing in will add them to this account. Continue?')){QS.signOut();repaint();render();msg('Sign-in cancelled.');return}
+  }
+  try{lsx.setItem('qs_owner',u.uid)}catch(e){}
+  startLoop();repaint();render();msg(fresh?'Account created. We sent you a verification email.':'Signed in.','ok');
+  QS.sync();
+}
+async function googleGo(){
+  if(window.QuillAndroid&&typeof window.QuillAndroid.googleSignIn==='function'){msg('Opening Google\u2026');try{window.QuillAndroid.googleSignIn(GOOGLE_CLIENT_ID)}catch(e){msg('Could not start Google sign-in.','err')}return}
+  if(isWebView()){msg('Google sign-in inside the app is not available yet. Use email and password here, or sign in with Google on the website.','err');return}
+  if(!GOOGLE_CLIENT_ID){msg('Google sign-in is not set up yet.','err');return}
+  var state=rnd();try{sessionStorage.setItem('qs_gst',state)}catch(e){}
+  location.href='https://accounts.google.com/o/oauth2/v2/auth?client_id='+encodeURIComponent(GOOGLE_CLIENT_ID)+'&redirect_uri='+encodeURIComponent(location.origin+location.pathname)+'&response_type=id_token&scope='+encodeURIComponent('openid email profile')+'&state='+state+'&nonce='+rnd()+'&prompt=select_account';
+}
+window.__qsGoogleToken=async function(token,err){
+  if(!dlg)window.qsOpen();
+  if(!token){msg(err||'Google sign-in was cancelled.','err');return}
+  try{msg('Signing in\u2026');var u=await QS.google(token);await afterLogin(u,false)}catch(e){msg(e.message,'err')}
+};
+
+/* ---------- Backup tab ---------- */
+function backupName(){var d=new Date();return 'quill-backup-'+d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)+'.json'}
+async function backupBlob(){var bk=await QS.buildBackup();return {blob:new Blob([JSON.stringify(bk)],{type:'application/json'}),count:bk.count}}
+function blobToB64(blob){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){var d=String(r.result);ok(d.slice(d.indexOf(',')+1))};r.onerror=no;r.readAsDataURL(blob)})}
+
+async function deviceStats(){
+  var el=dlg&&dlg.querySelector('#qsDev');if(!el)return;
+  var docs=0;try{docs=(await store.all()).length}catch(e){}
+  var t=docs+(docs===1?' document':' documents')+' on this device';
+  try{
+    if(navigator.storage&&navigator.storage.estimate){
+      var e=await navigator.storage.estimate();
+      if(e&&e.usage!=null)t+=' \u00b7 app is using '+fmtMB(e.usage)+(e.quota?' of about '+fmtMB(e.quota)+' available':'');
+    }
+  }catch(x){}
+  if(dlg&&dlg.querySelector('#qsDev'))dlg.querySelector('#qsDev').textContent=t;
+}
+function renderBackup(){
+  var c=body(),u=QS.user();
+  c.innerHTML='<div class="qs-s" id="qsDev">Checking this device\u2026</div>'
+   +'<div class="qs-sec">Folder on this device</div><div id="qsFold"></div>'
+   +'<div class="qs-sec">Backup file</div><small>Works with Google Drive, Dropbox, OneDrive, Files or any app on your phone.</small>'
+   +'<button type="button" class="qs-b pri" data-bshare>Send backup to a drive or app\u2026</button>'
+   +'<button type="button" class="qs-b" data-bsave>Save backup on this device</button>'
+   +'<button type="button" class="qs-b" data-brest>Restore from a backup file\u2026</button>'
+   +'<input type="file" id="qsFile" accept=".json,application/json" style="display:none">'
+   +'<div class="qs-sec">Google Drive (automatic)</div><div id="qsGd"></div>'
+   +'<div class="qs-msg"></div>'
+   +'<div class="qs-n">Restoring never deletes anything. Documents that are missing here are added back, and a document is replaced only when the backup has a newer version.</div>';
+  deviceStats();renderGd();renderFold();
+}
+function renderGd(){
+  var el=dlg&&dlg.querySelector('#qsGd');if(!el)return;
+  if(!QS.user()){el.innerHTML='<small>Sign in on the Account tab to connect Google Drive. Your backup is kept in a hidden app folder in your own Drive and uses your own Google storage.</small>';return}
+  var g=QS.gd.state();
+  if(gdUi.phase==='waiting'&&gdUi.dev){
+    el.innerHTML='<small>1. Tap Open Google and sign in.<br>2. Enter this code:</small><div class="qs-code">'+esc(gdUi.dev.user_code)+'</div>'
+     +'<button type="button" class="qs-b pri" data-gdopen>Open Google</button><button type="button" class="qs-b" data-gdcancel>Cancel</button><small style="margin-top:8px">Waiting for you to approve\u2026</small>';
+    return;
+  }
+  if(!g.connected){
+    el.innerHTML='<small>Keeps one backup file in a hidden app folder of your own Google Drive. Nobody else can see it.</small><button type="button" class="qs-b" data-gdc>Connect Google Drive</button>';return}
+  el.innerHTML='<div class="qs-s" id="qsGdi">Connected \u00b7 last backup: '+esc(fmtT(g.last))+(g.error?'<br>\u26A0 '+esc(g.error):'')+'</div>'
+   +'<button type="button" class="qs-b pri" data-gdb>Back up now</button><button type="button" class="qs-b" data-gdr>Restore from Google Drive</button>'
+   +(QS.mode()==='drive'?'<small style="margin-top:8px">\u2705 Documents sync through Google Drive.</small>':'<button type="button" class="qs-b" data-smode="drive">Use Google Drive for sync</button>')
+   +'<label class="qs-ck"><input type="checkbox" data-gda '+(g.auto?'checked':'')+'> Back up automatically (once a day, when something changed)</label>'
+   +'<button type="button" class="qs-l" data-gdx>Disconnect Google Drive</button>';
+}
+async function gdWait(dev){
+  var wait=Math.max(3,Number(dev.interval)||5)*1000,until=Date.now()+(Number(dev.expires_in)||600)*1000;
+  while(!gdUi.cancel&&Date.now()<until){
+    await new Promise(function(r){setTimeout(r,wait)});
+    if(gdUi.cancel||!dlg)return;
+    var r;try{r=await QS.gd.poll(dev.device_code)}catch(e){gdUi.phase='idle';renderGd();msg(e.message,'err');return}
+    if(r.status==='ok'){gdUi.phase='idle';renderGd();msg('Google Drive connected.','ok');QS.gd.autoBackup().then(function(){renderGd()});return}
+    if(r.status==='slow_down')wait+=5000;
+    else if(r.status==='denied'){gdUi.phase='idle';renderGd();msg('Google Drive was not allowed.','err');return}
+    else if(r.status==='expired'||r.status==='error'){gdUi.phase='idle';renderGd();msg('The code expired. Please try again.','err');return}
+  }
+  if(!gdUi.cancel&&gdUi.phase==='waiting'){gdUi.phase='idle';renderGd();msg('The code expired. Please try again.','err')}
+}
+async function backupShare(){
+  msg('Preparing\u2026');
+  try{
+    var b=await backupBlob(),name=backupName();
+    if(window.QuillAndroid&&typeof window.QuillAndroid.shareFile==='function'){window.QuillAndroid.shareFile(name,'application/json',await blobToB64(b.blob));msg(b.count+' documents ready to send.','ok');return}
+    var f=new File([b.blob],name,{type:'application/json'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:name});msg('Shared.','ok');return}
+    saveFile(b.blob,name);msg(b.count+' documents saved as '+name,'ok');
+  }catch(e){if(e&&e.name==='AbortError'){msg('');return}msg('Could not create the backup: '+(e&&e.message?e.message:e),'err')}
+}
+async function backupSave(){
+  msg('Preparing\u2026');
+  try{var b=await backupBlob(),name=backupName();saveFile(b.blob,name);msg(b.count+' documents saved as '+name,'ok')}
+  catch(e){msg('Could not create the backup: '+(e&&e.message?e.message:e),'err')}
+}
+function saveFile(blob,name){
+  if(typeof window.saveBlobAs==='function')return window.saveBlobAs(blob,name);
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500);
+}
+function showRestore(r){
+  msg('Restored: '+r.added+' added back, '+r.updated+' updated, '+r.skipped+' already up to date'+(r.invalid?', '+r.invalid+' skipped (invalid)':'')+'.','ok');
+  deviceStats();if(QS.user())QS.sync();
+}
+async function restoreFile(file){
+  if(!file)return;msg('Reading backup\u2026');
+  var obj;try{obj=JSON.parse(await file.text())}catch(e){msg('That file is not a Quill Docs backup.','err');return}
+  try{showRestore(await QS.restoreBackup(obj))}catch(e){msg(e.message,'err')}
+}
+
+/* ---------- Admin tab ---------- */
+async function renderAdmin(){
+  var c=body();c.innerHTML='<div class="qs-s">Loading\u2026</div><div class="qs-msg"></div>';
+  try{
+    var o=await QS.adminOverview();if(!dlg||tab!=='admin')return;
+    var pct=Math.min(100,Math.round(100*o.pool.used/Math.max(1,o.pool.total)));
+    c.innerHTML='<div class="qs-s"><b>Cloud storage pool</b><br>'+fmtMB(o.pool.used)+' of '+fmtMB(o.pool.total)+' used ('+pct+'%)<div class="qs-bar"><i style="width:'+pct+'%"></i></div><small>New people get '+o.defaultMB+' MB each. Set a bigger limit for a person below. Their limits together should stay inside the pool.</small></div>'
+     +'<div class="qs-msg"></div>'
+     +o.users.map(function(u){
+        return '<div class="qs-u" data-uid="'+esc(u.uid)+'"><b>'+esc(u.email||'(no email yet)')+'</b><small>'+u.count+' docs \u00b7 '+fmtMB(u.used)+' used \u00b7 limit '+(u.quota_mb?u.quota_mb+' MB':o.defaultMB+' MB (default)')+'</small>'
+         +'<div class="qs-ur"><input type="number" min="1" max="100000" inputmode="numeric" placeholder="MB" data-qv><button type="button" data-qset>Set</button><button type="button" data-qreset>Default</button></div></div>';
+      }).join('')||'<small>No people yet.</small>';
+  }catch(e){c.innerHTML='<div class="qs-msg err">'+esc(e.message)+'</div>'}
+}
+
+/* ---------- Visible folder on the device (Android folder picker, or the browser's folder picker) ---------- */
+var QF=(function(){
+  var NAT=function(){return !!(window.QuillFolder&&typeof window.QuillFolder.folderWrite==='function')};
+  var WEB=function(){return !NAT()&&typeof window.showDirectoryPicker==='function'};
+  var root=null,busy=false;
+  function b64(t){return btoa(unescape(encodeURIComponent(t)))}
+  function unb64(b){return decodeURIComponent(escape(atob(b)))}
+  function jget(k,d){try{var v=lsx.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+  function jset(k,v){try{lsx.setItem(k,JSON.stringify(v))}catch(e){}}
+  function idb(){return new Promise(function(res,rej){var r=indexedDB.open('qf_handle',1);r.onupgradeneeded=function(){r.result.createObjectStore('h')};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}})}
+  async function hget(){var d=await idb();return new Promise(function(res){var q=d.transaction('h').objectStore('h').get('dir');q.onsuccess=function(){res(q.result||null)};q.onerror=function(){res(null)}})}
+  async function hset(h){var d=await idb();return new Promise(function(res,rej){var t=d.transaction('h','readwrite');t.objectStore('h').put(h,'dir');t.oncomplete=res;t.onerror=function(){rej(t.error)}})}
+  function safe(s){return (String(s||'').replace(/[\\\/:*?"<>|\u0000-\u001f]/g,'_').trim().slice(0,60))||'Untitled'}
+  function fname(d){return safe(d.title)+' ['+String(d.id).slice(-6)+'].quill.json'}
+  /* adapters: name, ready, write, remove, list, read */
+  var A={
+    name:async function(){if(NAT())return String(window.QuillFolder.folderName()||'');if(!root)root=await hget();return root?root.name:''},
+    ready:async function(ask){
+      if(NAT())return !!window.QuillFolder.folderName();
+      if(!root)root=await hget();if(!root)return false;
+      try{var p=await root.queryPermission({mode:'readwrite'});if(p!=='granted'&&ask)p=await root.requestPermission({mode:'readwrite'});return p==='granted'}catch(e){return false}
+    },
+    write:async function(n,t){
+      if(NAT()){if(!window.QuillFolder.folderWrite(n,b64(t)))throw new Error('write failed');return}
+      var fh=await root.getFileHandle(n,{create:true}),w=await fh.createWritable();await w.write(t);await w.close();
+    },
+    remove:async function(n){if(NAT()){window.QuillFolder.folderDelete(n);return}try{await root.removeEntry(n)}catch(e){}},
+    list:async function(){
+      if(NAT()){try{return JSON.parse(window.QuillFolder.folderList()||'[]')}catch(e){return []}}
+      var out=[];for await(var en of root.entries()){if(en[1].kind==='file'&&/\.quill\.json$/.test(en[0])){var f=await en[1].getFile();out.push({name:en[0],mtime:f.lastModified})}}return out;
+    },
+    read:async function(n){
+      if(NAT())return unb64(window.QuillFolder.folderRead(n)||'');
+      var fh=await root.getFileHandle(n);return (await fh.getFile()).text();
+    }
+  };
+  function isOn(){return lsx.getItem('qf_on')==='1'}
+  async function run(force){
+    if(busy)return {n:0,rm:0,imp:0};
+    if(!QS.user())return {n:0,rm:0,imp:0};
+    if(!isOn()&&!force)return {n:0,rm:0,imp:0};
+    if(!NAT()&&!WEB())return {n:0,rm:0,imp:0,err:'This app build cannot use a device folder. Install the newest APK.'};
+    if(!(await A.ready(false)))return {n:0,rm:0,imp:0,err:'Folder needs permission. Tap Choose folder.'};
+    busy=true;var n=0,rm=0,imp=0;
+    try{
+      var map=jget('qf_map',{}),last=jget('qf_last',0),started=Date.now();
+      /* import: files copied into the folder, or edited there, are brought in when they are newer */
+      var files=await A.list(),known={};Object.keys(map).forEach(function(id){known[map[id].n]=map[id]});
+      var docs=[];
+      for(var i=0;i<files.length;i++){
+        var f=files[i],k=known[f.name];
+        if(k&&f.mtime<=last+2000)continue;
+        try{var rec=JSON.parse(await A.read(f.name));if(rec&&typeof rec.id==='string'&&!(k&&k.id===rec.id&&Number(rec.updated)===k.u))docs.push(rec)}catch(e){}
+      }
+      if(docs.length){var r=await QS.restoreBackup({app:'quill-docs',docs:docs});imp=r.added+r.updated}
+      /* export */
+      var all=await store.all(),live={};
+      for(var j=0;j<all.length;j++){
+        var d=all[j],nm=fname(d);live[d.id]=1;
+        var m=map[d.id];if(m&&m.n===nm&&m.u===d.updated)continue;
+        await A.write(nm,JSON.stringify(d));
+        if(m&&m.n!==nm)await A.remove(m.n);
+        map[d.id]={n:nm,u:d.updated,id:d.id};n++;
+      }
+      var gone=Object.keys(map).filter(function(id){return !live[id]});
+      if(gone.length&&gone.length>Math.max(3,Object.keys(map).length*0.5)){}
+      else for(var g=0;g<gone.length;g++){await A.remove(map[gone[g]].n);delete map[gone[g]];rm++}
+      jset('qf_map',map);jset('qf_last',started);
+      return {n:n,rm:rm,imp:imp};
+    }catch(e){return {n:n,rm:rm,imp:imp,err:'Folder copy failed: '+(e&&e.message||e)}}
+    finally{busy=false}
+  }
+  var tmr=0;function soon(ms){if(!isOn())return;clearTimeout(tmr);tmr=setTimeout(function(){run().then(function(){renderFold()})},ms||4000)}
+  async function pick(){
+    try{
+      if(NAT()){window.QuillFolder.pickFolder();return}
+      if(WEB()){root=await window.showDirectoryPicker({mode:'readwrite'});await hset(root);picked(root.name);return}
+      msg('This app build cannot choose a folder yet. Install the newest APK.','err');
+    }catch(e){if(e&&e.name!=='AbortError')msg('Could not choose a folder: '+(e.message||e),'err')}
+  }
+  function picked(name){lsx.setItem('qf_on','1');try{lsx.removeItem('qf_map')}catch(e){}msg('Copying documents to '+name+'\u2026');run(true).then(function(r){renderFold();msg(r.err||('Folder ready: '+r.n+' documents copied'+(r.imp?', '+r.imp+' imported':'')+'.'),r.err?'err':'ok')})}
+  window.__qfPicked=function(name){if(name)picked(name);else msg('No folder chosen.','err')};
+  function off(){lsx.removeItem('qf_on')}
+  /* keep it fresh: after every save, rename, move, delete */
+  var pa=window.__docsAfterSave;window.__docsAfterSave=function(){try{if(pa)pa.apply(this,arguments)}catch(e){}soon(5000)};
+  ['wdRenameDoc','wdMoveDoc','wdDelDoc','wdDupDoc','wdRestoreDoc'].forEach(function(n){
+    var f=window[n];if(typeof f!=='function'||f.__qf)return;
+    var w=function(){var r=f.apply(this,arguments);Promise.resolve(r).then(function(){soon(3000)},function(){});return r};w.__qf=1;window[n]=w;
+  });
+  setInterval(function(){if(!document.hidden)soon(500)},90000);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)soon(1500)});
+  setTimeout(function(){soon(3000)},4000);
+  return {run:run,pick:pick,off:off,isOn:isOn,name:A.name,supported:function(){return NAT()||WEB()},ready:A.ready};
+})();
+function renderFold(){
+  var el=dlg&&dlg.querySelector('#qsFold');if(!el)return;
+  if(!QF.supported()){el.innerHTML='<small>Saving to a visible folder needs the newest Android app (or Chrome/Edge on a computer). Your documents are still safe inside the app.</small>';return}
+  QF.name().then(function(nm){
+    if(!dlg||!dlg.querySelector('#qsFold'))return;
+    if(!QF.isOn()||!nm){el.innerHTML='<small>Pick a folder and every document is also saved there as a file, updated automatically. Files you drop in later are imported.</small><button type="button" class="qs-b" data-qfpick>Choose folder</button>';return}
+    el.innerHTML='<div class="qs-s">Folder: <b>'+esc(nm)+'</b><br>Documents are copied here after every save.</div><button type="button" class="qs-b pri" data-qfnow>Copy now</button><button type="button" class="qs-b" data-qfpick>Change folder</button><button type="button" class="qs-l" data-qfoff>Turn off</button>';
+  });
+}
+
+/* ---------- events ---------- */
+function onClick(e){
+  var t=e.target,q=function(a){return t.closest&&t.closest(a)};
+  if(t===dlg||q('.qs-x')){close();return}
+  var tb=q('[data-t]');if(tb){tab=tb.getAttribute('data-t');render();return}
+  var m=q('[data-m]');if(m){mode=m.getAttribute('data-m');var ev=dlg.querySelector('#qsE')?dlg.querySelector('#qsE').value:'';render();if(dlg.querySelector('#qsE'))dlg.querySelector('#qsE').value=ev;return}
+  if(q('[data-eye]')){var p=dlg.querySelector('#qsP');p.type=p.type==='password'?'text':'password';q('[data-eye]').textContent=p.type==='password'?'Show':'Hide';return}
+  if(q('[data-go]')){go();return}
+  if(q('[data-g]')){googleGo();return}
+  if(q('[data-fg]')){
+    var em=(dlg.querySelector('#qsE').value||'').trim();if(!em||em.indexOf('@')<1){msg('Enter your email above, then tap Forgot password.','err');return}
+    msg('Sending\u2026');QS.reset(em).then(function(){msg('If that email has an account, a reset link is on its way. Check your inbox and spam folder.','ok')}).catch(function(x){msg(x.message,'err')});return}
+  if(q('[data-rv]')){e.preventDefault();QS.sendVerify().then(function(){msg('Verification email sent.','ok')}).catch(function(x){msg(x.message,'err')});return}
+  if(q('[data-sync]')){msg('');QS.sync().then(function(r){if(r&&r.ok&&!r.problems.length)msg('Everything is up to date.','ok')});return}
+  if(q('[data-out]')){QS.signOut();isAdminUser=false;usageNums=null;usageTxt='';repaint();render();return}
+  if(q('[data-del]')){
+    if(!window.confirm('Delete your account? Your cloud copy and login are removed permanently. Documents on this device stay.'))return;
+    msg('Deleting\u2026');QS.deleteAccount().then(function(){try{lsx.removeItem('qs_owner')}catch(x){}isAdminUser=false;repaint();render();msg('Account deleted.','ok')}).catch(function(x){msg(x.message,'err')});return}
+  var sm=q('[data-smode]');
+  if(sm){var v=sm.getAttribute('data-smode');
+    if(v==='drive'&&!QS.gd.state().connected){tab='backup';render();msg('Connect Google Drive here first, then choose Google Drive sync.','err');return}
+    QS.setMode(v);render();QS.sync();return}
+  if(q('[data-qfpick]')){QF.pick();return}
+  if(q('[data-qfnow]')){msg('Copying\u2026');QF.run(true).then(function(r){renderFold();msg(r.err||('Folder is up to date ('+r.n+' copied'+(r.rm?', '+r.rm+' removed':'')+(r.imp?', '+r.imp+' imported':'')+').'),r.err?'err':'ok')});return}
+  if(q('[data-qfoff]')){QF.off();renderFold();msg('Folder copy turned off. Files already in the folder stay there.','ok');return}
+  /* backup */
+  if(q('[data-bshare]')){backupShare();return}
+  if(q('[data-bsave]')){backupSave();return}
+  if(q('[data-brest]')){var fi=dlg.querySelector('#qsFile');if(fi){fi.value='';fi.click()}return}
+  if(q('[data-gdc]')){
+    msg('Contacting Google\u2026');gdUi.cancel=false;
+    QS.gd.start().then(function(dev){gdUi={phase:'waiting',dev:dev,cancel:false};renderGd();msg('');gdWait(dev)}).catch(function(x){msg(x.status===501?'Google Drive backup is not set up on the server yet.':x.message,'err')});return}
+  if(q('[data-gdopen]')){var url=(gdUi.dev&&gdUi.dev.verification_url)||'https://www.google.com/device';try{if(window.QuillAndroid&&typeof window.QuillAndroid.openUrl==='function')window.QuillAndroid.openUrl(url);else window.open(url,'_blank','noopener')}catch(x){}return}
+  if(q('[data-gdcancel]')){gdUi.cancel=true;gdUi.phase='idle';renderGd();msg('');return}
+  if(q('[data-gdb]')){msg('Backing up\u2026');QS.gd.backup().then(function(r){renderGd();msg(r.count+' documents backed up to Google Drive.','ok')}).catch(function(x){msg(x.message,'err');renderGd()});return}
+  if(q('[data-gdr]')){
+    if(!window.confirm('Restore from your Google Drive backup? Missing documents are added back; nothing is deleted.'))return;
+    msg('Restoring\u2026');QS.gd.restore().then(showRestore).catch(function(x){msg(x.message,'err')});return}
+  if(q('[data-gdx]')){
+    if(!window.confirm('Disconnect Google Drive? Your existing backup stays in your Drive.'))return;
+    QS.gd.disconnect().then(function(){renderGd();msg('Disconnected.','ok')});return}
+  /* admin */
+  var row=q('.qs-u');
+  if(row&&q('[data-qset]')){
+    var v=row.querySelector('[data-qv]').value,n=Number(v);
+    if(!v||!Number.isInteger(n)||n<1||n>100000){msg('Enter a whole number of MB (1 to 100000).','err');return}
+    QS.adminSetQuota(row.getAttribute('data-uid'),n).then(function(){renderAdmin().then(function(){msg('Limit set to '+n+' MB.','ok')})}).catch(function(x){msg(x.message,'err')});return}
+  if(row&&q('[data-qreset]')){QS.adminSetQuota(row.getAttribute('data-uid'),null).then(function(){renderAdmin().then(function(){msg('Back to the default limit.','ok')})}).catch(function(x){msg(x.message,'err')});return}
+}
+
+window.qsOpen=function(note,which){
+  close();gdUi.cancel=false;if(which)tab=which;
+  dlg=document.createElement('div');dlg.id='qsDlg';dlg.setAttribute('role','dialog');dlg.setAttribute('aria-modal','true');
+  dlg.innerHTML='<div class="qs-c"></div>';dlg.addEventListener('click',onClick);
+  dlg.addEventListener('change',function(e){
+    if(e.target&&e.target.id==='qsFile'){restoreFile(e.target.files&&e.target.files[0])}
+    else if(e.target&&e.target.hasAttribute&&e.target.hasAttribute('data-gda')){QS.gd.setAuto(e.target.checked);msg(e.target.checked?'Automatic backup is on.':'Automatic backup is off.','ok')}
+  });
+  dlg.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'&&dlg.querySelector('[data-go]'))go()});
+  document.body.appendChild(dlg);render();if(note)msg(note);
+};
+window.qsLabel=function(){var u=QS.user();return u?'Account & sync \u00b7 '+u.email:'Sign in, sync & backup'};
+
+/* ---- startup ---- */
+(function boot(){
+  repaint();
+  if(QS.user())startLoop();
+  /* return from Google's website sign-in */
+  try{
+    if(location.hash&&location.hash.indexOf('id_token=')>-1){
+      var p=new URLSearchParams(location.hash.slice(1)),tok=p.get('id_token'),stt=p.get('state'),want=sessionStorage.getItem('qs_gst');
+      history.replaceState(null,'',location.pathname+location.search);
+      if(tok&&stt&&want&&stt===want){sessionStorage.removeItem('qs_gst');setTimeout(function(){window.qsOpen();window.__qsGoogleToken(tok)},600)}
+    }
+  }catch(e){}
+  if(QS.user())setTimeout(function(){if(navigator.onLine!==false)QS.sync()},2500);
+})();
+})();
+
 </script>
 </body>
 </html>
