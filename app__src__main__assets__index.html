@@ -899,6 +899,58 @@ button,input,select,textarea{max-width:100%;font:inherit}
 #settingsOverlay .st-row{width:100%;display:flex;align-items:center;gap:16px;background:transparent;color:var(--text);border:0;border-radius:18px;padding:16px 14px;text-align:left;margin:0;justify-content:flex-start!important}
 #settingsOverlay .st-row:active{background:rgba(128,128,128,.18)}
 #settingsOverlay .st-ic{width:46px;height:46px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:1.3em;flex:0 0 auto}
+#settingsOverlay .st-ic{width:clamp(40px,11.5vw,48px);height:clamp(40px,11.5vw,48px);border-radius:14px;font-size:1em;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);border:1.5px solid color-mix(in srgb,var(--accent) 38%,transparent);box-sizing:border-box;transition:background .15s,border-color .15s,transform .15s}
+#settingsOverlay .st-ic svg{width:clamp(20px,5.6vw,24px);height:clamp(20px,5.6vw,24px)}
+#settingsOverlay .st-row:active .st-ic{background:color-mix(in srgb,var(--accent) 22%,transparent);border-color:var(--accent);transform:scale(.96)}
+#settingsOverlay .st-row{gap:clamp(12px,4vw,16px);padding:clamp(12px,3.6vw,16px) clamp(10px,3.4vw,14px)}
+#settingsOverlay .st-ch{display:inline-flex;align-items:center;font-size:1em}
+#settingsOverlay .st-ch svg{width:18px;height:18px}
+#settingsOverlay.setup .sto-bk{display:none}
+#settingsOverlay .sto-bk{margin:0 0 14px}
+#settingsOverlay .sto-adv{margin:0 0 6px}
+#settingsOverlay .sto-adv>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:18px;background:var(--card);border:1px solid rgba(128,128,128,.22);color:var(--text)}
+#settingsOverlay .sto-adv>summary::-webkit-details-marker{display:none}
+#settingsOverlay .sto-adv>summary b{display:block;font-size:.95em;font-weight:650}
+#settingsOverlay .sto-adv>summary small{display:block;font-size:.78em;color:var(--sub);margin-top:2px;line-height:1.35}
+#settingsOverlay .sto-adv>summary::after{content:"";flex:0 0 auto;width:9px;height:9px;border-right:2px solid var(--sub);border-bottom:2px solid var(--sub);transform:rotate(45deg);margin:0 4px 3px 0;transition:transform .2s}
+#settingsOverlay .sto-adv[open]>summary::after{transform:rotate(-135deg);margin:3px 4px 0 0}
+#settingsOverlay .sto-adv-body{padding-top:14px}
+#settingsOverlay #inMode{display:none}
+#settingsOverlay .sto-sub{font-size:.85em;color:var(--sub);margin:2px 0 14px;line-height:1.45}
+#settingsOverlay .sto-cards{display:flex;flex-direction:column;gap:10px;margin:0 0 14px}
+#settingsOverlay .sto-card{width:100%;display:flex;align-items:center;gap:clamp(12px,4vw,16px);text-align:left;margin:0;padding:clamp(12px,3.6vw,16px);border-radius:20px;background:var(--card);color:var(--text);border:1.5px solid rgba(128,128,128,.22);justify-content:flex-start!important;transition:border-color .15s,background .15s,box-shadow .15s,transform .15s}
+#settingsOverlay .sto-card:active{transform:scale(.99)}
+#settingsOverlay .sto-ic{width:clamp(40px,11.5vw,48px);height:clamp(40px,11.5vw,48px);border-radius:14px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;box-sizing:border-box;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);border:1.5px solid color-mix(in srgb,var(--accent) 38%,transparent)}
+#settingsOverlay .sto-ic svg{width:clamp(20px,5.6vw,24px);height:clamp(20px,5.6vw,24px)}
+#settingsOverlay .sto-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+#settingsOverlay .sto-tx b{font-size:1.02em;font-weight:650}
+#settingsOverlay .sto-tx small{font-size:.8em;color:var(--sub);line-height:1.35;font-weight:400}
+#settingsOverlay .sto-ck{width:24px;height:24px;border-radius:50%;border:1.8px solid rgba(128,128,128,.5);flex:0 0 auto;display:grid;place-items:center;color:transparent;box-sizing:border-box;transition:background .15s,border-color .15s}
+#settingsOverlay .sto-ck svg{width:14px;height:14px;stroke-width:2.6}
+#settingsOverlay .sto-card.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,var(--card));box-shadow:0 6px 20px color-mix(in srgb,var(--accent) 16%,transparent)}
+#settingsOverlay .sto-card.on .sto-ck{background:var(--accent);border-color:var(--accent);color:#fff}
+#settingsOverlay .sto-status{background:var(--card2);border:1px solid rgba(128,128,128,.18);border-radius:18px;padding:12px 14px;margin:0 0 16px}
+#settingsOverlay .sto-st-h,#settingsOverlay .sto-h{font-size:.7em;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:var(--sub);margin:0 0 8px}
+#settingsOverlay .sto-h{margin-top:4px}
+#settingsOverlay .sto-st-r{display:flex;gap:12px;align-items:flex-start}
+#settingsOverlay .sto-st-i{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;flex:0 0 auto;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+#settingsOverlay .sto-st-i svg{width:18px;height:18px}
+#settingsOverlay .sto-st-r b{display:block;font-size:.95em;font-weight:650;word-break:break-word}
+#settingsOverlay .sto-st-r small{display:block;color:var(--sub);font-size:.8em;line-height:1.45;margin-top:2px}
+#settingsOverlay .sto-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px;margin:0 0 12px}
+#settingsOverlay .sto-act{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start!important;gap:10px;padding:14px;margin:0;border-radius:18px;background:var(--card);border:1px solid rgba(128,128,128,.22);color:var(--text);text-align:left;min-width:0}
+#settingsOverlay .sto-act:active{background:color-mix(in srgb,var(--accent) 10%,var(--card))}
+#settingsOverlay .sto-act svg{width:22px;height:22px;color:var(--accent);flex:0 0 auto}
+#settingsOverlay .sto-act b{display:block;font-size:.92em;font-weight:650}
+#settingsOverlay .sto-act small{display:block;font-size:.76em;color:var(--sub);font-weight:400;line-height:1.35;margin-top:2px}
+#settingsOverlay .sto-note{font-size:.8em;color:var(--sub);line-height:1.5;margin:0 0 12px}
+#settingsOverlay .sto-note:empty{display:none}
+#settingsOverlay .sto-l{display:block;font-size:.78em;font-weight:700;color:var(--sub);margin:0 0 6px}
+#settingsOverlay #driveFields input,#settingsOverlay #driveFields select{width:100%;box-sizing:border-box;margin:0 0 12px}
+#settingsOverlay .sto-primary{width:100%;display:flex;align-items:center;justify-content:center!important;gap:8px;margin:2px 0 0;padding:14px;border-radius:16px;border:0;background:var(--accent);color:#fff;font-weight:700}
+#settingsOverlay .sto-primary svg{width:18px;height:18px}
+#settingsOverlay .sto-or{display:flex;align-items:center;gap:12px;color:var(--sub);font-size:.75em;margin:14px 0;text-transform:uppercase;letter-spacing:.8px}
+#settingsOverlay .sto-or::before,#settingsOverlay .sto-or::after{content:"";flex:1;height:1px;background:rgba(128,128,128,.25)}
 #settingsOverlay .st-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 #settingsOverlay .st-tx b{font-size:1.05em;font-weight:600}
 #settingsOverlay .st-tx small{font-size:.8em;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -974,7 +1026,8 @@ html.pf-tap .item{padding-top:9px;padding-bottom:9px}
 .pf-nav button.on{background:var(--accent);color:#fff;border-color:transparent}
 .pf-group{margin:0 0 16px;border:1px solid rgba(128,128,128,.18);border-radius:18px;background:var(--card);overflow:hidden;scroll-margin-top:calc(var(--pf-top,64px) + 54px)}
 .pf-gh{display:flex;gap:12px;align-items:center;padding:16px 16px 14px}
-.pf-gi{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:1.15em;flex:0 0 auto;color:#fff}
+.pf-gi{width:clamp(36px,10.5vw,40px);height:clamp(36px,10.5vw,40px);border-radius:12px;display:grid;place-items:center;font-size:1em;flex:0 0 auto;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);border:1.5px solid color-mix(in srgb,var(--accent) 38%,transparent);box-sizing:border-box}
+.pf-gi svg{width:clamp(18px,5vw,22px);height:clamp(18px,5vw,22px)}
 .pf-gh b{display:block;font-family:var(--serif);font-weight:400;font-size:1.28em;line-height:1.15}
 .pf-gh small{display:block;margin-top:2px;color:var(--sub);font-size:.78em}
 .pf-row{display:flex;align-items:center;justify-content:space-between;gap:10px 18px;padding:13px 16px;border-top:1px solid rgba(128,128,128,.13)}
@@ -1197,9 +1250,6 @@ function paintStatus(){
   if(p){
     p.style.display='none';
     try{
-      if(typeof DocCache!=='undefined'&&cfg&&cfg.owner&&cfg.provider==='github'){
-        DocCache.pending(docCacheKey()).then(function(l){p.style.display='';p.textContent=l.length?l.length+' waiting to upload':'Nothing waiting';p.className='pf-pill '+(l.length?'warn':'ok');}).catch(function(){});
-      }
     }catch(e){}
   }
   var np=$('pfPerm'),nb=$('pfPermBtn');
@@ -1294,10 +1344,6 @@ function importData(file){
 async function clearCache(){
   try{
     if(typeof isLocalCfg==='function'&&isLocalCfg()){toast('Your documents live on this device in this mode, so there is no safe cache to clear.');return;}
-    if(typeof DocCache!=='undefined'&&cfg&&cfg.owner&&cfg.provider==='github'){
-      var pend=await DocCache.pending(docCacheKey());
-      if(pend.length){toast(pend.length+' offline edit(s) are still waiting to upload. Sync first.');return;}
-    }
   }catch(e){}
   if(!confirm('Clear the offline copy of your documents and images stored on this device? Your online documents are not affected and will download again.'))return;
   try{var q=indexedDB.deleteDatabase('cl_note_cache');await new Promise(function(r){q.onsuccess=q.onerror=q.onblocked=r;});}catch(e){} try{var q2=indexedDB.deleteDatabase('cl_doc_cache');await new Promise(function(r){q2.onsuccess=q2.onerror=q2.onblocked=r;});}catch(e){}
@@ -1599,6 +1645,23 @@ body.fab-off .bottom-wrap .nb-fab-float,body.on-home .bottom-wrap .nb-fab-float,
 .st-arrow:active{transform:scale(.94)}
 .st-arrow svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .st-flow-nav .flow-steps{margin:0!important;flex:1;justify-content:center}
+.ap-back{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:220;opacity:0;pointer-events:none;transition:opacity .22s}
+.ap-back.open{opacity:1;pointer-events:auto}
+.ap-sheet{position:fixed;left:0;right:0;bottom:0;margin:0 auto;width:100%;max-width:520px;max-height:80vh;overflow:auto;background:var(--card);color:var(--text);z-index:221;border-radius:24px 24px 0 0;padding:8px 16px calc(18px + env(safe-area-inset-bottom,0px));box-sizing:border-box;transform:translateY(105%);transition:transform .25s ease;box-shadow:0 -12px 40px rgba(0,0,0,.35)}
+.ap-sheet.open{transform:none}
+.ap-grab{width:40px;height:4px;border-radius:2px;background:rgba(128,128,128,.4);margin:4px auto 10px}
+.ap-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.ap-top b{display:block;font-size:1.1em;font-weight:700}
+.ap-top small{display:block;font-size:.8em;color:var(--sub);margin-top:2px}
+.ap-x{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;margin:0;padding:0;background:rgba(128,128,128,.14);color:var(--text);border:0}
+.ap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px}
+.ap-tile{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start!important;gap:10px;text-align:left;margin:0;padding:14px;border-radius:18px;background:var(--card2,var(--card));border:1px solid rgba(128,128,128,.22);color:var(--text);min-width:0;position:relative}
+.ap-tile:active{background:color-mix(in srgb,var(--accent) 10%,var(--card))}
+.ap-ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;box-sizing:border-box;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);border:1.5px solid color-mix(in srgb,var(--accent) 38%,transparent)}
+.ap-ic svg{width:22px;height:22px}
+.ap-tile b{display:block;font-size:.98em;font-weight:650}
+.ap-tile small{display:block;font-size:.78em;color:var(--sub);font-weight:400;margin-top:2px;line-height:1.35}
+.ap-soon{position:absolute;top:12px;right:12px;font-size:.66em;font-weight:700;letter-spacing:.3px;padding:3px 8px;border-radius:999px;color:var(--sub);background:rgba(128,128,128,.16)}
 .sd-back{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:210;opacity:0;pointer-events:none;transition:opacity .22s}
 .sd-back.on{opacity:1;pointer-events:auto}
 .sd-panel{position:fixed;top:0;bottom:0;left:0;width:min(84vw,320px);background:var(--card);z-index:211;transform:translateX(-102%);transition:transform .25s ease;display:flex;flex-direction:column;box-shadow:12px 0 40px rgba(0,0,0,.4);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);overflow-y:auto}
@@ -1616,6 +1679,13 @@ body.fab-off .bottom-wrap .nb-fab-float,body.on-home .bottom-wrap .nb-fab-float,
 .sd-row{width:100%;display:flex;align-items:center;gap:14px;background:transparent;border:0;color:var(--text);text-align:left;padding:12px;border-radius:14px;font:inherit;font-weight:700;font-size:.95em;cursor:pointer;margin:0}
 .sd-row:active,.sd-row:hover{background:rgba(128,128,128,.14)}
 .sd-ic{width:40px;height:40px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;background:transparent;border:1.5px solid rgba(128,128,128,.28);color:var(--sub,#8f95a3);transition:border-color .15s,color .15s,background .15s}.sd-ic svg{width:21px;height:21px}.sd-row:hover .sd-ic,.sd-row:active .sd-ic{border-color:var(--accent);color:var(--accent)}
+.sd-foot{justify-content:space-evenly!important;gap:0!important;padding:10px 12px!important}
+.sd-foot>.sd-set,.sd-foot>#sdUpd{flex:0 0 44px!important;width:44px!important;height:44px!important;margin:0!important;padding:0!important;box-sizing:border-box}
+.sd-set{position:relative}
+.sd-badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:9px;background:var(--accent,#6366f1);color:#fff;font-size:.62em;font-weight:800;line-height:18px;text-align:center}
+.sd-badge:empty{display:none}
+.sd-set.active{background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent)}
+.sd-row.active{background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent)}
 .sd-sep{height:1px;background:rgba(128,128,128,.18);margin:6px 12px}
 
 /* ===== Round 3: account view, profile widgets, profile layouts ===== */
@@ -1693,6 +1763,7 @@ body:not(.on-home) .topbar .title{font-size:1.4em}
 .pg-pill .pg-ico svg{width:13px;height:13px;stroke-width:2.2}
 #status.status{display:inline-flex;align-items:center;gap:8px;margin:0 0 12px 2px;padding:5px 12px 5px 10px;border-radius:999px;font-size:.78em;font-weight:700;color:var(--sub);background:rgba(128,128,128,.12);border:1px solid rgba(128,128,128,.2)}
 #status.status:empty{display:none}
+#status.status{display:none!important}
 #status.status::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--sub);flex:0 0 auto}
 #status.status[data-state="ok"]::before{background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent)}
 #status.status[data-state="busy"]::before{background:#f59e0b;animation:stPulse 1s ease-in-out infinite}
@@ -1718,6 +1789,33 @@ body:not(.on-home) #dateSub,body:not(.on-home) #digitalClock{display:none!import
 <style id="nbOnly">
 .bottom-nav,.pg-dots,.edge-nav,#digitalClock,#dateSub{display:none!important}
 .bottom-wrap .nb-fab-float{bottom:calc(26px + env(safe-area-inset-bottom,0px))!important}
+</style>
+<style id="qdPremium">
+/* Premium favourite star */
+.qd-star{display:inline-grid;place-items:center;flex:0 0 auto;width:clamp(20px,5.6vw,26px);height:clamp(20px,5.6vw,26px);margin:0 2px;color:var(--text,#e5e7eb);background:none;border:0;box-shadow:none;vertical-align:middle}
+.qd-star svg{width:100%;height:100%;display:block}
+/* Settings: help + contact */
+#settingsOverlay .hp-wrap{max-width:640px;margin:0 auto;padding:4px 0 8px}
+#settingsOverlay .hp-lead{margin:2px 2px 14px;font-size:.88em;line-height:1.5;color:var(--sub)}
+#settingsOverlay .hp-list{display:flex;flex-direction:column;gap:8px;margin:0 0 14px}
+#settingsOverlay .hp-q{background:var(--card);border:1px solid rgba(128,128,128,.2);border-radius:18px;overflow:hidden}
+#settingsOverlay .hp-q>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:clamp(12px,3.4vw,15px) clamp(12px,3.6vw,16px);font-weight:650;font-size:.95em;-webkit-tap-highlight-color:transparent}
+#settingsOverlay .hp-q>summary::-webkit-details-marker{display:none}
+#settingsOverlay .hp-q>summary::after{content:"";flex:0 0 auto;width:8px;height:8px;border-right:2px solid var(--sub);border-bottom:2px solid var(--sub);transform:rotate(45deg);margin:0 4px 3px 0;transition:transform .2s}
+#settingsOverlay .hp-q[open]>summary::after{transform:rotate(-135deg);margin:3px 4px 0 0}
+#settingsOverlay .hp-q>p{margin:0;padding:0 clamp(12px,3.6vw,16px) 14px;font-size:.86em;line-height:1.55;color:var(--sub)}
+#settingsOverlay .hp-btn{width:100%;display:flex;align-items:center;justify-content:center!important;gap:8px;margin:10px 0 0;padding:14px;border-radius:16px;border:0;background:var(--accent);color:#fff;font-weight:700;font-size:.95em}
+#settingsOverlay .hp-btn svg{width:18px;height:18px}
+#settingsOverlay .hp-btn.ghost{background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);border:1.5px solid color-mix(in srgb,var(--accent) 38%,transparent)}
+#settingsOverlay .hp-btn:disabled{opacity:.45}
+#settingsOverlay .ct-seg{display:flex;gap:6px;padding:4px;margin:0 0 16px;border-radius:16px;background:var(--card2,var(--card));border:1px solid rgba(128,128,128,.2)}
+#settingsOverlay .ct-seg button{flex:1;margin:0;padding:10px 6px;border:0;border-radius:12px;background:transparent;color:var(--sub);font-weight:650;font-size:.88em}
+#settingsOverlay .ct-seg button.on{background:var(--accent);color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--accent) 28%,transparent)}
+#settingsOverlay .ct-box,#settingsOverlay .ct-in{width:100%;box-sizing:border-box;border-radius:16px;border:1.5px solid rgba(128,128,128,.28);background:var(--card);color:var(--text);padding:13px 14px;font:inherit;font-size:.95em;line-height:1.5;margin:0}
+#settingsOverlay .ct-box{resize:vertical;min-height:130px}
+#settingsOverlay .ct-box:focus,#settingsOverlay .ct-in:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+#settingsOverlay .ct-count{text-align:right;font-size:.74em;color:var(--sub);margin:4px 4px 14px}
+#settingsOverlay .ct-note{margin:12px 2px 0;font-size:.8em;line-height:1.5;color:var(--sub);min-height:1em}
 </style>
 <style id="helpCss">
 /* ---- Help tab ---- */
@@ -1853,20 +1951,29 @@ body.doc-selecting .nb-fab-float,body.doc-selecting .fab-dial,body.doc-selecting
 <div class="pg-dots" id="pgDots" role="tablist" aria-label="Pages"></div>
 <button type="button" class="edge-nav edge-prev" id="enPrev" onclick="swNav(-1)" aria-label="Previous page"><span>‹</span></button>
 <button type="button" class="edge-nav edge-next" id="enNext" onclick="swNav(1)" aria-label="Next page" title="Next page"><span>›</span></button>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="qdStarGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe27a"/><stop offset=".55" stop-color="#ffc21a"/><stop offset="1" stop-color="#f09a00"/></linearGradient></defs></svg>
 <div class="sd-back" id="sdBack" onclick="sdClose()"></div>
 <aside class="sd-panel" id="sdPanel" aria-hidden="true" aria-label="Settings sidebar">
   <div class="sd-top"><span class="sd-brand">Quill Docs</span><button type="button" class="sd-x" onclick="sdClose()" aria-label="Collapse sidebar">✕</button></div>
   <div class="sd-list">
-    <button type="button" class="sd-row" data-tab="docs"><span class="sd-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>Docs</button>
-    <div class="sd-sep"></div>
-    <button type="button" class="sd-row" onclick="sdClose();openTrash()"><span class="sd-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></span>Trash<span id="sdTrashN" style="margin-left:auto;font-size:.8em;font-weight:800;color:var(--sub)"></span></button>
-    <button type="button" class="sd-row" data-tab="help"><span class="sd-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01"/></svg></span>Help</button>
+    <button type="button" class="sd-row" data-sd="docs" data-tab="docs"><span class="sd-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>Docs</button>
+    <button type="button" class="sd-row" data-sd="recent" onclick="docQuickGo('recent')"><span class="sd-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>Recent</button>
+    <button type="button" class="sd-row" data-sd="star" onclick="docQuickGo('star')"><span class="sd-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg></span>Favourites</button>
+    <button type="button" class="sd-row" data-sd="apps" onclick="sdClose();appsOpen()"><span class="sd-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/></svg></span>Apps</button>
   </div>
   <div class="app-copy">© 2026 Inzimamul Haque. All rights reserved.</div>
   <div class="sd-foot">
     <button type="button" class="sd-set" onclick="sdGo('menu')" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+    <button type="button" class="sd-set" id="sdTrashBtn" onclick="sdClose();openTrash()" aria-label="Trash" title="Trash"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg><span id="sdTrashN" class="sd-badge"></span></button>
+    <button type="button" class="sd-set" id="sdHelpBtn" data-tab="help" aria-label="Help" title="Help"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01"/></svg></button>
   </div>
 </aside>
+<div class="ap-back" id="apBack" onclick="appsClose()"></div>
+<section class="ap-sheet" id="apSheet" role="dialog" aria-modal="true" aria-label="Your apps" aria-hidden="true">
+  <div class="ap-grab"></div>
+  <div class="ap-top"><div><b>Your apps</b><small>More apps from the same maker</small></div><button type="button" class="ap-x" onclick="appsClose()" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+  <div class="ap-grid" id="apGrid"></div>
+</section>
 <div class="bottom-wrap"><nav class="bottom-nav">
   <button class="nb active" data-tab="docs" aria-label="Docs"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><span>Docs</span></button>
 </nav>
@@ -1930,73 +2037,108 @@ body.doc-selecting .nb-fab-float,body.doc-selecting .fab-dial,body.doc-selecting
   </div>
 </div>
 
-<!-- Git Settings Modal -->
+<!-- Settings Modal -->
 <div id="settingsOverlay" class="overlay" style="display:none">
   <div class="modal">
     <div class="st-welcome" id="stWelcome">
       <div class="st-flow-nav"><button type="button" class="st-arrow" id="stFlowBack" aria-label="Back to Register" title="Back"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><div class="flow-steps"><span>1 · Register</span><span class="on">2 · Storage</span><span>3 · Lock</span></div><button type="button" class="st-arrow" id="stFlowFwd" aria-label="Next: Lock" title="Next"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button></div>
       <div class="st-wl-ico"><span data-ico="database" data-sz="26"></span></div>
       <h2>Choose where to save</h2>
-      <p>Pick a folder on this device, or connect Git or a cloud drive.</p>
+      <p>Store documents in this browser, pick a folder on this device, or connect a cloud drive.</p>
       <p style="margin-top:6px">You can change this any time in Settings.</p>
     </div>
     <div class="st-top"><div style="display:flex;align-items:center;gap:10px;min-width:0"><button type="button" id="stBack" class="st-close" style="display:none" onclick="stMenu()" aria-label="Back">‹</button><h2 id="stTitle">Settings</h2></div><button type="button" class="st-close" onclick="closeSettings()" aria-label="Close settings" title="Close"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
     <div id="stMenu">
       <div class="st-grp">
-      <button type="button" class="st-row" onclick="stOpen('general')"><span class="st-ic" style="background:#f97316">⚙️</span><span class="st-tx"><b>General</b><small id="stSub_general"></small></span><span class="st-ch">›</span></button>
-      <button type="button" class="st-row" onclick="stOpen('conn')"><span class="st-ic" style="background:#3b82f6">🔌</span><span class="st-tx"><b>Storage</b><small id="stSub_conn"></small></span><span class="st-ch">›</span></button>
-      <button type="button" class="st-row" onclick="stOpen('prefs')"><span class="st-ic" style="background:#ec4899">🎨</span><span class="st-tx"><b>Preferences</b><small id="stSub_prefs"></small></span><span class="st-ch">›</span></button>
+      <button type="button" class="st-row" onclick="if(window.qsOpen)window.qsOpen()"><span class="st-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 17.8 8.5 4 4 0 0 1 17 18z"/></svg></span><span class="st-tx"><b>Account</b><small id="stSub_account">Sign in, sync &amp; backup</small></span><span class="st-ch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span></button>
+      <button type="button" class="st-row" onclick="stOpen('general')"><span class="st-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></span><span class="st-tx"><b>General</b><small id="stSub_general"></small></span><span class="st-ch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span></button>
+      <button type="button" class="st-row" onclick="stOpen('conn')"><span class="st-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg></span><span class="st-tx"><b>Storage</b><small id="stSub_conn"></small></span><span class="st-ch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span></button>
+      <button type="button" class="st-row" onclick="stOpen('prefs')"><span class="st-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.7-.8 1.7-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 0 0 5-5c0-3.9-4-7.2-9-7.2z"/><circle cx="7.5" cy="11" r=".7"/><circle cx="10" cy="7.5" r=".7"/><circle cx="14.5" cy="7.5" r=".7"/></svg></span><span class="st-tx"><b>Preferences</b><small id="stSub_prefs"></small></span><span class="st-ch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span></button>
       </div>
       <div class="st-grp">
+      <button type="button" class="st-row" onclick="stOpen('help')"><span class="st-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01"/></svg></span><span class="st-tx"><b>Help</b><small>Guides, tips and answers</small></span><span class="st-ch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span></button>
+      <button type="button" class="st-row" onclick="stOpen('contact')"><span class="st-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7.5 8.5 6 8.5-6"/></svg></span><span class="st-tx"><b>Contact</b><small>Send a suggestion or report a problem</small></span><span class="st-ch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span></button>
       </div>
       <div class="app-copy" style="margin-top:14px">© 2026 Inzimamul Haque. All rights reserved.</div>
     </div>
     <div class="st-sec" data-sec="conn">
     <h3 class="st-conn-h" style="margin-top:0"><span class="h-ico" data-ico="database" data-sz="18"></span>Storage</h3>
-    <label>Where are your documents stored?</label>
-    <select id="inMode" onchange="syncModeUI()"><option value="git">Git repository (GitHub, GitLab, Gitea…)</option><option value="drive">Cloud drive (Google Drive, OneDrive, Dropbox)</option><option value="local">Browser storage (this device)</option><option value="folder">Device storage (folder in Files app)</option></select>
-    <div id="storageWhere" style="font-size:.8em;line-height:1.55;color:var(--sub);background:var(--card2);border:1px solid rgba(128,128,128,.22);border-radius:12px;padding:10px 12px;margin:8px 0"></div>
-    <div id="gitFields">
-      <select id="inGitProv" onchange="syncModeUI()"><option value="github">GitHub</option><option value="gitlab">GitLab (gitlab.com or self-hosted)</option><option value="gitea">Gitea / Forgejo / Codeberg</option></select>
-      <input id="inHost" placeholder="Server URL (leave blank for gitlab.com / codeberg.org)">
-      <input id="inOwner" placeholder="GitHub owner/org">
-      <input id="inRepo" placeholder="Repo name only (e.g. my-docs)">
-      <input id="inBranch" placeholder="Branch (e.g. main)">
-      <input id="inToken" placeholder="Personal Access Token" type="password">
-      <div id="mirrorBox" style="margin:8px 0;padding:10px;border:1px dashed rgba(128,128,128,.4);border-radius:12px">
-        <div style="font-weight:800;font-size:.88em">Also keep a copy in a device folder</div>
-        <div id="mirrorInfo" style="font-size:.78em;color:var(--sub);line-height:1.45;margin:4px 0 8px">GitHub only. Every document is also saved as a real file in a folder you choose, so you can work with GitHub and device storage at the same time. Edits you make to these files are uploaded on the next sync.</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" onclick="pickMirrorFolder()">Choose folder</button><button type="button" onclick="allowMirrorFolder()">Allow access</button></div>
+    <select id="inMode" onchange="syncModeUI()" aria-hidden="true" tabindex="-1"><option value="local">Browser storage (this device)</option><option value="folder">Device storage (folder in Files app)</option><option value="drive">Cloud drive (Google Drive, OneDrive, Dropbox)</option></select>
+    <div id="storageWhere" class="sto-status"></div>
+    <div class="sto-bk">
+      <div class="sto-h">Back up your documents</div>
+      <div class="sto-actions">
+        <button type="button" id="stoBkFolder" class="sto-act" style="display:none" onclick="stoBackupFolder()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 10v5M9.5 12.5 12 15l2.5-2.5"/></svg><span><b>Backup folder</b><small>Copy to your file manager</small></span></button>
+        <button type="button" class="sto-act" onclick="if(window.qsOpen)window.qsOpen()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 17.8 8.5 4 4 0 0 1 17 18z"/><path d="M12 11v5M9.8 13.8 12 16l2.2-2.2"/></svg><span><b>Google Drive</b><small>Automatic daily backup</small></span></button>
       </div>
     </div>
-    <div id="driveFields" style="display:none">
-      <select id="inDriveProv" onchange="syncModeUI()"><option value="gdrive">Google Drive</option><option value="onedrive">OneDrive</option><option value="dropbox">Dropbox</option></select>
-      <input id="inDriveFolder" placeholder="Documents folder in your drive (e.g. Docs)">
-      <input id="inClientId" placeholder="OAuth Client ID (only for the Sign in button)">
-      <input id="inDriveToken" placeholder="Access token" type="password">
-      <button type="button" onclick="driveSignIn()"><span data-ico="key" data-sz="16"></span>Sign in</button>
-      <div id="driveHelp" style="font-size:.78em;color:var(--sub);line-height:1.45;margin:6px 0"></div>
-    </div>
-    <div id="folderFields" style="display:none">
-      <div id="folderHelp" style="font-size:.8em;color:var(--sub);line-height:1.45;margin:4px 0 8px">Your documents are saved as normal files in a folder you choose, so they show up in your file manager and other apps (Syncthing…). Edits made outside the app appear after a refresh.</div>
-      <button type="button" id="folderPickBtn" onclick="chooseDeviceFolder()"><span data-ico="folder" data-sz="16"></span>Choose folder</button>
-      <div id="folderInfo" style="font-size:.78em;color:var(--sub);margin:6px 0"></div>
-    </div>
-    <div id="localFields" style="display:none">
-      <div style="font-size:.8em;color:var(--sub);line-height:1.45;margin:4px 0 8px">Documents are kept privately inside this browser on this device (IndexedDB). No account or internet needed. Clearing site data removes them, so export a backup now and then.</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px">
-        <button type="button" onclick="document.getElementById('localImportFiles').click()"><span data-ico="upload" data-sz="16"></span>Import documents</button>
-        <button type="button" onclick="document.getElementById('localImportDir').click()"><span data-ico="folder" data-sz="16"></span>Import folder</button>
-        <button type="button" onclick="exportLocalZip()"><span data-ico="download" data-sz="16"></span>Export ZIP</button>
-        <button type="button" onclick="shareLocalZip()"><span data-ico="share" data-sz="16"></span>Save / Share…</button>
+    <details class="sto-adv" id="stoAdv">
+      <summary><span><b>Advanced options</b><small>Device folder, cloud drive, import and export</small></span></summary>
+      <div class="sto-adv-body">
+        <div class="sto-h">Storage location</div>
+        <div class="sto-cards" role="radiogroup" aria-label="Storage location">
+          <button type="button" class="sto-card" data-mode="local" role="radio" aria-checked="false" onclick="stoPick('local')"><span class="sto-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></span><span class="sto-tx"><b>This device</b><small>Default. Private, works offline.</small></span><span class="sto-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></button>
+          <button type="button" class="sto-card" data-mode="folder" role="radio" aria-checked="false" onclick="stoPick('folder')"><span class="sto-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span class="sto-tx"><b>Device folder</b><small>Real files in a folder you choose.</small></span><span class="sto-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></button>
+          <button type="button" class="sto-card" data-mode="drive" role="radio" aria-checked="false" onclick="stoPick('drive')"><span class="sto-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 17.8 8.5 4 4 0 0 1 17 18z"/></svg></span><span class="sto-tx"><b>Cloud drive</b><small>Google Drive, OneDrive or Dropbox.</small></span><span class="sto-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span></button>
+        </div>
+        <div id="driveFields" style="display:none">
+          <label class="sto-l" for="inDriveProv">Provider</label>
+          <select id="inDriveProv" onchange="syncModeUI()"><option value="gdrive">Google Drive</option><option value="onedrive">OneDrive</option><option value="dropbox">Dropbox</option></select>
+          <label class="sto-l" for="inDriveFolder">Folder in your drive</label>
+          <input id="inDriveFolder" placeholder="e.g. Docs">
+          <label class="sto-l" for="inClientId">OAuth Client ID</label>
+          <input id="inClientId" placeholder="Needed for the Sign in button">
+          <button type="button" class="sto-primary" onclick="driveSignIn()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="3.5"/><path d="M10.5 12.5 19 4M15 8l2.5 2.5"/></svg><span>Sign in</span></button>
+          <div class="sto-or"><span>or</span></div>
+          <label class="sto-l" for="inDriveToken">Access token</label>
+          <input id="inDriveToken" placeholder="Paste an access token" type="password">
+          <div id="driveHelp" class="sto-note"></div>
+        </div>
+        <div id="folderFields" style="display:none">
+          <div class="sto-actions">
+            <button type="button" id="folderPickBtn" class="sto-act" onclick="chooseDeviceFolder()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span><b>Choose folder</b><small>Pick where files are saved</small></span></button>
+          </div>
+          <div id="folderHelp" class="sto-note">Your documents are saved as normal files in a folder you choose, so they show up in your file manager and other apps. Edits made outside the app appear after a refresh.</div>
+          <div id="folderInfo" class="sto-note"></div>
+        </div>
+        <div id="localFields" style="display:none">
+          <div class="sto-h">Import and export</div>
+          <div class="sto-actions" id="localActions">
+            <button type="button" class="sto-act" onclick="document.getElementById('localImportFiles').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V5M7.5 9.5 12 5l4.5 4.5M5 19h14"/></svg><span><b>Import documents</b><small>Add .md, .txt or images</small></span></button>
+            <button type="button" class="sto-act" onclick="document.getElementById('localImportDir').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v4M10 13h4"/></svg><span><b>Import folder</b><small>Add a whole folder</small></span></button>
+            <button type="button" class="sto-act" onclick="exportLocalZip()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></svg><span><b>Export ZIP</b><small>Download a backup</small></span></button>
+            <button type="button" class="sto-act" onclick="shareLocalZip()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span><b>Save / Share…</b><small>Send to Files or apps</small></span></button>
+          </div>
+          <div id="localInfo" class="sto-note"></div>
+          <input type="file" id="localImportFiles" accept=".md,.markdown,.txt,image/*" multiple style="display:none" onchange="importLocalFiles(this.files);this.value=''">
+          <input type="file" id="localImportDir" webkitdirectory multiple style="display:none" onchange="importLocalFiles(this.files);this.value=''">
+        </div>
       </div>
-      <div id="localInfo" style="font-size:.78em;color:var(--sub);margin-bottom:6px"></div>
-      <input type="file" id="localImportFiles" accept=".md,.markdown,.txt,image/*" multiple style="display:none" onchange="importLocalFiles(this.files);this.value=''">
-      <input type="file" id="localImportDir" webkitdirectory multiple style="display:none" onchange="importLocalFiles(this.files);this.value=''">
-    </div>
+    </details>
     </div>
     <div id="stExtra">
-    <div class="st-sec" data-sec="prefs"><div id="pfRoot"><div class="pf-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" id="pfSearchBox" placeholder="Search preferences" aria-label="Search preferences" autocomplete="off"></div><nav class="pf-nav" aria-label="Preference groups"><button type="button" data-act="jump" data-to="appearance">Appearance</button><button type="button" data-act="jump" data-to="data">Sync and data</button><button type="button" data-act="jump" data-to="privacy">Privacy</button><button type="button" data-act="jump" data-to="access">Accessibility</button></nav><div class="pf-groups"><section class="pf-group" id="pfg-appearance"><div class="pf-gh"><span class="pf-gi" style="background:#ec4899">🎨</span><div><b>Appearance</b><small>Theme, color and text size</small></div></div><div class="pf-row" data-kw="dark light mode"><div class="pf-lab"><b>Theme</b><small>Match your device or choose one.</small></div><div class="pf-ctl"><div class="pf-seg" role="group"><button type="button" data-pf="theme" data-v="system">System</button><button type="button" data-pf="theme" data-v="light">Light</button><button type="button" data-pf="theme" data-v="dark">Dark</button></div></div></div><div class="pf-row" data-kw="look design style theme appearance classic minimal bold glass midnight paper sage mist slate espresso forest soft warm cream"><div class="pf-lab"><b>Look</b><small>Redesigns the whole app. Every look except Classic sets its own light or dark; the Light/Dark choice above applies to Classic.</small></div><div class="pf-ctl"><div class="pf-seg pf-seg-wrap"><button type="button" data-pf="look" data-v="classic">Classic</button><button type="button" data-pf="look" data-v="minimal">Minimal</button><button type="button" data-pf="look" data-v="bold">Bold</button><button type="button" data-pf="look" data-v="glass">Glass</button><button type="button" data-pf="look" data-v="midnight">Midnight</button><button type="button" data-pf="look" data-v="paper">Paper</button><button type="button" data-pf="look" data-v="sage">Sage</button><button type="button" data-pf="look" data-v="mist">Mist</button><button type="button" data-pf="look" data-v="slate">Slate</button><button type="button" data-pf="look" data-v="espresso">Espresso</button><button type="button" data-pf="look" data-v="forest">Forest</button></div></div></div><div class="pf-row tg" data-pft="compact" data-kw="dense spacing"><div class="pf-lab"><b>Compact layout</b><small>Tighter cards and lists so more fits on screen.</small></div><button type="button" class="pf-tg" role="switch" aria-label="Compact layout"></button></div></section><section class="pf-group" id="pfg-data"><div class="pf-gh"><span class="pf-gi" style="background:#14b8a6">☁️</span><div><b>Sync and data</b><small>Status, backup and storage</small></div></div><div class="pf-row" data-kw="last synced refresh offline"><div class="pf-lab"><b>Sync status</b><small>Your files.</small></div><div class="pf-ctl"><span class="pf-pill" id="pfSyncMain"></span><span class="pf-pill" id="pfNet"></span><span class="pf-pill" id="pfPend" style="display:none"></span><button type="button" class="pf-btn pri" data-act="sync">Sync now</button></div></div><div class="pf-row tg" data-pft="wifiOnly" data-kw="cellular mobile data"><div class="pf-lab"><b>Sync only on Wi-Fi</b></div><button type="button" class="pf-tg" role="switch" aria-label="Sync only on Wi-Fi"></button></div><div class="pf-row" data-kw="export import json backup restore"><div class="pf-lab"><b>Back up settings</b><small>Saves your preferences. Storage details and PIN are never included.</small></div><div class="pf-ctl"><button type="button" class="pf-btn " data-act="export">Export</button><button type="button" class="pf-btn " data-act="import">Import</button><input type="file" id="pfImportFile" accept="application/json,.json" hidden></div></div><div class="pf-row" data-kw="storage clear cache"><div class="pf-lab"><b>Offline copy</b><small>Removes the downloaded copy of your documents from this device. Blocked while edits are waiting to upload.</small></div><div class="pf-ctl"><button type="button" class="pf-btn bad" data-act="clear">Clear cache</button></div></div><div class="pf-row" data-kw="defaults restore"><div class="pf-lab"><b>Reset preferences</b><small>Returns everything on this page to its default.</small></div><div class="pf-ctl"><button type="button" class="pf-btn bad" data-act="reset">Reset</button></div></div></section><section class="pf-group" id="pfg-privacy"><div class="pf-gh"><span class="pf-gi" style="background:#ef4444">🔒</span><div><b>Privacy and lock</b><small>Keep your documents private on shared devices</small></div></div><div class="pf-row tg" data-pft="lock" data-kw="pin passcode"><div class="pf-lab"><b>App lock</b><small>Asks for a 4-digit PIN. This hides the app; it does not encrypt your documents.</small></div><button type="button" class="pf-tg" role="switch" aria-label="App lock"></button></div><div class="pf-row pf-sub" data-kw="pin passcode" data-dep="lock"><div class="pf-lab"><b>Change PIN</b><small>Choose a new 4-digit PIN.</small></div><div class="pf-ctl"><button type="button" class="pf-btn " data-act="pin">Change PIN</button></div></div><div class="pf-row pf-sub" data-kw="timeout" data-dep="lock"><div class="pf-lab"><b>Lock after</b><small>When to ask for the PIN again.</small></div><div class="pf-ctl"><select class="pf-sel" data-pfs="lockAfter" aria-label="Lock after"><option value="0">Immediately</option><option value="1">After 1 minute</option><option value="5">After 5 minutes</option><option value="15">After 15 minutes</option><option value="-1">Only when the app opens</option></select></div></div><div class="pf-row tg pf-sub" data-pft="bio" data-kw="fingerprint face" id="pfBioRow"><div class="pf-lab"><b>Biometric unlock</b><small>Use fingerprint or face unlock where your device supports it.</small></div><button type="button" class="pf-tg" role="switch" aria-label="Biometric unlock"></button></div></section><section class="pf-group" id="pfg-access"><div class="pf-gh"><span class="pf-gi" style="background:#22c55e">♿</span><div><b>Accessibility</b><small>Make Docs easier to see and use</small></div></div><div class="pf-row tg" data-pft="calm" data-kw="animation"><div class="pf-lab"><b>Reduce motion</b><small>Turns off animations. Follows your device setting until you change it.</small></div><button type="button" class="pf-tg" role="switch" aria-label="Reduce motion"></button></div><div class="pf-row tg" data-pft="hc" data-kw="contrast"><div class="pf-lab"><b>High contrast</b><small>Stronger text and borders.</small></div><button type="button" class="pf-tg" role="switch" aria-label="High contrast"></button></div><div class="pf-row tg" data-pft="tap" data-kw="touch button size"><div class="pf-lab"><b>Larger tap targets</b><small>Taller buttons and list rows.</small></div><button type="button" class="pf-tg" role="switch" aria-label="Larger tap targets"></button></div></section></div><div class="pf-empty" id="pfEmpty">No preferences match your search.</div><p class="pf-foot">Changes apply instantly and are saved on this device.</p></div></div>
+    <div class="st-sec" data-sec="prefs"><div id="pfRoot"><div class="pf-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" id="pfSearchBox" placeholder="Search preferences" aria-label="Search preferences" autocomplete="off"></div><nav class="pf-nav" aria-label="Preference groups"><button type="button" data-act="jump" data-to="appearance">Appearance</button><button type="button" data-act="jump" data-to="data">Sync and data</button><button type="button" data-act="jump" data-to="privacy">Privacy</button><button type="button" data-act="jump" data-to="access">Accessibility</button></nav><div class="pf-groups"><section class="pf-group" id="pfg-appearance"><div class="pf-gh"><span class="pf-gi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.7-.8 1.7-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 0 0 5-5c0-3.9-4-7.2-9-7.2z"/><circle cx="7.5" cy="11" r=".7"/><circle cx="10" cy="7.5" r=".7"/><circle cx="14.5" cy="7.5" r=".7"/></svg></span><div><b>Appearance</b><small>Theme, color and text size</small></div></div><div class="pf-row" data-kw="dark light mode"><div class="pf-lab"><b>Theme</b><small>Match your device or choose one.</small></div><div class="pf-ctl"><div class="pf-seg" role="group"><button type="button" data-pf="theme" data-v="system">System</button><button type="button" data-pf="theme" data-v="light">Light</button><button type="button" data-pf="theme" data-v="dark">Dark</button></div></div></div><div class="pf-row" data-kw="look design style theme appearance classic minimal bold glass midnight paper sage mist slate espresso forest soft warm cream"><div class="pf-lab"><b>Look</b><small>Redesigns the whole app. Every look except Classic sets its own light or dark; the Light/Dark choice above applies to Classic.</small></div><div class="pf-ctl"><div class="pf-seg pf-seg-wrap"><button type="button" data-pf="look" data-v="classic">Classic</button><button type="button" data-pf="look" data-v="minimal">Minimal</button><button type="button" data-pf="look" data-v="bold">Bold</button><button type="button" data-pf="look" data-v="glass">Glass</button><button type="button" data-pf="look" data-v="midnight">Midnight</button><button type="button" data-pf="look" data-v="paper">Paper</button><button type="button" data-pf="look" data-v="sage">Sage</button><button type="button" data-pf="look" data-v="mist">Mist</button><button type="button" data-pf="look" data-v="slate">Slate</button><button type="button" data-pf="look" data-v="espresso">Espresso</button><button type="button" data-pf="look" data-v="forest">Forest</button></div></div></div><div class="pf-row tg" data-pft="compact" data-kw="dense spacing"><div class="pf-lab"><b>Compact layout</b><small>Tighter cards and lists so more fits on screen.</small></div><button type="button" class="pf-tg" role="switch" aria-label="Compact layout"></button></div></section><section class="pf-group" id="pfg-data"><div class="pf-gh"><span class="pf-gi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.5-4.5L4 8M4 4v4h4M4 13a8 8 0 0 0 14.5 4.5L20 16M20 20v-4h-4"/></svg></span><div><b>Sync and data</b><small>Status, backup and storage</small></div></div><div class="pf-row" data-kw="last synced refresh offline"><div class="pf-lab"><b>Sync status</b><small>Your files.</small></div><div class="pf-ctl"><span class="pf-pill" id="pfSyncMain"></span><span class="pf-pill" id="pfNet"></span><span class="pf-pill" id="pfPend" style="display:none"></span><button type="button" class="pf-btn pri" data-act="sync">Sync now</button></div></div><div class="pf-row tg" data-pft="wifiOnly" data-kw="cellular mobile data"><div class="pf-lab"><b>Sync only on Wi-Fi</b></div><button type="button" class="pf-tg" role="switch" aria-label="Sync only on Wi-Fi"></button></div><div class="pf-row" data-kw="export import json backup restore"><div class="pf-lab"><b>Back up settings</b><small>Saves your preferences. Storage details and PIN are never included.</small></div><div class="pf-ctl"><button type="button" class="pf-btn " data-act="export">Export</button><button type="button" class="pf-btn " data-act="import">Import</button><input type="file" id="pfImportFile" accept="application/json,.json" hidden></div></div><div class="pf-row" data-kw="storage clear cache"><div class="pf-lab"><b>Offline copy</b><small>Removes the downloaded copy of your documents from this device. Blocked while edits are waiting to upload.</small></div><div class="pf-ctl"><button type="button" class="pf-btn bad" data-act="clear">Clear cache</button></div></div><div class="pf-row" data-kw="defaults restore"><div class="pf-lab"><b>Reset preferences</b><small>Returns everything on this page to its default.</small></div><div class="pf-ctl"><button type="button" class="pf-btn bad" data-act="reset">Reset</button></div></div></section><section class="pf-group" id="pfg-privacy"><div class="pf-gh"><span class="pf-gi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3M12 15v2"/></svg></span><div><b>Privacy and lock</b><small>Keep your documents private on shared devices</small></div></div><div class="pf-row tg" data-pft="lock" data-kw="pin passcode"><div class="pf-lab"><b>App lock</b><small>Asks for a 4-digit PIN. This hides the app; it does not encrypt your documents.</small></div><button type="button" class="pf-tg" role="switch" aria-label="App lock"></button></div><div class="pf-row pf-sub" data-kw="pin passcode" data-dep="lock"><div class="pf-lab"><b>Change PIN</b><small>Choose a new 4-digit PIN.</small></div><div class="pf-ctl"><button type="button" class="pf-btn " data-act="pin">Change PIN</button></div></div><div class="pf-row pf-sub" data-kw="timeout" data-dep="lock"><div class="pf-lab"><b>Lock after</b><small>When to ask for the PIN again.</small></div><div class="pf-ctl"><select class="pf-sel" data-pfs="lockAfter" aria-label="Lock after"><option value="0">Immediately</option><option value="1">After 1 minute</option><option value="5">After 5 minutes</option><option value="15">After 15 minutes</option><option value="-1">Only when the app opens</option></select></div></div><div class="pf-row tg pf-sub" data-pft="bio" data-kw="fingerprint face" id="pfBioRow"><div class="pf-lab"><b>Biometric unlock</b><small>Use fingerprint or face unlock where your device supports it.</small></div><button type="button" class="pf-tg" role="switch" aria-label="Biometric unlock"></button></div></section><section class="pf-group" id="pfg-access"><div class="pf-gh"><span class="pf-gi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4.5" r="1.8"/><path d="M5 8.5h14M12 8.5v5M9 20l3-6.5 3 6.5"/></svg></span><div><b>Accessibility</b><small>Make Docs easier to see and use</small></div></div><div class="pf-row tg" data-pft="calm" data-kw="animation"><div class="pf-lab"><b>Reduce motion</b><small>Turns off animations. Follows your device setting until you change it.</small></div><button type="button" class="pf-tg" role="switch" aria-label="Reduce motion"></button></div><div class="pf-row tg" data-pft="hc" data-kw="contrast"><div class="pf-lab"><b>High contrast</b><small>Stronger text and borders.</small></div><button type="button" class="pf-tg" role="switch" aria-label="High contrast"></button></div><div class="pf-row tg" data-pft="tap" data-kw="touch button size"><div class="pf-lab"><b>Larger tap targets</b><small>Taller buttons and list rows.</small></div><button type="button" class="pf-tg" role="switch" aria-label="Larger tap targets"></button></div></section></div><div class="pf-empty" id="pfEmpty">No preferences match your search.</div><p class="pf-foot">Changes apply instantly and are saved on this device.</p></div></div>
+    <div class="st-sec" data-sec="help"><div class="hp-wrap">
+      <p class="hp-lead">Quick answers to common questions.</p>
+      <div class="hp-list"><details class="hp-q"><summary>Getting started</summary><p>Tap the + button to create a document. Your documents appear on the Docs page, and the profile picture at the top opens the sidebar.</p></details><details class="hp-q"><summary>Favourites</summary><p>Open a document\u2019s \u22ee menu and choose Star. Starred documents show a gold star and are collected under Favourites in the sidebar.</p></details><details class="hp-q"><summary>Where are my documents saved?</summary><p>By default on this device. In Settings \u203a Storage you can choose a folder or connect a cloud drive, and back up to Google Drive from Account.</p></details><details class="hp-q"><summary>Lock the app</summary><p>Settings \u203a Preferences \u203a Privacy and lock lets you turn on a 4-digit PIN and, where supported, fingerprint or face unlock.</p></details><details class="hp-q"><summary>Deleted something by mistake?</summary><p>Deleted documents go to Trash in the sidebar. Open Trash and restore them from there.</p></details><details class="hp-q"><summary>Other apps</summary><p>Tap Apps in the sidebar to see more apps from the same maker.</p></details></div>
+      <button type="button" class="hp-btn" id="hpFull"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.4 5.2 8 4.5 4.5 4.5v13c3.5 0 5.9.7 7.5 2 1.6-1.3 4-2 7.5-2v-13c-3.5 0-5.9.7-7.5 2z"/><path d="M12 6.5v13"/></svg>Open full help guide</button>
+      <button type="button" class="hp-btn ghost" onclick="stOpen('contact')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7.5 8.5 6 8.5-6"/></svg>Still need help? Contact us</button>
+    </div></div>
+    <div class="st-sec" data-sec="contact"><div class="hp-wrap">
+      <p class="hp-lead">We read every message. Tell us what you would like to see, or what went wrong.</p>
+      <div class="ct-seg" role="radiogroup" aria-label="Message type">
+        <button type="button" class="on" data-ct="Suggestion" role="radio" aria-checked="true">Suggestion</button>
+        <button type="button" data-ct="Problem" role="radio" aria-checked="false">Problem</button>
+        <button type="button" data-ct="Question" role="radio" aria-checked="false">Question</button>
+      </div>
+      <label class="sto-l" for="ctMsg">Your message</label>
+      <textarea id="ctMsg" class="ct-box" rows="6" maxlength="2000" placeholder="Write your suggestion here\u2026" aria-label="Message"></textarea>
+      <div class="ct-count"><span id="ctCount">0</span> / 2000</div>
+      <label class="sto-l" for="ctMail">Your email (optional, if you want a reply)</label>
+      <input id="ctMail" class="ct-in" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com">
+      <button type="button" class="hp-btn" id="ctSend" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3 10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5z"/></svg>Send message</button>
+      <p class="ct-note" id="ctNote"></p>
+    </div></div>
     <div class="st-sec" data-sec="general">
     <h3 style="margin:0 0 2px"><span class="h-ico" data-ico="database" data-sz="18"></span>General</h3>
     <label>Auto-refresh</label>
@@ -2033,6 +2175,7 @@ try{[['cl_noteLayout2','cl_docLayout2'],['cl_starredNotes','cl_starredDocs'],['c
 
 
 let cfg = JSON.parse(localStorage.getItem('cl_cfg') || 'null');
+if (cfg && !['local','folder','drive'].includes(cfg.mode)) { cfg = {mode:'local', provider:'', host:'', clientId:'', owner:'local', repo:'vault', branch:'main', token:'local', autoRefresh: cfg.autoRefresh || 0}; try { localStorage.setItem('cl_cfg', JSON.stringify(cfg)); } catch(e) {} }
 /* ---- Profile widgets: business card, about me, skills, goals, snapshot, world clocks, time progress ---- */
 
 
@@ -3186,47 +3329,41 @@ function openDocForEdit(file){ if(file && file.__wd && window.wdOpen) wdOpen(fil
 
 
 /* ══════════════════════════════════════════════════════════
-   GITHUB & DATA ENGINE
+   STORAGE ENGINE
    ══════════════════════════════════════════════════════════ */
+function stoPaint(){
+  const m = (document.getElementById('inMode') || {}).value;
+  document.querySelectorAll('#settingsOverlay .sto-card').forEach(b => { const on = b.dataset.mode === m; b.classList.toggle('on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
+  const bf = document.getElementById('stoBkFolder'); if (bf) bf.style.display = window.__docsNative ? '' : 'none';
+  const adv = document.getElementById('stoAdv'); if (adv && m !== 'local') adv.open = true;
+}
+function stoBackupFolder(){ try { closeSettings(); } catch(e) {} try { window.docsBackupDlg(); } catch(e) {} }
+function stoPick(m){ const sel = document.getElementById('inMode'); if (sel.value === m) return; sel.value = m; syncModeUI(); }
 async function updateStorageWhere(){
   const box = document.getElementById('storageWhere'); if (!box) return;
   const v = id => (document.getElementById(id) || {}).value || '';
   const esc = x => String(x).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const mode = v('inMode'), prov = v('inGitProv') || 'github';
-  const row = (ic, t, d) => `<div style="margin-bottom:6px"><b style="color:var(--text)">${ic} ${t}</b><br>${d}</div>`;
-  let html = '<div style="font-size:.72em;font-weight:900;letter-spacing:.8px;margin-bottom:6px">WHERE YOUR DOCUMENTS ARE STORED</div>';
-  if (mode === 'git') {
-    const host = v('inHost') || ({github:'github.com', gitlab:'gitlab.com', gitea:'codeberg.org'})[prov];
-    const path = [v('inOwner'), v('inRepo')].filter(Boolean).join('/') || 'your repository';
-    html += row('☁️', 'Online copy', esc(host) + ' → <b>' + esc(path) + '</b> (branch ' + esc(v('inBranch') || 'main') + '). This is the master copy with full history.');
-    if (prov === 'github') {
-      let n = 0, pend = 0;
-      try { if (cfg && cfg.owner) { const k = docCacheKey(); n = (await DocCache.load(k)).size; pend = (await DocCache.pending(k)).length; } } catch(e) {}
-      let use = '';
-      try { if (navigator.storage && navigator.storage.estimate) { const e = await navigator.storage.estimate(); use = ' Browser storage used by this site: ' + (e.usage / 1048576).toFixed(1) + ' MB of ' + Math.round(e.quota / 1048576) + ' MB.'; } } catch(e) {}
-      html += row('📱', 'Offline copy on this device', 'Saved inside this browser (IndexedDB): <b>' + n + ' documents</b>. Opens without internet and syncs only changed documents.' + use);
-      html += row(pend ? '⏳' : '✅', 'Waiting to upload', pend ? '<b>' + pend + '</b> offline edit(s) will upload when you are back online.' : 'Nothing waiting. Everything is uploaded.');
-    } else html += row('📱', 'On this device', 'Not saved offline. Documents load from the server each time (no incremental sync for this provider).');
-  } else if (mode === 'drive') {
+  const mode = v('inMode');
+  const IC = {dev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>', fol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>', cld: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 17.8 8.5 4 4 0 0 1 17 18z"/></svg>'};
+  const row = (ic, t, d) => `<div class="sto-st-r"><span class="sto-st-i">${IC[ic]}</span><div><b>${t}</b><small>${d}</small></div></div>`;
+  let html = '<div class="sto-st-h">Where your documents are</div>';
+  if (mode === 'drive') {
     const nm = ({gdrive:'Google Drive', onedrive:'OneDrive', dropbox:'Dropbox'})[v('inDriveProv')] || 'Cloud drive';
-    html += row('☁️', 'Online', esc(nm) + ' → folder <b>' + esc(v('inDriveFolder') || 'Notes') + '</b>.');
-    html += row('📱', 'On this device', 'Not saved offline. Documents load from the drive each time.');
+    html += row('cld', esc(nm) + ' · ' + esc(v('inDriveFolder') || 'Notes'), 'Documents are read from and saved to your drive. They are not kept offline.');
   } else if (mode === 'folder') {
-    html += row('📂', 'On this device only', 'Real files in the folder you chose' + ((typeof FolderVault !== 'undefined' && FolderVault.name && FolderVault.name()) ? ': <b>' + esc(FolderVault.name()) + '</b>' : '') + '. Not uploaded anywhere. Back it up yourself.');
+    const fn = (typeof FolderVault !== 'undefined' && FolderVault.name && FolderVault.name()) ? esc(FolderVault.name()) : '';
+    html += row('fol', 'Device folder' + (fn ? ' · ' + fn : ''), 'Real files you can open in your file manager. Not uploaded anywhere, so back them up yourself.');
   } else {
-    html += row('🌐', 'This browser only', 'Saved inside this browser (IndexedDB). Not uploaded or backed up. Clearing site data deletes it, so use Export ZIP regularly.');
+    html += row('dev', 'Stored on this device', 'Private to this app and works offline. Set up a backup below so you never lose your documents.');
   }
   box.innerHTML = html;
 }
 function syncModeUI(){
-  updateStorageWhere();
+  updateStorageWhere(); try { stoPaint(); } catch(e) {}
   const mode = document.getElementById('inMode').value;
-  document.getElementById('gitFields').style.display = mode === 'git' ? '' : 'none';
   document.getElementById('driveFields').style.display = mode === 'drive' ? '' : 'none';
   document.getElementById('folderFields').style.display = mode === 'folder' ? '' : 'none';
   document.getElementById('localFields').style.display = (mode === 'local' || mode === 'folder') ? '' : 'none';
-  const gp = inGitProv.value; inHost.style.display = (mode === 'git' && gp !== 'github') ? '' : 'none';
-  inOwner.placeholder = gp === 'gitlab' ? 'GitLab namespace (user or group)' : gp === 'gitea' ? 'Owner / organisation' : 'GitHub owner/org';
   const dp = inDriveProv.value;
   inClientId.style.display = document.querySelector('#driveFields button').style.display = '';
   document.getElementById('driveHelp').innerHTML = ({gdrive:'Google: create an OAuth Web client, add this page\'s address as a redirect URI and use the <b>drive</b> scope.',onedrive:'OneDrive: register an app (single-page, redirect = this page) with <b>Files.ReadWrite</b>.',dropbox:'Dropbox: create an app with <b>files.content.read/write</b>; add this page\'s address as a redirect URI.'})[dp] + ' Or paste an access token above. Tokens expire (about 1 hour), so sign in again when asked.';
@@ -3240,7 +3377,7 @@ function syncModeUI(){
 }
 async function updateLocalInfo(){
   const el = document.getElementById('localInfo'); if (!el) return;
-  const mode = document.getElementById('inMode').value; if (mode === 'git' || mode === 'drive') return;
+  const mode = document.getElementById('inMode').value; if (mode === 'drive') return;
   try {
     const V = mode === 'folder' ? FolderVault : LocalVault; await V.init(); await V.scan();
     const n = V.all().filter(r => /\.md$/i.test(r.path)).length;
@@ -3248,37 +3385,28 @@ async function updateLocalInfo(){
   } catch(e) { el.textContent = e.message === 'PERM' ? '' : (mode === 'folder' ? '' : 'Local storage is not available in this browser.'); }
 }
 function openSettings(setup){
+  try{var _sa=document.getElementById('stSub_account');if(_sa&&window.qsLabel)_sa.textContent=window.qsLabel()}catch(e){}
   setup = setup === true;
   const _ov = document.getElementById('settingsOverlay');
   _ov.classList.toggle('setup', setup);
   document.getElementById('stSaveBtn').textContent = setup ? 'Connect' : 'Save & Connect';
   _ov.style.display='flex';
   try { _ov.querySelector('.modal').scrollTop = 0; } catch(e) {}
-  inMode.value = (cfg && ['local','folder','drive'].includes(cfg.mode)) ? cfg.mode : 'git';
-  inGitProv.value = (cfg && cfg.mode === 'git' && cfg.provider) || 'github';
+  inMode.value = (cfg && ['local','folder','drive'].includes(cfg.mode)) ? cfg.mode : 'local';
   inDriveProv.value = (cfg && cfg.mode === 'drive' && cfg.provider) || 'gdrive';
-  inHost.value = (cfg && cfg.host) || ''; inClientId.value = (cfg && cfg.clientId) || '';
+  inClientId.value = (cfg && cfg.clientId) || '';
   if (cfg && cfg.mode === 'drive') { inDriveFolder.value = cfg.repo || ''; inDriveToken.value = cfg.token || ''; }
   syncModeUI();
-  if(cfg && (!cfg.mode || cfg.mode === 'git')){
-    inOwner.value = cfg.owner;
-    inRepo.value = cfg.repo;
-    inBranch.value = cfg.branch;
-    inToken.value = cfg.token;
-    inAutoRefresh.value = String(cfg.autoRefresh || 0);
-  } else if (cfg) {
-    inAutoRefresh.value = String(cfg.autoRefresh || 0);
-  } else {
-  }
+  if (cfg) inAutoRefresh.value = String(cfg.autoRefresh || 0);
   if (setup) stOpen('conn'); else stMenu();
 }
-const ST_TITLES = {general: 'General', conn: 'Storage', prefs: 'Preferences'};
+const ST_TITLES = {general: 'General', conn: 'Storage', prefs: 'Preferences', help: 'Help', contact: 'Contact'};
 function stOpen(name){
   const ov = document.getElementById('settingsOverlay');
   ov.classList.remove('in-menu');
   ov.querySelectorAll('.st-sec').forEach(e => e.classList.toggle('on', e.dataset.sec === name));
   document.getElementById('stTitle').textContent = ST_TITLES[name] || 'Settings';
-  ov.classList.toggle('st-instant', name === 'prefs'); if (name === 'prefs' && window.pfPaint) pfPaint();
+  ov.classList.toggle('st-instant', name === 'prefs' || name === 'help' || name === 'contact'); if (name === 'prefs' && window.pfPaint) pfPaint();
   document.getElementById('stBack').style.display = 'inline-flex';
   if(name === 'general'){ try { gsInit(); } catch(e) { console.warn('general', e); } }
   try { ov.querySelector('.modal').scrollTop = 0; } catch(e) {}
@@ -3309,8 +3437,8 @@ function stMenu(){
   document.getElementById('stTitle').textContent = 'Settings';
   document.getElementById('stBack').style.display = 'none';
   const set = (k, t) => { const el = document.getElementById('stSub_' + k); if (el) el.textContent = t; };
-  const modes = {git: 'Git repository', drive: 'Cloud drive', local: 'Browser storage', folder: 'Device folder'};
-  set('conn', cfg && cfg.token || (cfg && cfg.mode) ? (modes[cfg.mode || 'git'] || '') + (cfg.repo && cfg.mode !== 'local' ? ' • ' + cfg.repo : '') : 'Not connected');
+  const modes = {drive: 'Cloud drive', local: 'Browser storage', folder: 'Device folder'};
+  set('conn', cfg && cfg.token || (cfg && cfg.mode) ? (modes[cfg.mode || 'local'] || '') + (cfg.repo && cfg.mode !== 'local' ? ' • ' + cfg.repo : '') : 'Not connected');
   const ar = document.getElementById('inAutoRefresh').value;
   set('general', 'Auto-refresh: ' + (ar === '0' ? 'Off' : 'every ' + ar + ' min'));
   set('prefs', window.PF ? PF.summary() : '');
@@ -3320,7 +3448,7 @@ function stMenu(){
 function closeSettings(){ document.getElementById('settingsOverlay').style.display='none'; }
 async function saveSettings(){
   const mode = inMode.value, local = mode === 'local' || mode === 'folder', drive = mode === 'drive';
-  const prov = mode === 'git' ? inGitProv.value : drive ? inDriveProv.value : '';
+  const prov = drive ? inDriveProv.value : '';
   if (drive && !inDriveToken.value.trim()) { alert('Tap Sign in, or paste an access token first.'); return; }
   if (mode === 'folder') {
     if (!FolderVault.supported()) { alert('This browser cannot pick a folder. Use "This device (in-browser storage)" instead.'); return; }
@@ -3329,11 +3457,11 @@ async function saveSettings(){
   }
   const _wasSetup = document.getElementById('settingsOverlay').classList.contains('setup');
   cfg = {
-    mode: mode, provider: prov, host: inHost.value.trim().replace(/\/+$/, ''), clientId: inClientId.value.trim(),
-    owner: drive ? prov : local ? mode : inOwner.value.trim(),
-    repo: drive ? (inDriveFolder.value.trim() || 'Notes') : local ? 'vault' : inRepo.value.trim(),
-    branch: (local || drive) ? 'main' : (inBranch.value.trim() || 'main'),
-    token: drive ? inDriveToken.value.trim() : local ? mode : inToken.value.trim(),
+    mode: mode, provider: prov, host: '', clientId: inClientId.value.trim(),
+    owner: drive ? prov : mode,
+    repo: drive ? (inDriveFolder.value.trim() || 'Notes') : 'vault',
+    branch: 'main',
+    token: drive ? inDriveToken.value.trim() : mode,
     autoRefresh: parseInt(inAutoRefresh.value, 10) || 0
   };
   localStorage.setItem('cl_cfg', JSON.stringify(cfg));
@@ -3491,7 +3619,7 @@ function fabDialEl(){
   d.innerHTML = '<button type="button" class="fd-item" data-a="folder" role="menuitem"><span class="fd-lab">New folder</span><span class="fd-btn">📁</span></button><button type="button" class="fd-item" data-a="note" role="menuitem"><span class="fd-lab">New document</span><span class="fd-btn">📝</span></button><button type="button" class="fd-item" data-a="doc" role="menuitem"><span class="fd-lab">New document</span><span class="fd-btn">📄</span></button><button type="button" class="fd-item" data-a="import" role="menuitem"><span class="fd-lab">Import</span><span class="fd-btn"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 15v3a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-3"/></svg></span></button>';
   d.querySelector('[data-a="import"]').onclick = () => { closeFabDial(); try { window.wdImport(''); } catch(e) {} };
   d.querySelector('[data-a="note"]').onclick = () => { closeFabDial(); startCreate(window.__fabFolder || ''); };
-  d.querySelector('[data-a="folder"]').onclick = () => { closeFabDial(); openVaultFolderModal({mode: 'create'}); };
+  d.querySelector('[data-a="folder"]').onclick = () => { closeFabDial(); openVaultFolderModal({mode: 'create', parent: window.__fabFolder || ''}); };
   d.querySelector('[data-a="doc"]').onclick = () => { closeFabDial(); wdNew(window.__fabFolder || ''); };
   wrap.appendChild(d);
   const bk = document.createElement('div'); bk.id = 'fabDialBack'; bk.className = 'fab-dial-back'; bk.onclick = closeFabDial; document.body.appendChild(bk);
@@ -3677,7 +3805,7 @@ function userInitials(){ return userName().split(/\s+/).filter(Boolean).slice(0,
      • "local"  : IndexedDB vault inside the browser
      • "folder" : a real folder on the device (visible in the Files app)
    ══════════════════════════════════════════════════════════ */
-const isRemoteCfg = () => !!(cfg && (cfg.mode === 'drive' || (cfg.mode === 'git' && cfg.provider && cfg.provider !== 'github')));
+const isRemoteCfg = () => !!(cfg && cfg.mode === 'drive');
 const isLocalCfg = () => !!(cfg && (cfg.mode === 'local' || cfg.mode === 'folder')) || isRemoteCfg();
 const LocalVault = (function(){
   let db = null, mem = null, bySha = null, booting = null;
@@ -3793,7 +3921,7 @@ const FolderVault = (function(){
 })();
 const activeVault = () => (cfg && cfg.mode === 'folder') ? FolderVault : isRemoteCfg() ? remoteVault() : LocalVault;
 
-/* ── Cloud drives & other git hosts: same vault interface, backed by each service's REST API ── */
+/* ── Cloud drives: same vault interface, backed by each service's REST API ── */
 const b64ToBytes = b64 => { const bin = atob(b64), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; };
 const okRes = async r => { if (!r.ok) { const t = await r.text().catch(() => ''); throw new Error(r.status === 401 ? 'Sign-in expired — open Settings and sign in again.' : 'Sync error ' + r.status + ' ' + t.slice(0, 120)); } return r; };
 const encPath = p => p.split('/').map(encodeURIComponent).join('/');
@@ -3851,29 +3979,6 @@ const PROV = {
       async del(p){ if (ids.has(p)) { await okRes(await fetch(A + '/' + ids.get(p), {method: 'DELETE', headers: H()})); ids.delete(p); } }
     };
   },
-  gitlab: c => {
-    const B = (c.host || 'https://gitlab.com') + '/api/v4/projects/' + encodeURIComponent(c.owner + '/' + c.repo) + '/repository/', H = () => ({'PRIVATE-TOKEN': c.token}), br = encodeURIComponent(c.branch || 'main');
-    return {
-      async list(){ const files = [], dirs = []; let n = 1, j;
-        do { j = await (await okRes(await fetch(B + 'tree?recursive=true&per_page=100&ref=' + br + '&page=' + n++, {headers: H()}))).json(); j.forEach(x => x.type === 'blob' ? files.push({path: x.path, sha: x.id}) : dirs.push(x.path)); } while (j.length === 100 && n < 200);
-        return {files, dirs}; },
-      async get(p){ return (await okRes(await fetch(B + 'files/' + encodeURIComponent(p) + '/raw?ref=' + br, {headers: H()}))).arrayBuffer(); },
-      async put(p, bytes, old, b64){ await okRes(await fetch(B + 'files/' + encodeURIComponent(p), {method: old ? 'PUT' : 'POST', headers: {...H(), 'Content-Type': 'application/json'}, body: JSON.stringify({branch: c.branch || 'main', content: b64, encoding: 'base64', commit_message: 'Update ' + p})})); },
-      async del(p){ await okRes(await fetch(B + 'files/' + encodeURIComponent(p) + '?branch=' + br + '&commit_message=' + encodeURIComponent('Delete ' + p), {method: 'DELETE', headers: H()})); }
-    };
-  },
-  gitea: c => {
-    const B = (c.host || 'https://codeberg.org') + '/api/v1/repos/' + encodeURIComponent(c.owner) + '/' + encodeURIComponent(c.repo) + '/', H = () => ({Authorization: 'token ' + c.token}), br = c.branch || 'main';
-    return {
-      async list(){ const files = [], dirs = []; let n = 1, j;
-        do { j = await (await okRes(await fetch(B + 'git/trees/' + encodeURIComponent(br) + '?recursive=true&per_page=1000&page=' + n++, {headers: H()}))).json(); (j.tree || []).forEach(x => x.type === 'blob' ? files.push({path: x.path, sha: x.sha}) : x.type === 'tree' && dirs.push(x.path)); } while (j.truncated && n < 50);
-        return {files, dirs}; },
-      async get(p){ return (await okRes(await fetch(B + 'raw/' + encPath(p) + '?ref=' + encodeURIComponent(br), {headers: H()}))).arrayBuffer(); },
-      async put(p, bytes, old, b64){ const body = {content: b64, branch: br, message: 'Update ' + p}; if (old) body.sha = old.sha;
-        const r = await okRes(await fetch(B + 'contents/' + encPath(p), {method: old ? 'PUT' : 'POST', headers: {...H(), 'Content-Type': 'application/json'}, body: JSON.stringify(body)})); return ((await r.json()).content || {}).sha; },
-      async del(p, old){ await okRes(await fetch(B + 'contents/' + encPath(p), {method: 'DELETE', headers: {...H(), 'Content-Type': 'application/json'}, body: JSON.stringify({sha: old && old.sha, branch: br, message: 'Delete ' + p})})); }
-    };
-  }
 };
 function remoteVault(){}
 const OAUTH = {
@@ -3999,15 +4104,7 @@ function showLoadError(e){
 }
 
 function gh(path, opts={}){
-  if (isLocalCfg()) return localGh(path, opts);
-  return fetch('https://api.github.com' + path, {
-    ...opts,
-    headers: {
-      'Authorization': 'token ' + cfg.token,
-      'Accept': 'application/vnd.github+json',
-      ...(opts.headers || {})
-    }
-  });
+  return localGh(path, opts);
 }
 
 /* ---- Incremental sync: keep downloaded documents on this device, fetch only changed ones ---- */
@@ -4084,15 +4181,14 @@ const DocCache = (function(){
 
 async function loadData(){
   if(!cfg || !cfg.token){
-    document.getElementById('status').textContent = 'Tap ⚙️ to connect your git repo.';
+    document.getElementById('status').textContent = 'Tap ⚙️ to choose where to store your documents.';
     return;
   }
-  document.getElementById('status').textContent = isLocalCfg() ? 'Loading local documents…' : 'Syncing with git…';
+  document.getElementById('status').textContent = 'Loading documents…';
   try{
-    if(!isLocalCfg()) await flushPending();
     let treeRes;
     try { treeRes = await gh(`/repos/${cfg.owner}/${cfg.repo}/git/trees/${cfg.branch}?recursive=1`); }
-    catch(netErr) { if (!isLocalCfg() && await loadOffline()) return; throw netErr; }
+    catch(netErr) { throw netErr; }
     if(!treeRes.ok) throw new Error('Repo/branch/token issue (' + treeRes.status + ')');
     const tree = await treeRes.json();
     // Keep the complete repository folder tree, not only Markdown files.
@@ -4102,9 +4198,7 @@ async function loadData(){
       .map(f => f.path)
       .filter(Boolean);
     const mdFiles = tree.tree.filter(f => f.type === 'blob' && f.path.endsWith('.md'));
-    const useCache = !isLocalCfg();
-    const cacheKey = cfg.owner + '/' + cfg.repo + '@' + cfg.branch + ':';
-    const cached = useCache ? await DocCache.load(cacheKey) : new Map();
+    const cached = new Map();
     const loaded = new Array(mdFiles.length);
     const toFetch = [];
     mdFiles.forEach((f, i) => {
@@ -4114,7 +4208,6 @@ async function loadData(){
     });
     let done = 0;
     const total = toFetch.length;
-    const fetched = [];
     const worker = async () => {
       while (toFetch.length) {
         const i = toFetch.shift(), f = mdFiles[i];
@@ -4123,21 +4216,12 @@ async function loadData(){
         const blob = await blobRes.json();
         const content = b64ToText(blob.content);
         loaded[i] = {path: f.path, sha: f.sha, lines: content.replace(/\r/g, '').split("\n")};
-        fetched.push({key: cacheKey + f.path, path: f.path, sha: f.sha, text: content});
         done++;
         if (total > 5) document.getElementById('status').textContent = 'Syncing… ' + done + '/' + total + ' changed notes';
       }
     };
     await Promise.all(Array.from({length: Math.min(8, total)}, worker));
     filesCache = loaded;
-    if (useCache) {
-      DocCache.meta(cacheKey, foldersCache);
-      mirrorSync().catch(() => {});
-      const live = new Set(mdFiles.map(f => f.path));
-      const gone = [...cached.keys()].filter(pth => !live.has(pth)).map(pth => cacheKey + pth);
-      DocCache.save(fetched, gone).catch(() => {});
-    }
-
     vaultImages = {};
     tree.tree.forEach(f => { if (f.type === 'blob' && /\.(png|jpe?g|gif|webp|svg|avif|bmp)$/i.test(f.path)) vaultImages[f.path.split('/').pop().toLowerCase()] = f.path; });
 
@@ -4150,150 +4234,11 @@ async function loadData(){
   }
 }
 
-/* ---- Device-folder mirror: GitHub stays the master, every document is also written as a real file ---- */
-const Mirror = (function(){
-  let root = null;
-  const db = () => new Promise((res, rej) => { const r = indexedDB.open('cl_mirror_handle', 1); r.onupgradeneeded = () => r.result.createObjectStore('h'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
-  const hget = async () => { const d = await db(); return new Promise(res => { const q = d.transaction('h').objectStore('h').get('dir'); q.onsuccess = () => res(q.result || null); q.onerror = () => res(null); }); };
-  const hset = async h => { const d = await db(); return new Promise((res, rej) => { const t = d.transaction('h', 'readwrite'); t.objectStore('h').put(h, 'dir'); t.oncomplete = res; t.onerror = () => rej(t.error); }); };
-  return {
-    supported: () => typeof window !== 'undefined' && 'showDirectoryPicker' in window,
-    async name(){ if (!root) root = await hget(); return root ? root.name : ''; },
-    async pick(){ const h = await window.showDirectoryPicker({mode: 'readwrite'}); await hset(h); root = h; return h.name; },
-    async ready(ask){
-      if (!root) root = await hget(); if (!root) return false;
-      try { let p = await root.queryPermission({mode: 'readwrite'}); if (p !== 'granted' && ask) p = await root.requestPermission({mode: 'readwrite'}); return p === 'granted'; } catch(e) { return false; }
-    },
-    async readAll(since){
-      const out = new Map();
-      const walk = async (dir, pre) => {
-        for await (const [name, h] of dir.entries()) {
-          if (skipDot(name)) continue;
-          if (h.kind === 'directory') await walk(h, pre + name + '/');
-          else if (/\.md$/i.test(name)) { const f = await h.getFile(); out.set(pre + name, {mtime: f.lastModified, get: () => f.text()}); }
-        }
-      };
-      await walk(root, '');
-      return out;
-    },
-    async remove(path){
-      try { const parts = path.split('/'), name = parts.pop(); let d = root; for (const x of parts) d = await d.getDirectoryHandle(x); await d.removeEntry(name); } catch(e) {}
-    },
-    async write(path, text){
-      const parts = path.split('/'), name = parts.pop(); let d = root;
-      for (const x of parts) d = await d.getDirectoryHandle(x, {create: true});
-      const fh = await d.getFileHandle(name, {create: true}), w = await fh.createWritable(); await w.write(text); await w.close();
-    }
-  };
-})();
-let mirrorBusy = false;
-const mirrorHash = str => { let h = 5381; for (let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0; return (h >>> 0).toString(16) + '-' + str.length; };
-/* Edits made to the .md files in the device folder are uploaded to GitHub (new files are created, edits go through the normal save + conflict handling). */
-async function mirrorImport(H, D, since){
-  let n = 0;
-  const files = await Mirror.readAll();
-  for (const [path, info] of files) {
-    if (info.mtime < since - 2000 && path in H) continue;
-    const text = (await info.get()).replace(/\r/g, '');
-    const known = path in H, f = filesCache.find(x => x.path === path);
-    if (known && mirrorHash(text) === H[path]) continue;
-    if (f) {
-      if (!known) continue;
-      if (f.lines.join("\n") === text) { H[path] = mirrorHash(text); continue; }
-      if (D[path] !== f.sha) { if (await putConflictCopy(path, text)) { H[path] = mirrorHash(text); n++; } continue; }
-      f.lines = text.split("\n"); if (await commitFile(f)) { H[path] = mirrorHash(text); n++; }
-    } else {
-      const nf = {path, sha: undefined, lines: text.split("\n")};
-      if (await commitFile(nf)) { filesCache.push(nf); H[path] = mirrorHash(text); n++; }
-    }
-  }
-  return n;
-}
-async function mirrorSync(){
-  if (mirrorBusy || !cfg || isLocalCfg() || !Mirror.supported()) return;
-  if (!(await Mirror.name())) return;
-  if (!(await Mirror.ready(false))) { document.getElementById('status').textContent = 'Device folder needs permission — Settings → Allow access'; return; }
-  mirrorBusy = true;
-  try {
-    const key = docCacheKey(), mk = 'mirror:' + key, hk = 'mirrorH:' + key, tk = 'mirrorT:' + key;
-    const done = (await DocCache.meta(mk)) || {}, H = (await DocCache.meta(hk)) || {}, since = (await DocCache.meta(tk)) || 0, started = Date.now();
-    let up = 0, n = 0, rm = 0;
-    try { up = await mirrorImport(H, done, since); } catch(e) {}
-    for (const f of filesCache) {
-      const text = f.lines.join("\n");
-      if (done[f.path] === f.sha && H[f.path] === mirrorHash(text)) continue;
-      try { await Mirror.write(f.path, text); done[f.path] = f.sha; H[f.path] = mirrorHash(text); n++; } catch(e) {}
-    }
-    const live = new Set(filesCache.map(f => f.path));
-    for (const pth of Object.keys(done)) if (!live.has(pth)) { await Mirror.remove(pth); delete done[pth]; delete H[pth]; rm++; }
-    await DocCache.meta(mk, done); await DocCache.meta(hk, H); await DocCache.meta(tk, started);
-    if (n || up || rm) document.getElementById('status').textContent = 'Device folder: ' + n + ' copied' + (up ? ', ' + up + ' uploaded' : '') + (rm ? ', ' + rm + ' removed' : '') + ' ✓';
-  } finally { mirrorBusy = false; }
-}
-async function mirrorWrite(path, content, sha){
-  try {
-    if (!cfg || isLocalCfg() || !Mirror.supported() || !(await Mirror.ready(false))) return;
-    await Mirror.write(path, content);
-    const mk = 'mirror:' + docCacheKey(), d = (await DocCache.meta(mk)) || {}; d[path] = sha; await DocCache.meta(mk, d);
-    const hk = 'mirrorH:' + docCacheKey(), H = (await DocCache.meta(hk)) || {}; H[path] = mirrorHash(content); await DocCache.meta(hk, H);
-  } catch(e) {}
-}
-async function updateMirrorInfo(){
-  const el = document.getElementById('mirrorInfo'); if (!el) return;
-  if (!Mirror.supported()) { el.textContent = 'This browser cannot choose a device folder (use Chrome or Edge). GitHub sync still works.'; return; }
-  const n = await Mirror.name();
-  if (n) el.textContent = 'Folder: ' + n + ' — notes are copied here after every sync and save. Edits and new .md files you add here are uploaded to GitHub on the next sync. Notes deleted on GitHub are removed here. Deleting a file here does not delete it on GitHub.';
-}
-async function pickMirrorFolder(){
-  try { const n = await Mirror.pick(); await updateMirrorInfo(); if (cfg) mirrorSync(); } catch(e) {}
-}
-async function allowMirrorFolder(){
-  try { if (!(await Mirror.name())) return pickMirrorFolder(); await Mirror.ready(true); await updateMirrorInfo(); if (cfg) mirrorSync(); } catch(e) {}
-}
-if (typeof syncModeUI === 'function') { const _smu = syncModeUI; window.syncModeUI = function(){ const r = _smu.apply(this, arguments); updateMirrorInfo(); return r; }; }
-setTimeout(updateMirrorInfo, 800);
 
-const docCacheKey = () => cfg.owner + '/' + cfg.repo + '@' + cfg.branch + ':';
-async function loadOffline(){
-  const key = docCacheKey(), cached = await DocCache.load(key);
-  if (!cached.size) return false;
-  filesCache = [...cached.values()].map(c => ({path: c.path, sha: c.sha, lines: c.text.replace(/\r/g, '').split("\n")}));
-  foldersCache = (await DocCache.meta(key)) || [];
-  document.getElementById('status').textContent = 'Offline • ' + filesCache.length + ' notes (saved copy) — edits sync when you are back online';
-  render();
-  mirrorSync().catch(() => {});
-  return true;
-}
-async function putConflictCopy(path, content){
-  const cp = path.replace(/\.md$/, '') + ' (conflict ' + new Date().toISOString().slice(0, 16).replace('T', ' ').replace(':', '.') + ').md';
-  const r = await gh(`/repos/${cfg.owner}/${cfg.repo}/contents/${encodeURIComponent(cp).replace(/%2F/g,'/')}`, {method:'PUT', body:JSON.stringify({message:'Conflict copy via dashboard', content:textToB64(content), branch:cfg.branch})});
-  return r.ok;
-}
-let flushing = false;
-async function flushPending(){
-  if (flushing || !cfg || !cfg.token || isLocalCfg() || !navigator.onLine) return;
-  flushing = true;
-  try {
-    const key = docCacheKey();
-    for (const q of await DocCache.pending(key)) {
-      let r;
-      try { r = await gh(`/repos/${cfg.owner}/${cfg.repo}/contents/${encodeURIComponent(q.path).replace(/%2F/g,'/')}`, {method:'PUT', body:JSON.stringify({message:'Update via dashboard (offline edit)', content:textToB64(q.text), sha:q.baseSha, branch:cfg.branch})}); }
-      catch(e) { break; }
-      if (r.ok) { const j = await r.json(); await DocCache.put(key, q.path, j.content.sha, q.text); await DocCache.unqueue(q.key); }
-      else if (r.status === 409 || r.status === 422) { if (await putConflictCopy(q.path, q.text)) await DocCache.unqueue(q.key); }
-      else break;
-    }
-  } finally { flushing = false; }
-}
-window.addEventListener('online', () => {
-  if (cfg && cfg.token && !isLocalCfg()) loadData();
-  else flushPending();
-});
 try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch(e) {}
 
 async function commitFile(file){
   const content = file.lines.join("\n");
-  const key = docCacheKey();
   let res = null;
   try {
     res = await gh(`/repos/${cfg.owner}/${cfg.repo}/contents/${encodeURIComponent(file.path).replace(/%2F/g,'/')}`,{
@@ -4302,21 +4247,8 @@ async function commitFile(file){
   if(res && res.ok){
     const j = await res.json();
     file.sha = j.content.sha;
-    if (!isLocalCfg()) { DocCache.put(key, file.path, file.sha, content); DocCache.unqueue(key + file.path); mirrorWrite(file.path, content, file.sha); }
-    document.getElementById('status').textContent = 'Synced ✓';
+    document.getElementById('status').textContent = 'Saved ✓';
     return true;
-  }
-  if(!res && !isLocalCfg()){
-    try { await DocCache.put(key, file.path, file.sha, content); await DocCache.queue(key + file.path, file.path, file.sha, content); } catch(e) {}
-    mirrorWrite(file.path, content, file.sha);
-    document.getElementById('status').textContent = 'Offline — saved on this device, will sync automatically';
-    return true;
-  }
-  if(res && (res.status === 409 || res.status === 422) && !isLocalCfg()){
-    if (await putConflictCopy(file.path, content)) {
-      document.getElementById('status').textContent = 'Conflict — your version was saved as a separate "(conflict …)" note';
-      return true;
-    }
   }
   document.getElementById('status').textContent = 'Save failed';
   return false;
@@ -4384,7 +4316,7 @@ function openVaultFolderModal(opts){
   const cur = renaming ? normalizeVaultPath(opts.path) : '';
   const curName = cur ? cur.split('/').pop() : '';
   const parentOf = cur.includes('/') ? cur.slice(0, cur.lastIndexOf('/')) : '';
-  const folders = allKnownFolders().sort((a, b) => a.localeCompare(b));
+  const folders = (window.docUI ? docUI.folderPaths() : allKnownFolders().sort((a, b) => a.localeCompare(b)));
   const ov = document.createElement('div'); ov.id = 'vfOverlay'; ov.className = 'overlay'; ov.style.zIndex = 320;
   ov.className = ''; ov.style.zIndex = 9700;
   const FIC = '<svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>' + (renaming ? '<path d="M12 11v4M10 13h4"/>' : '<path d="M12 10v5M9.5 12.5h5"/>') + '</svg>';
@@ -4442,6 +4374,7 @@ function openVaultFolderModal(opts){
       if(renaming){
         vfStatus('Renaming folder…');
         await renameVaultFolder(cur, target);
+        try { if(window.docUI) await docUI.remap(cur, target); } catch(_) {}
         closeVaultFolderModal();
         await loadData();
       } else {
@@ -4682,65 +4615,163 @@ function wdPseudoDocs(){
 }
 
 /* ---- Docs: select several documents at once (move / delete) ---- */
+window.docUI = {
+  S(d){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>'; },
+  toast(t){ try { PF.toast(t); } catch(e) {} },
+  folderPaths(){
+    const s = new Set();
+    const add = p => { p = String(p || '').split('/').filter(Boolean); for(let i = 1; i <= p.length; i++) s.add(p.slice(0, i).join('/')); };
+    try { allKnownFolders().forEach(f => { f = String(f); if(isVisibleVaultFolder(f)) add(f); }); } catch(e) {}
+    try { (wdDash.docs || []).forEach(d => { if(d.folder) add(d.folder); }); } catch(e) {}
+    return Array.from(s).sort((a, b) => a.localeCompare(b));
+  },
+  exists(p){ return this.folderPaths().some(x => x.toLowerCase() === String(p).toLowerCase()); },
+  async docs(){ try { return (await window.wdListDocs()) || []; } catch(e) { return wdDash.docs || []; } },
+  under(d, p){ const f = String(d.folder || ''); return f === p || f.indexOf(p + '/') === 0; },
+  pick(title, exclude, cb){
+    const bad = p => (exclude || []).some(x => p === x || p.indexOf(x + '/') === 0);
+    const list = [''].concat(this.folderPaths().filter(p => !bad(p)));
+    const ov = document.createElement('div'); ov.id = 'docMoveOv';
+    ov.innerHTML = '<div class="dm-box"><h3>' + nEsc(title) + '</h3><div class="dm-list">' + list.map(f => { const dep = f ? f.split('/').length - 1 : 0; return '<button type="button" data-f="' + nEsc(f) + '" style="padding-left:' + (12 + dep * 18) + 'px">' + (f ? '📁 ' + nEsc(f.split('/').pop()) : '🏠 Top level (no folder)') + '</button>'; }).join('') + '</div><button type="button" class="dm-x">Cancel</button></div>';
+    document.body.appendChild(ov);
+    ov.onclick = e => { if(e.target === ov || e.target.closest('.dm-x')){ ov.remove(); return; } const b = e.target.closest('button[data-f]'); if(!b) return; const f = b.dataset.f; ov.remove(); cb(f); };
+  },
+  async remap(oldP, newP){ for(const d of await this.docs()){ if(this.under(d, oldP)){ try { await wdMoveDoc(d.id, newP + String(d.folder).slice(oldP.length)); } catch(e) {} } } },
+  async moveFolder(src, dest){
+    const name = src.split('/').pop(), target = (dest ? dest + '/' : '') + name;
+    if(target === src) return true;
+    if(dest === src || dest.indexOf(src + '/') === 0){ alert('A folder cannot be moved into itself.'); return false; }
+    if(this.exists(target)){ alert('A folder named "' + name + '" already exists there.'); return false; }
+    try { await renameVaultFolder(src, target); } catch(e) {}
+    await this.remap(src, target);
+    return true;
+  },
+  async copyFolder(src, dest){
+    const name = src.split('/').pop(); let nm = name, target = (dest ? dest + '/' : '') + nm;
+    for(let i = 1; this.exists(target) && i < 100; i++){ nm = name + ' copy' + (i > 1 ? ' ' + (i + 1) : ''); target = (dest ? dest + '/' : '') + nm; }
+    try { await createVaultFolder(target); } catch(e) {}
+    for(const d of await this.docs()){ if(this.under(d, src)){ try { await this.copyDoc(d, target + String(d.folder).slice(src.length)); } catch(e) {} } }
+  },
+  async copyDoc(d, folder){
+    const nid = await wdDupDoc(d.id); if(!nid) return;
+    try { await wdRenameDoc(nid, d.title || 'Untitled document'); } catch(e) {}
+    await wdMoveDoc(nid, folder);
+  },
+  async deleteFolder(p, realP){
+    for(const d of await this.docs()){ if(this.under(d, p)){ try { await wdDelDoc(d.id); } catch(e) {} } }
+    try { await deleteVaultFolder(realP || p); } catch(e) {}
+  },
+  async refresh(){ try { await loadData(); } catch(e) {} try { wdDashRefresh(true); } catch(e) {} setTimeout(() => { try { render(); } catch(e) {} try { docSel.updateBar(); } catch(e) {} }, 350); },
+  info(p){
+    const docs = (wdDash.docs || []).filter(d => this.under(d, p));
+    const subs = this.folderPaths().filter(x => x.indexOf(p + '/') === 0).length;
+    const last = docs.reduce((m, d) => Math.max(m, d.updated || d.created || 0), 0);
+    const parent = p.indexOf('/') > -1 ? p.slice(0, p.lastIndexOf('/')) : '';
+    const row = (a, b) => '<div style="display:flex;justify-content:space-between;gap:12px;padding:11px 2px;border-bottom:1px solid rgba(128,128,128,.18)"><span style="opacity:.6">' + a + '</span><b style="text-align:right;word-break:break-word">' + nEsc(b) + '</b></div>';
+    const ov = document.createElement('div'); ov.id = 'docMoveOv';
+    ov.innerHTML = '<div class="dm-box"><h3>📁 ' + nEsc(p.split('/').pop()) + '</h3>' + row('Location', 'Documents' + (parent ? ' › ' + parent.split('/').join(' › ') : '')) + row('Documents', String(docs.length)) + row('Subfolders', String(subs)) + row('Modified', last ? new Date(last).toLocaleString() : '—') + '<button type="button" class="dm-x" style="margin-top:8px">Close</button></div>';
+    document.body.appendChild(ov);
+    ov.onclick = e => { if(e.target === ov || e.target.closest('.dm-x')) ov.remove(); };
+  }
+};
 window.docSel = {
-  on: false, set: new Set(),
+  on: false, set: new Set(), FK: '__folder__/',
   paint(el){ if(el && el.dataset) el.classList.toggle('doc-selected', this.on && this.set.has(el.dataset.selpath)); },
   paintAll(){ document.querySelectorAll('[data-selpath]').forEach(e => this.paint(e)); this.updateBar(); },
   start(){ this.on = true; this.set.clear(); document.body.classList.add('doc-selecting'); this.buildBar(); render(); },
   stop(){ this.on = false; this.set.clear(); document.body.classList.remove('doc-selecting'); const b = document.getElementById('docSelBar'); if(b) b.remove(); if(this._k){ document.removeEventListener('keydown', this._k, true); this._k = null; } render(); },
-  toggle(path, el){ if(this.set.has(path)) this.set.delete(path); else this.set.add(path); this.paintAll(); },
+  toggle(path){ if(this.set.has(path)) this.set.delete(path); else this.set.add(path); this.paintAll(); },
   ids(){ return Array.from(this.set).filter(p => String(p).indexOf('__wd__/') === 0).map(p => String(p).slice(7)); },
+  fids(){ return Array.from(this.set).filter(p => String(p).indexOf(this.FK) === 0).map(p => String(p).slice(this.FK.length)); },
+  all(){ return Array.from(new Set(Array.from(document.querySelectorAll('[data-selpath]')).map(e => e.dataset.selpath))); },
   updateBar(){
-    const n = this.set.size, t = document.getElementById('docSelCount'); if(t) t.textContent = n ? n + ' selected' : 'Select documents';
+    const n = this.set.size, t = document.getElementById('docSelCount'); if(t) t.innerHTML = '<b>' + n + '</b><small>selected</small>';
     const bar = document.getElementById('docSelBar'); if(bar) bar.classList.toggle('none', !n);
-    let total = 0; try { total = wdPseudoDocs().length; } catch(e) {}
-    const al = document.getElementById('docSelAll'); if(al) al.textContent = (total && n >= total) ? 'Deselect all' : 'Select all';
-    const sl = document.getElementById('docSelStarLab'); if(sl){ const st = getStarred(), ps = Array.from(this.set); sl.textContent = (ps.length && ps.every(p => st.has(p))) ? 'Unstar' : 'Star'; }
+    const total = this.all().length, allOn = total && n >= total;
+    const al = document.getElementById('docSelAllLab'); if(al) al.textContent = allOn ? 'None' : 'All';
+    const ab = document.getElementById('docSelAll'); if(ab) ab.title = allOn ? 'Deselect all' : 'Select all';
+    const sl = document.getElementById('docSelStarLab'); if(sl){ const st = getStarred(), ps = Array.from(this.set).filter(p => String(p).indexOf('__wd__/') === 0); sl.textContent = (ps.length && ps.every(p => st.has(p))) ? 'Unstar' : 'Star'; }
   },
   star(){
-    const ps = Array.from(this.set); if(!ps.length) return;
+    const ps = Array.from(this.set).filter(p => String(p).indexOf('__wd__/') === 0); if(!ps.length) return;
     const st = getStarred(), allStar = ps.every(p => st.has(p));
     ps.forEach(p => { if(allStar){ if(st.has(p)) toggleStar(p); } else if(!st.has(p)) toggleStar(p); });
     try { render(); } catch(e) {} this.updateBar();
-    try { PF.toast(allStar ? 'Removed from starred' : 'Added to starred'); } catch(e) {}
+    docUI.toast(allStar ? 'Removed from favourites' : 'Added to favourites');
   },
-  selectAll(){ const all = wdPseudoDocs().map(n => n.path); if(this.set.size >= all.length) this.set.clear(); else all.forEach(p => this.set.add(p)); this.paintAll(); },
+  selectAll(){ const all = this.all(); if(this.set.size >= all.length) this.set.clear(); else all.forEach(p => this.set.add(p)); this.paintAll(); },
   buildBar(){
     let b = document.getElementById('docSelBar'); if(b) b.remove();
     b = document.createElement('div'); b.id = 'docSelBar';
-    const I = d => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
-    b.innerHTML = '<div class="ds-top"><button type="button" data-a="x" class="ds-close" aria-label="Exit selection">' + I('<path d="M18 6 6 18M6 6l12 12"/>') + '</button><b id="docSelCount">Select documents</b><button type="button" data-a="all" id="docSelAll" class="ds-all">Select all</button></div>'
-      + '<div class="ds-acts"><button type="button" data-a="move" class="ds-act">' + I('<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v5M9.5 13.5 12 16l2.5-2.5"/>') + '<span>Move</span></button>'
-      + '<button type="button" data-a="star" class="ds-act">' + I('<path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/>') + '<span id="docSelStarLab">Star</span></button>'
-      + '<button type="button" data-a="del" class="ds-act ds-del">' + I('<path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/>') + '<span>Delete</span></button></div>';
-    b.onclick = e => { const a = e.target.closest('button'); if(!a) return; const k = a.dataset.a; if(k === 'all') this.selectAll(); else if(k === 'x') this.stop(); else if(k === 'del') this.del(); else if(k === 'move') this.move(); else if(k === 'star') this.star(); };
+    const I = d => docUI.S(d);
+    const btn = (a, ic, lab, cls, id) => '<button type="button" data-a="' + a + '" class="ds-btn ' + (cls || '') + '"' + (id ? ' id="' + id + '"' : '') + '>' + I(ic) + '<span' + (a === 'star' ? ' id="docSelStarLab"' : (a === 'all' ? ' id="docSelAllLab"' : '')) + '>' + lab + '</span></button>';
+    b.innerHTML = '<button type="button" data-a="x" class="ds-close" aria-label="Exit selection">' + I('<path d="M18 6 6 18M6 6l12 12"/>') + '</button><div id="docSelCount" class="ds-count"></div>'
+      + btn('all', '<path d="M2.5 12.5 7 17l8-9.5"/><path d="m11 15 1.5 1.5L21.5 7"/>', 'All', 'ds-sel', 'docSelAll')
+      + btn('move', '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v5M9.5 13.5 12 16l2.5-2.5"/>', 'Move', 'ds-act')
+      + btn('copy', '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>', 'Copy', 'ds-act')
+      + btn('star', '<path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/>', 'Star', 'ds-act')
+      + btn('del', '<path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/>', 'Delete', 'ds-act ds-del');
+    b.onclick = e => { const a = e.target.closest('button'); if(!a) return; const k = a.dataset.a; if(k === 'all') this.selectAll(); else if(k === 'x') this.stop(); else if(k === 'del') this.del(); else if(k === 'move') this.move(); else if(k === 'copy') this.copy(); else if(k === 'star') this.star(); };
     if(!this._k){ this._k = e => { if(e.key === 'Escape' && this.on && !document.getElementById('docMoveOv')){ e.preventDefault(); this.stop(); } }; document.addEventListener('keydown', this._k, true); }
     document.body.appendChild(b); this.updateBar();
   },
   async del(){
-    const ids = this.ids(); if(!ids.length) return;
-    if(localStorage.getItem('cl_confirmDel') !== '0' && !confirm('Move ' + ids.length + ' document' + (ids.length > 1 ? 's' : '') + ' to Trash?\nYou can restore them from Trash in the sidebar.')) return;
+    const ids = this.ids(), fs = this.fids(); if(!ids.length && !fs.length) return;
+    const what = [ids.length ? ids.length + ' document' + (ids.length > 1 ? 's' : '') : '', fs.length ? fs.length + ' folder' + (fs.length > 1 ? 's' : '') : ''].filter(Boolean).join(' and ');
+    if((fs.length || localStorage.getItem('cl_confirmDel') !== '0') && !confirm('Delete ' + what + '?\nDocuments go to Trash, where you can restore them from the sidebar.')) return;
     for(const id of ids){ try { await wdDelDoc(id); } catch(e) {} }
-    this.set.clear(); wdDashRefresh(true); setTimeout(() => { try { render(); } catch(e) {} this.updateBar(); }, 300);
-    try { PF.toast('Moved to Trash'); } catch(e) {}
+    for(const f of fs){ await docUI.deleteFolder(f, f.indexOf('/') < 0 ? realFolderPath(f) : f); }
+    this.set.clear(); docUI.toast('Deleted'); await docUI.refresh();
   },
   move(){
-    const ids = this.ids(); if(!ids.length) return;
-    const fs = new Set(); try { allKnownFolders().forEach(f => fs.add(String(f))); } catch(e) {} wdDash.docs.forEach(d => { if(d.folder) fs.add(String(d.folder)); });
-    const list = [''].concat(Array.from(fs).sort((a, b) => a.localeCompare(b)));
-    const ov = document.createElement('div'); ov.id = 'docMoveOv';
-    ov.innerHTML = '<div class="dm-box"><h3>Move ' + ids.length + ' document' + (ids.length > 1 ? 's' : '') + ' to…</h3><div class="dm-list">' + list.map(f => '<button type="button" data-f="' + nEsc(f) + '">' + (f ? '📁 ' + nEsc(f) : '🏠 Top level (no folder)') + '</button>').join('') + '</div><button type="button" class="dm-x">Cancel</button></div>';
-    document.body.appendChild(ov);
-    ov.onclick = async e => {
-      if(e.target === ov || e.target.closest('.dm-x')){ ov.remove(); return; }
-      const b = e.target.closest('button[data-f]'); if(!b) return;
-      const f = b.dataset.f; ov.remove();
-      for(const id of ids){ try { await wdMoveDoc(id, f); } catch(x) {} }
-      this.set.clear(); wdDashRefresh(true); setTimeout(() => { try { render(); } catch(e) {} this.updateBar(); }, 300);
-      try { PF.toast('Moved'); } catch(x) {}
-    };
+    const ids = this.ids(), fs = this.fids(); if(!ids.length && !fs.length) return;
+    docUI.pick('Move ' + (ids.length + fs.length) + ' item' + (ids.length + fs.length > 1 ? 's' : '') + ' to…', fs, async dest => {
+      for(const id of ids){ try { await wdMoveDoc(id, dest); } catch(x) {} }
+      for(const f of fs){ await docUI.moveFolder(f, dest); }
+      this.set.clear(); docUI.toast('Moved'); await docUI.refresh();
+    });
+  },
+  copy(){
+    const ids = this.ids(), fs = this.fids(); if(!ids.length && !fs.length) return;
+    docUI.pick('Copy ' + (ids.length + fs.length) + ' item' + (ids.length + fs.length > 1 ? 's' : '') + ' to…', fs, async dest => {
+      const all = await docUI.docs();
+      for(const id of ids){ const d = all.find(x => x.id === id); if(d){ try { await docUI.copyDoc(d, dest); } catch(x) {} } }
+      for(const f of fs){ await docUI.copyFolder(f, dest); }
+      this.set.clear(); docUI.toast('Copied'); await docUI.refresh();
+    });
   }
 };
+window.docQuickGo = function(k){
+  try { sdClose(); } catch(e) {}
+  window.__docQuick = k || null; try { sdPaintActive(); } catch(e) {} docLayout = 'Folder Browser'; try { localStorage.setItem('cl_docLayout2', docLayout); } catch(e) {}
+  docBrowse = [];
+  try { if(docSel.on) docSel.stop(); } catch(e) {}
+  if(typeof activeTab !== 'undefined' && activeTab !== 'docs'){ try { swGo('docs', 'r'); } catch(e) { const t = document.querySelector('.nb[data-tab="docs"]'); if(t) t.click(); } }
+  try { render(); } catch(e) {}
+};
+document.addEventListener('click', e => { if(e.target.closest && e.target.closest('[data-tab="docs"]')){ window.__docQuick = null; try { sdPaintActive(); } catch(x) {} } }, true);
+(function(){ const st = document.createElement('style'); st.textContent =
+ 'body.doc-selecting [data-selpath]{position:relative}'
+ + 'body.doc-selecting [data-selpath]::before{content:"";position:absolute;top:8px;left:8px;width:22px;height:22px;box-sizing:border-box;border-radius:50%;border:2px solid rgba(200,205,225,.9);background:rgba(10,12,22,.4);z-index:4;pointer-events:none;transition:background .15s,border-color .15s,transform .15s}'
+ + 'body.doc-selecting .doc-selected::before{background:var(--accent,#6366f1) url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'white\' stroke-width=\'3.4\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'M5 12.5l4.5 4.5L19 7.5\'/%3E%3C/svg%3E") center/13px no-repeat;border-color:var(--accent,#6366f1);box-shadow:0 2px 8px rgba(99,102,241,.55);transform:scale(1.04)}'
+ + 'body.doc-selecting .doc-selected::after{content:none!important;display:none!important}'
+ + 'body.doc-selecting .doc-selected{outline:0!important;box-shadow:inset 0 0 0 2px var(--accent,#6366f1)!important;background-color:color-mix(in srgb,var(--accent,#6366f1) 14%,transparent)!important}'
+ + 'body #docSelBar{position:fixed!important;top:0!important;bottom:auto!important;left:0!important;right:0!important;display:flex!important;align-items:center!important;flex-wrap:nowrap!important;gap:2px!important;padding:calc(8px + env(safe-area-inset-top,0px)) 8px 8px!important;border:0!important;border-bottom:1px solid rgba(128,128,128,.25)!important;border-radius:0 0 20px 20px!important;background:var(--card,#1b1f2e)!important;box-shadow:0 8px 24px rgba(0,0,0,.35)!important;z-index:9000!important;animation:dsDown .2s ease}'
+ + '@keyframes dsDown{from{transform:translateY(-100%)}to{transform:none}}'
+ + 'body #docSelBar .ds-close{flex:0 0 auto;width:38px;height:38px;padding:0!important;border-radius:50%!important;border:1px solid rgba(128,128,128,.3)!important;background:transparent!important;color:var(--text)!important;display:flex;align-items:center;justify-content:center}'
+ + 'body #docSelBar .ds-close svg{width:19px;height:19px}'
+ + 'body #docSelBar .ds-count{flex:1 1 auto;min-width:0;padding:0 6px;line-height:1.1}'
+ + 'body #docSelBar .ds-count b{display:block;font-size:17px;font-weight:800;margin:0;text-align:left}'
+ + 'body #docSelBar .ds-count small{display:block;font-size:10px;opacity:.6;font-weight:600}'
+ + 'body #docSelBar .ds-btn{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:44px;padding:5px 4px!important;border:0!important;border-radius:12px!important;background:transparent!important;color:var(--text)!important;font-weight:700}'
+ + 'body #docSelBar .ds-btn svg{width:21px;height:21px;display:block}'
+ + 'body #docSelBar .ds-btn span{margin:0!important;font-size:10px!important;font-weight:700!important}'
+ + 'body #docSelBar .ds-btn:active{background:rgba(128,128,128,.18)!important}'
+ + 'body #docSelBar .ds-sel{color:var(--accent,#6366f1)!important}'
+ + 'body #docSelBar .ds-del{color:#ef4444!important}'
+ + 'body #docSelBar.none .ds-act{opacity:.35;pointer-events:none}';
+ document.head.appendChild(st); })();
+
 (function(){ const st = document.createElement('style'); st.textContent =
  '.doc-selected{outline:3px solid var(--accent,#6366f1)!important;outline-offset:-3px;position:relative}.doc-selected::after{content:"✓";position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:var(--accent,#6366f1);color:#fff;font-weight:900;font-size:.8em;display:flex;align-items:center;justify-content:center;z-index:2}'+
  '#docSelBar{position:fixed;left:10px;right:10px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:9000;display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:var(--card,#fff);color:var(--text,#111);border:1px solid rgba(128,128,128,.3);border-radius:18px;padding:10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.35)}#docSelBar span{font-weight:800;font-size:.85em;margin-right:auto}#docSelBar button{border:1px solid rgba(128,128,128,.35);background:var(--card2,#eee);color:var(--text,#111);border-radius:12px;padding:8px 12px;font-weight:700;font-size:.82em;font-family:inherit}#docSelBar.none .ds-act{opacity:.4;pointer-events:none}#docSelBar .ds-del{color:#ef4444}'+
@@ -5026,7 +5057,7 @@ function renderDocsTab(body){
 
     const starHtml = n => {
       const on = getStarred().has(n.path), hid = getHiddenDocs().has(n.path);
-      return `${on ? '<span title="Starred" style="color:#facc15;font-size:.95em;padding:0 2px;">★</span>' : ''}<button type="button" data-docmenu="${nEsc(n.path)}" title="Document options" aria-label="Document options" aria-haspopup="menu" style="background:transparent;border:0;cursor:pointer;padding:2px 8px;font-size:1.15em;font-weight:900;line-height:1;color:${hid ? 'var(--accent)' : 'var(--sub)'};">⋮</button>`;
+      return `${on ? '<span class="qd-star" title="Favourite" role="img" aria-label="Favourite"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></span>' : ''}<button type="button" data-docmenu="${nEsc(n.path)}" title="Document options" aria-label="Document options" aria-haspopup="menu" style="background:transparent;border:0;cursor:pointer;padding:2px 8px;font-size:1.15em;font-weight:900;line-height:1;color:${hid ? 'var(--accent)' : 'var(--sub)'};">⋮</button>`;
     };
     const docTitleOf = path => {
       try {
@@ -5164,7 +5195,7 @@ function renderDocsTab(body){
         if (e.button > 0) return;
         if (window.docSel && docSel.on) return;
         fired = false; sx = e.clientX; sy = e.clientY; clear();
-        timer = setTimeout(() => { timer = null; fired = true; try { navigator.vibrate && navigator.vibrate(12); } catch(x) {} showDocMenu(el, n.path, {clientX: sx, clientY: sy}); }, 450);
+        timer = setTimeout(() => { timer = null; fired = true; try { navigator.vibrate && navigator.vibrate(12); } catch(x) {} if (n.file && n.file.__wd && window.docSel) { if (!docSel.on) docSel.start(); docSel.toggle(n.path); } else showDocMenu(el, n.path, {clientX: sx, clientY: sy}); }, 450);
       });
       el.addEventListener('pointermove', e => { if (timer && Math.hypot(e.clientX - sx, e.clientY - sy) > 10) clear(); });
       ['pointerup', 'pointercancel', 'pointerleave'].forEach(t => el.addEventListener(t, clear));
@@ -5465,6 +5496,7 @@ function renderDocsTab(body){
       };
       let view = scan(docBrowse);
       while (docBrowse.length && !view.folders.length && !view.notes.length && !(noFilt && allKnownFolders().some(fp => pathKey(fp) === pathKey(docBrowse.join('/'))))) { docBrowse = docBrowse.slice(0, -1); view = scan(docBrowse); }
+      if (window.__docQuick) { const stq = getStarred(); let nq = filtered.slice(); if (window.__docQuick === 'star') nq = nq.filter(n => stq.has(n.path)); else nq = nq.sort((a, b) => (b.dateMs || 0) - (a.dateMs || 0)).slice(0, 30); view = {folders: [], notes: nq}; }
       const ago = ms => { if (!ms) return '—'; const m = Math.round((Date.now() - ms) / 60000); if (m < 1) return 'Just now'; if (m < 60) return m + ' min ago'; const h = Math.round(m / 60); if (h < 24) return h + ' hours ago'; const d = Math.round(h / 24); return d < 8 ? d + ' days ago' : new Date(ms).toLocaleDateString(PF.loc(), {day:'numeric', month:'short'}); };
 
       /* ---- icons ---- */
@@ -5515,29 +5547,37 @@ function renderDocsTab(body){
       /* ---- header ---- */
       const wrap = document.createElement('div'); wrap.className = 'card'; wrap.style.cssText = 'padding:0 0 10px;overflow:hidden;margin-top:0;';
       const head = document.createElement('div'); head.style.cssText = 'display:flex;align-items:center;gap:6px;padding:2px 10px 6px;';
-      const iconBtn = 'width:38px;height:38px;border-radius:50%;border:0;background:transparent;color:var(--text);font-size:1.2em;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;';
-      const curV = BROWSE_VIEWS.find(v => v[0] === docBrowseView);
-      head.innerHTML = `${docBrowse.length ? `<button type="button" data-back style="${iconBtn}" aria-label="Back">←</button>` : ''}
-        <div style="flex:1;min-width:0;font-size:1.15em;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-left:${docBrowse.length ? 0 : 8}px;">${nEsc(docBrowse.length ? docBrowse[docBrowse.length - 1] : (activeTab === 'docs' ? 'All documents' : 'All documents'))}</div>
-`;
-      const bk = head.querySelector('[data-back]'); if (bk) bk.onclick = () => go(docBrowse.slice(0, -1));
+      const quick = window.__docQuick || null;
+      const QT = {recent: 'Recent', star: 'Favourites'};
+      const iconBtn = 'width:42px;height:42px;border-radius:50%;border:1px solid rgba(128,128,128,.3);background:transparent;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;padding:0;';
+      const SV = d => `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+      const docGlyph = '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--accent)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>';
+      const canBack = !!(docBrowse.length || quick);
+      const titleTxt = quick ? QT[quick] : (docBrowse.length ? docBrowse[docBrowse.length - 1] : 'All documents');
+      const VW = [['list', 'List view', '<path d="M8.5 6H21M8.5 12H21M8.5 18H21"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>'], ['grid', 'Grid view', '<rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/>'], ['large', 'Large icons', '<rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/>'], ['tiles', 'Tiles', '<rect x="3.5" y="4" width="7" height="6" rx="1.5"/><rect x="13.5" y="4" width="7" height="6" rx="1.5"/><path d="M3.5 15h7M13.5 15h7M3.5 19h4M13.5 19h4"/>'], ['details', 'Details', '<path d="M4 5h16M4 10h16M4 15h16M4 20h16"/><path d="M9 5v15"/>'], ['shelf', 'Shelf', '<rect x="4" y="4" width="4.5" height="7" rx="1"/><rect x="9.75" y="4" width="4.5" height="7" rx="1"/><rect x="15.5" y="4" width="4.5" height="7" rx="1"/><path d="M3 15h18M3 20h18"/>']];
+      head.style.cssText = 'display:flex;align-items:center;gap:12px;padding:6px 12px 12px;border-bottom:1px solid rgba(128,128,128,.2);';
+      head.innerHTML = (canBack ? `<button type="button" data-back style="${iconBtn}" aria-label="Back">${SV('<path d="M19 12H5M12 19l-7-7 7-7"/>')}</button>` : '')
+        + `<div style="flex:1;min-width:0;padding-left:${canBack ? 0 : 6}px;"><div style="font-size:1.5em;font-weight:700;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${nEsc(titleTxt)}</div><div data-crumbs style="display:flex;flex-wrap:nowrap;overflow:hidden;align-items:center;gap:6px;font-size:.92em;font-weight:600;margin-top:3px;white-space:nowrap;"></div></div>`
+        + (() => { const cv = VW.find(v => v[0] === docBrowseView) || VW[1]; return `<button type="button" data-vwcur aria-label="View: ${cv[1]}" title="View: ${cv[1]}" style="width:44px;height:44px;border-radius:14px;border:1px solid rgba(128,128,128,.3);background:var(--accent);color:#fff;flex:0 0 auto;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;">${SV(cv[2])}</button>`; })();
+      const cw = head.querySelector('[data-crumbs]');
+      if (docBrowse.length && !quick) {
+        const crumbs = [['Documents', []]].concat(docBrowse.map((nm, i) => [nm, docBrowse.slice(0, i + 1)]));
+        crumbs.forEach((c, i) => {
+          const last = i === crumbs.length - 1;
+          const bsp = document.createElement('span'); bsp.textContent = c[0]; bsp.style.cssText = `flex:0 0 auto;cursor:${last ? 'default' : 'pointer'};color:${last ? 'var(--sub)' : 'var(--accent)'};${last ? 'overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;' : ''}`;
+          if (!last) bsp.onclick = () => go(c[1]);
+          cw.appendChild(bsp);
+          if (!last) { const sep = document.createElement('span'); sep.textContent = '›'; sep.style.cssText = 'color:var(--sub);flex:0 0 auto;'; cw.appendChild(sep); }
+        });
+      } else cw.remove();
+      const bk = head.querySelector('[data-back]'); if (bk) bk.onclick = () => { if (quick) { window.__docQuick = null; docBrowse = []; filterAndRenderFolderDeck(); } else go(docBrowse.slice(0, -1)); };
+      const vwb = head.querySelector('[data-vwcur]'); if (vwb) vwb.onclick = () => { try { window.__browseViewPick(vwb); } catch(x) {} };
       window.__browseViewPick = btn => { closeAllKebabs(); popLayoutMenu(btn, 'FOLDER VIEW', BROWSE_VIEWS, docBrowseView, v => { docBrowseView = v; try { localStorage.setItem('cl_docBrowseView', v); } catch(x) {} filterAndRenderFolderDeck(); }); };
       wrap.appendChild(head);
 
-      const crumb = document.createElement('div'); crumb.style.cssText = 'display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:2px 16px 10px;font-size:.85em;font-weight:600;color:var(--accent);border-bottom:1px solid rgba(128,128,128,.2);';
-      const crumbs = [['Documents', []]].concat(docBrowse.map((nm, i) => [nm, docBrowse.slice(0, i + 1)]));
-      crumbs.forEach((c, i) => {
-        const last = i === crumbs.length - 1;
-        const bsp = document.createElement('span'); bsp.textContent = c[0]; bsp.style.cssText = `cursor:${last ? 'default' : 'pointer'};${last ? 'color:var(--sub);' : ''}`;
-        if (!last) bsp.onclick = () => go(c[1]);
-        crumb.appendChild(bsp);
-        if (!last) { const sep = document.createElement('span'); sep.textContent = '›'; sep.style.color = 'var(--sub)'; crumb.appendChild(sep); }
-      });
-      if (docBrowse.length) wrap.appendChild(crumb); else head.style.cssText += 'padding-bottom:10px;border-bottom:1px solid rgba(128,128,128,.2);';
-
       /* ---- items ---- */
       const items = view.folders.map(f => ({f, name: f.name, sub: f.count === 0 ? 'Empty folder' : `${f.count} ${(activeTab === 'docs' ? 'document' : 'note')}${f.count === 1 ? '' : 's'} · ${ago(f.last)}`, count: f.count, last: f.last, icon: sz => folderIcon(sz, f.name), open: () => go(docBrowse.concat(f.name))}))
-        .concat(view.notes.map(n => ({n, name: n.displayTitle, sub: `${statusOf(n) || ago(n.dateMs)}${n.lineCount ? ' · ' + n.lineCount + ' ln' : ''}`, last: n.dateMs, icon: sz => fileIcon(sz, n), open: null})));
+        .concat(view.notes.map(n => ({n, name: n.displayTitle, sub: (n.isDocument ? 'Word · ' + ago(n.dateMs) : '') || `${statusOf(n) || ago(n.dateMs)}${n.lineCount ? ' · ' + n.lineCount + ' ln' : ''}`, last: n.dateMs, icon: sz => fileIcon(sz, n), open: null})));
       const popColorMenu = (btn, name) => {
         const old = document.getElementById('popColorMenu'); if (old) old.remove();
         const cur = folderHS(name);
@@ -5561,17 +5601,41 @@ function renderDocsTab(body){
           const fIc = S('<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>');
           const rows = [
             ['edit', 'Rename', S('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'), 't-edit'],
+            ['select', 'Select', S('<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.5"/>'), 't-edit'],
+            ['move', 'Move', S('<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v5M9.5 13.5 12 16l2.5-2.5"/>'), 't-edit'],
+            ['copy', 'Copy', S('<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>'), 't-edit'],
+            ['info', 'Info', S('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5h.01"/>'), 't-edit'],
             ['color', 'Icon colour', S('<circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="10" r="1" fill="currentColor"/><circle cx="12" cy="7.5" r="1" fill="currentColor"/><circle cx="15.5" cy="10" r="1" fill="currentColor"/><path d="M12 21a2.5 2.5 0 0 1 0-5h1.5a2 2 0 0 0 2-2"/>'), 't-edit'],
             null,
-            ['delete', 'Delete folder', S('<path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/>'), 't-del']
+            ['delete', 'Delete', S('<path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/>'), 't-del']
           ];
           docActionMenu({ anchor: b, ev: e, title: it.name, sub: it.sub || 'Folder', icon: fIc, rows, onPick: v => {
+            const plain = docBrowse.concat(it.name).join('/');
+            const real = docBrowse.length ? plain : realFolderPath(it.name);
             if(v === 'color'){ popColorMenu(b, it.name); return; }
-            const real = docBrowse.length ? docBrowse.concat(it.name).join('/') : realFolderPath(it.name);
-            if(v === 'edit') openVaultFolderModal({mode:'rename', path: real}); else confirmDeleteVaultFolder(real);
+            if(v === 'select'){ if(!docSel.on) docSel.start(); docSel.toggle(docSel.FK + plain); return; }
+            if(v === 'info'){ docUI.info(plain); return; }
+            if(v === 'move'){ docUI.pick('Move “' + it.name + '” to…', [plain], async dest => { if(await docUI.moveFolder(plain, dest)){ docUI.toast('Folder moved'); await docUI.refresh(); } }); return; }
+            if(v === 'copy'){ docUI.pick('Copy “' + it.name + '” to…', [plain], async dest => { await docUI.copyFolder(plain, dest); docUI.toast('Folder copied'); await docUI.refresh(); }); return; }
+            if(v === 'edit'){ openVaultFolderModal({mode:'rename', path: real}); return; }
+            (async () => { const n = (wdDash.docs || []).filter(d => docUI.under(d, plain)).length; if(!confirm('Delete the folder "' + it.name + '" and everything inside it' + (n ? ' (' + n + ' document' + (n === 1 ? '' : 's') + ')' : '') + '?\nDocuments go to Trash.')) return; await docUI.deleteFolder(plain, real); docUI.toast('Folder deleted'); await docUI.refresh(); })();
           } }); }; return b; };
       let KPOS = 'top:2px;right:2px;';
-      const done = (el, it) => { if (it.f) { el.style.position = 'relative'; el.appendChild(kebab(it, KPOS)); } if (it.n) wire(el, it.n); else el.onclick = it.open; return el; };
+      const done = (el, it) => {
+        if (it.f) {
+          el.style.position = 'relative'; el.appendChild(kebab(it, KPOS));
+          const fkey = docSel.FK + docBrowse.concat(it.name).join('/');
+          el.dataset.selpath = fkey; docSel.paint(el);
+          let tm = null, sx = 0, sy = 0, fired = false; const clr = () => { if (tm) { clearTimeout(tm); tm = null; } };
+          try { el.style.webkitTouchCallout = 'none'; el.style.userSelect = 'none'; } catch(x) {}
+          el.addEventListener('pointerdown', e => { if (e.button > 0 || e.target.closest('button') || docSel.on) return; fired = false; sx = e.clientX; sy = e.clientY; clr(); tm = setTimeout(() => { tm = null; fired = true; try { navigator.vibrate && navigator.vibrate(12); } catch(x) {} docSel.start(); docSel.toggle(fkey); }, 450); });
+          el.addEventListener('pointermove', e => { if (tm && Math.hypot(e.clientX - sx, e.clientY - sy) > 10) clr(); });
+          ['pointerup', 'pointercancel', 'pointerleave'].forEach(t => el.addEventListener(t, clr));
+          el.addEventListener('contextmenu', e => e.preventDefault());
+          el.onclick = ev => { if (docSel.on) { ev.preventDefault(); ev.stopPropagation(); docSel.toggle(fkey); return; } if (fired) { fired = false; return; } it.open(); };
+          return el;
+        }
+        if (it.n) wire(el, it.n); else el.onclick = it.open; return el; };
       const star = it => it.n ? starHtml(it.n) : '';
       const nm = (it, css) => `<div style="${css}overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${nEsc(it.name)}</div>`;
       const body = document.createElement('div');
@@ -5582,7 +5646,7 @@ function renderDocsTab(body){
         KPOS = 'top:50%;right:6px;transform:translateY(-50%);';
         body.style.cssText = 'padding:4px 8px 0;';
         items.forEach(it => body.appendChild(done(mk('display:flex;align-items:center;gap:14px;padding:8px;border-radius:14px;cursor:pointer;min-width:0;',
-          `<div style="width:62px;height:62px;border-radius:18px;${tintBg(it)}display:flex;align-items:center;justify-content:center;flex:0 0 auto;">${it.icon(40)}</div>
+          `<div style="width:62px;height:62px;border-radius:18px;${tintBg(it)}display:flex;align-items:center;justify-content:center;flex:0 0 auto;">${(it.n && it.n.isDocument) ? docGlyph : it.icon(40)}</div>
           <div style="flex:1;min-width:0;">${nm(it, 'font-size:1.02em;font-weight:600;')}<div style="font-size:.82em;color:var(--sub);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${nEsc(it.sub)}</div></div>${it.n ? star(it) : '<span style="width:28px;"></span>'}`), it)));
       } else if (V === 'grid') {
         body.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(124px,1fr));gap:10px;padding:12px;';
@@ -5628,6 +5692,7 @@ function renderDocsTab(body){
         body.innerHTML = '<div class="ef-box"><div class="ef-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="ef-t">This folder is empty</div><div class="ef-s">Documents you create here will be kept together in this folder.</div><button type="button" class="ef-btn" data-efnew><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New document</button></div>';
         const efb = body.querySelector('[data-efnew]'); if (efb) efb.onclick = () => { try { startCreate(docBrowse.length ? docBrowse.join('/') : ''); } catch(e) {} };
       }
+      if (window.__docQuick && !items.length) { const t1 = body.querySelector('.ef-t'), t2 = body.querySelector('.ef-s'), nb = body.querySelector('[data-efnew]'); if (t1) t1.textContent = 'Nothing here yet'; if (t2) t2.textContent = window.__docQuick === 'star' ? 'Star a document to find it here.' : 'Documents you create or edit will appear here.'; if (nb) nb.remove(); }
       wrap.appendChild(body);
       deckContainer.appendChild(wrap);
     };
@@ -5894,11 +5959,9 @@ function paintPageKebab(){
   const T = _conn ? activeTab : 'none', items = [];
   if(_conn) items.push(['h', ({docs:'DOCS', help:'HELP'})[T] || 'PAGE']);
   if(T === 'docs' && window.__docsNative){ items.push(['📂 Open file from device…', () => { try { window.docsOpenFile(); } catch(e) {} }]); items.push(['💾 Backup & restore…', () => { try { window.docsBackupDlg(); } catch(e) {} }]); }
-  if(T === 'docs' && docLayout === 'Folder Browser') items.push(['▦ View…', () => { try { window.__browseViewPick && window.__browseViewPick(btn); } catch(e) {} }]);
   if(T === 'docs') items.push(['☑ Select documents', () => { try { docSel.start(); } catch(e) {} }]);
   if(_conn && T !== 'help') items.push(['↻ Refresh', () => refreshNow()]);
   
-  if(window.qsOpen) items.push(['\u2601\uFE0F ' + (window.qsLabel ? window.qsLabel() : 'Account & sync'), () => window.qsOpen()]);
   if(window.QuillAndroid && window.qdCheckUpdate) items.push(['⬆ Check for updates · v' + (window.qdVersionName || ''), () => window.qdCheckUpdate(true)]);
   if(T === 'docs') items.push(['❓ Help', () => openAreaHelp('docs')]);
   items.push(['⚙️ Settings', () => openSettings(), 'pk-sep']);
@@ -6076,7 +6139,58 @@ function stFlowFwd(){
 })();
 
 /* ---- Profile sidebar (tap the profile image) ---- */
+function sdPaintActive(){
+  try{
+    var q = window.__docQuick || null, onHelp = (typeof activeTab !== 'undefined' && activeTab === 'help');
+    var cur = onHelp ? 'help' : (q === 'recent' ? 'recent' : q === 'star' ? 'star' : 'docs');
+    document.querySelectorAll('#sdPanel .sd-row[data-sd]').forEach(function(b){ b.classList.toggle('active', b.dataset.sd === cur); });
+    var h = document.getElementById('sdHelpBtn'); if(h) h.classList.toggle('active', onHelp);
+  }catch(e){}
+}
+window.QD_APPS = window.QD_APPS || [
+  {name: 'Cadence', sub: 'Notes', icon: 'notes', url: ''},
+  {name: 'Schedule', sub: 'Tasks', icon: 'tasks', url: ''},
+  {name: 'Vault', sub: 'Dashboard', icon: 'dash', url: ''},
+  {name: 'Notebook', sub: 'Notebooks', icon: 'book', url: ''},
+  {name: 'Sketchbook', sub: 'Draw & sketch', icon: 'sketch', url: ''},
+  {name: 'Soft Reader', sub: 'Read comfortably', icon: 'reader', url: ''}
+];
+const AP_ICONS = {
+  book: '<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15.5H6.5A1.5 1.5 0 0 0 5 20z"/><path d="M5 20a1.5 1.5 0 0 0 1.5 1.5H19V18.5M9 7.5h6M9 11h4"/>',
+  sketch: '<path d="m4 20 1-4.2L16.4 4.4a2 2 0 0 1 2.8 0l.4.4a2 2 0 0 1 0 2.8L8.2 19z"/><path d="m14.5 6.3 3.2 3.2M4 20l4.2-1"/>',
+  reader: '<path d="M12 6.5C10.4 5.2 8 4.5 4.5 4.5v13c3.5 0 5.9.7 7.5 2 1.6-1.3 4-2 7.5-2v-13c-3.5 0-5.9.7-7.5 2z"/><path d="M12 6.5v13"/>',
+  notes: '<path d="M6 4h10a2 2 0 0 1 2 2v14H8a2 2 0 0 1-2-2z"/><path d="M9.5 9h5M9.5 13h5"/>',
+  tasks: '<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M8 3v4M16 3v4M9 15l2 2 4-4"/>',
+  dash: '<rect x="4" y="4" width="7" height="9" rx="1.6"/><rect x="13" y="4" width="7" height="5" rx="1.6"/><rect x="13" y="11" width="7" height="9" rx="1.6"/><rect x="4" y="15" width="7" height="5" rx="1.6"/>',
+  app: '<rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/>'
+};
+function appsOpen(){
+  const g = document.getElementById('apGrid'); g.textContent = '';
+  (window.QD_APPS || []).forEach((a, i) => {
+    const t = document.createElement('button'); t.type = 'button'; t.className = 'ap-tile';
+    const ic = document.createElement('span'); ic.className = 'ap-ic';
+    ic.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (AP_ICONS[a.icon] || AP_ICONS.app) + '</svg>';
+    const tx = document.createElement('span'), b = document.createElement('b'), sm = document.createElement('small');
+    b.textContent = a.name || 'App'; sm.textContent = a.sub || ''; tx.append(b, sm); t.append(ic, tx);
+    if (!a.url) { const c = document.createElement('span'); c.className = 'ap-soon'; c.textContent = 'Coming soon'; t.append(c); }
+    t.onclick = () => appsLaunch(i); g.append(t);
+  });
+  document.getElementById('apBack').classList.add('open');
+  const sh = document.getElementById('apSheet'); sh.classList.add('open'); sh.setAttribute('aria-hidden', 'false');
+}
+function appsClose(){
+  document.getElementById('apBack').classList.remove('open');
+  const sh = document.getElementById('apSheet'); sh.classList.remove('open'); sh.setAttribute('aria-hidden', 'true');
+}
+function appsLaunch(i){
+  const a = (window.QD_APPS || [])[i]; if (!a) return;
+  if (!a.url) { try { PF.toast((a.name || 'This app') + ' is coming soon'); } catch(e) { alert((a.name || 'This app') + ' is coming soon'); } return; }
+  appsClose();
+  try { if (window.QuillAndroid && typeof QuillAndroid.openUrl === 'function') QuillAndroid.openUrl(a.url); else window.open(a.url, '_blank', 'noopener'); } catch(e) {}
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { try { appsClose(); } catch(x) {} } });
 function sdOpen(){
+  sdPaintActive();
   const p = getProfile(), pan = document.getElementById('sdPanel'); if(!pan) return;
   const av = document.getElementById('sdAv');
   if(av){ if(p.photo){ av.classList.add('has-photo'); av.style.backgroundImage = "url('" + p.photo + "')"; av.textContent = ''; }
@@ -6171,6 +6285,17 @@ function pageIco(k){ return '<span class="pg-ico"><svg viewBox="0 0 24 24" aria-
   const el = document.getElementById('status'); if(!el || !window.MutationObserver) return;
   const upd = () => { const t = el.textContent || ''; el.dataset.state = /error|fail|expired|offline/i.test(t) ? 'bad' : (/^synced/i.test(t) ? 'ok' : 'busy'); };
   new MutationObserver(upd).observe(el, {childList: true, characterData: true, subtree: true}); upd();
+  /* floating top toast: mirrors every status message, then fades out by itself */
+  const st = document.createElement('style');
+  st.textContent = '#qdFloat{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 62px);transform:translate(-50%,-14px);z-index:99990;max-width:calc(100vw - 32px);padding:10px 18px;border-radius:999px;background:var(--card,#1a1d27);color:var(--text,#fff);border:1px solid rgba(128,128,128,.35);box-shadow:0 10px 30px rgba(0,0,0,.45);font-size:.88em;font-weight:700;text-align:center;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease}#qdFloat.on{opacity:1;transform:translate(-50%,0)}#qdFloat.bad{color:var(--danger,#f87171);border-color:var(--danger,#f87171)}';
+  document.head.appendChild(st);
+  const fl = document.createElement('div'); fl.id = 'qdFloat'; fl.setAttribute('role', 'status'); fl.setAttribute('aria-live', 'polite'); document.body.appendChild(fl);
+  let tm = 0, last = '';
+  new MutationObserver(() => {
+    const t = (el.textContent || '').trim(); if(!t || t === last) return; last = t;
+    fl.textContent = t; fl.classList.toggle('bad', el.dataset.state === 'bad'); fl.classList.add('on');
+    clearTimeout(tm); tm = setTimeout(() => { fl.classList.remove('on'); last = ''; }, /…$/.test(t) ? 4000 : 2500);
+  }).observe(el, {childList: true, characterData: true, subtree: true});
 })();
 function updatePageMark(){
   const m = PAGE_MARK[activeTab]; if(!m) return;
@@ -6208,6 +6333,7 @@ function updateFab(){
   document.body.classList.toggle('on-shelf', activeTab === 'shelf');
   document.body.classList.toggle('on-help', activeTab === 'help');
   document.querySelectorAll('[data-tab]').forEach(x => x.classList.toggle('active', x.dataset.tab === activeTab));
+  sdPaintActive();
 }
 (function(){ const base = render; render = function(){ const r = base.apply(this, arguments); try { updateFab(); } catch(e) {} return r; }; })();
 updateFab();
@@ -9281,7 +9407,7 @@ async function openDoc(id){
   $('wdOverlay').classList.add('open');document.body.style.overflow='hidden';try{cadOvTheme(false)}catch(_){}
   try{document.execCommand('styleWithCSS',false,true);document.execCommand('defaultParagraphSeparator',false,'p')}catch(_){}
   applyLayout();stage.scrollTop=0;
-  setTimeout(function(){fitZoom();paginate();if(id==null){$('wdTitle').focus()}},60);
+  setTimeout(function(){fitZoom();paginate();if(id==null){var _f=function(){try{var t=$('wdTitle');if(t)t.blur();ed.focus();var r=document.createRange();r.selectNodeContents(ed);r.collapse(true);var sl=window.getSelection();sl.removeAllRanges();sl.addRange(r)}catch(_){}};_f();setTimeout(_f,250)}},60);
 }
 async function closeDoc(){
   try{hidePO()}catch(_){}
@@ -9345,12 +9471,10 @@ window.wdNew=function(folder){
    '<div class="nd-h"><span class="nd-ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 11v6M9 14h6"/></svg></span><div class="nd-t"><h3>New document</h3><p>Choose a name and page setup</p></div><button type="button" class="nd-x" id="ndX" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>'+
    '<div class="nd-b">'+
    '<label for="ndName">Name</label><input id="ndName" placeholder="Untitled document" maxlength="120" autocomplete="off">'+
-   '<label for="ndFolder">Folder</label><select id="ndFolder"><option value="">No folder (top level)</option>'+fl.map(function(f){return '<option value="'+esc(f)+'"'+(f===folder?' selected':'')+'>'+esc(f)+'</option>'}).join('')+'</select>'+
    '<label for="ndSize">Page size</label><select id="ndSize">'+SIZES.map(function(z){return '<option value="'+z[0]+'"'+(z[0]===dp.size?' selected':'')+'>'+z[1]+' · '+Math.round(z[2])+' × '+Math.round(z[3])+' mm</option>'}).join('')+'</select>'+
    '<label>Orientation</label><div class="sg" id="ndOr"><button type="button" data-o="portrait"><i></i>Portrait</button><button type="button" data-o="landscape"><i></i>Landscape</button></div>'+
    '<label for="ndMg">Margins</label><select id="ndMg"><option value="normal">Normal</option><option value="narrow">Narrow</option><option value="moderate">Moderate</option><option value="wide">Wide</option><option value="custom">Custom…</option></select>'+
    '<div id="ndCust" style="display:none;margin-top:10px"><div class="nd-row"><div><label for="ndT" style="margin:0 0 4px">Top (mm)</label><input id="ndT" type="number" min="0" max="100" step="0.1" inputmode="decimal"></div><div><label for="ndB" style="margin:0 0 4px">Bottom (mm)</label><input id="ndB" type="number" min="0" max="100" step="0.1" inputmode="decimal"></div><div><label for="ndL" style="margin:0 0 4px">Left (mm)</label><input id="ndL" type="number" min="0" max="100" step="0.1" inputmode="decimal"></div><div><label for="ndR" style="margin:0 0 4px">Right (mm)</label><input id="ndR" type="number" min="0" max="100" step="0.1" inputmode="decimal"></div></div></div>'+
-   '<button type="button" id="ndImp" class="nd-imp"><span class="ii"><svg viewBox="0 0 24 24"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 15v3a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-3"/></svg></span><span><b>Import a file instead</b><small>PDF, image or Word document</small></span></button>'+
    '<div style="height:12px"></div></div>'+
    '<div class="ft"><button type="button" class="ndCancel" id="ndCancel">Cancel</button><button type="button" class="ndOk" id="ndOk">Create</button></div></div>';
   document.body.appendChild(ov);
@@ -9363,9 +9487,9 @@ window.wdNew=function(folder){
   function paint(){ov.querySelectorAll('#ndOr button').forEach(function(b){b.classList.toggle('on',b.dataset.o===orient)})}paint();
   ov.querySelector('#ndOr').onclick=function(e){var b=e.target.closest('button');if(!b)return;orient=b.dataset.o;paint()};
   function close(){ov.remove()}
-  function go(){var nm=$('ndName').value.trim(),f=$('ndFolder').value;if(!nm){var _t={};try{(window.wdDash&&wdDash.docs||[]).forEach(function(d){_t[String(d.title||'Untitled document').toLowerCase()]=1})}catch(_){}nm='Untitled document';for(var _i=2;_t[nm.toLowerCase()]&&_i<500;_i++)nm='Untitled document '+_i}
+  function go(){var nm=$('ndName').value.trim(),f=folder;if(!nm){var _t={};try{(window.wdDash&&wdDash.docs||[]).forEach(function(d){_t[String(d.title||'Untitled document').toLowerCase()]=1})}catch(_){}nm='Untitled document';for(var _i=2;_t[nm.toLowerCase()]&&_i<500;_i++)nm='Untitled document '+_i}
   var pg={size:$('ndSize').value,orient:orient,m:readM()};close();return wdNewRaw(f,{title:nm,page:pg})}
-  ov.querySelector('#ndOk').onclick=go;ov.querySelector('#ndCancel').onclick=close;ov.querySelector('#ndX').onclick=close;var _ib=ov.querySelector('#ndImp');if(_ib)_ib.onclick=function(){var _f=$('ndFolder').value;close();window.wdImport(_f)};
+  ov.querySelector('#ndOk').onclick=go;ov.querySelector('#ndCancel').onclick=close;ov.querySelector('#ndX').onclick=close;var _ib=ov.querySelector('#ndImp');if(_ib)_ib.onclick=function(){var _f=folder;close();window.wdImport(_f)};
   ov.addEventListener('click',function(e){if(e.target===ov)close()});
   ov.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName!=='SELECT'){e.preventDefault();go()}else if(e.key==='Escape')close()});
   setTimeout(function(){try{$('ndName').focus()}catch(_){}},60);
@@ -16546,17 +16670,17 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
     var b=document.createElement('div'); b.id='qdUpd'; b.setAttribute('role','dialog'); b.setAttribute('aria-modal','true'); b.setAttribute('aria-label','Update available');
     b.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(8,10,18,.6);font-family:inherit';
     b.innerHTML='<div style="width:100%;max-width:380px;background:var(--card,#fff);color:var(--text,#111);border:1px solid rgba(99,102,241,.45);border-radius:22px;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,.45)">'
-      +'<div style="display:flex;align-items:center;gap:12px"><div style="width:44px;height:44px;border-radius:14px;background:rgba(99,102,241,.16);color:var(--accent,#6366f1);display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V5M7.5 9.5 12 5l4.5 4.5M5 19h14"/></svg></div>'
+      +'<div style="display:flex;align-items:center;gap:12px"><div style="width:44px;height:44px;border-radius:14px;background:rgba(99,102,241,.16);color:var(--accent,#6366f1);display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8.5 12.5 12 16l3.5-3.5"/></svg></div>'
       +'<div style="min-width:0"><div style="font-weight:800;font-size:1.05em">Update available</div><div style="font-size:.82em;opacity:.75;margin-top:2px">'+(cv?'v'+cv+' \u2192 ':'')+(nv?'v'+nv:'New version')+'</div></div></div>'
       +'<div style="font-size:.86em;opacity:.8;margin-top:14px;line-height:1.45">A newer version of Quill Docs is ready. Tap <b>Update</b> to download and install it over the current app. Your documents are kept.</div>'
       +'<div style="display:flex;gap:10px;margin-top:18px"><button type="button" data-l style="flex:1;height:44px;border-radius:999px;border:1px solid rgba(128,128,128,.3);background:transparent;color:inherit;font-weight:800;cursor:pointer">Later</button>'
       +'<button type="button" data-u style="flex:1;height:44px;border-radius:999px;border:0;background:var(--accent,#6366f1);color:#fff;font-weight:800;cursor:pointer">Update</button></div></div>';
-    b.querySelector('[data-u]').onclick=function(){ if(installInApp(url)){ this.disabled=true; this.textContent='Downloading\u2026'; setTimeout(function(){b.remove()},1800) } else { openLink(url); b.remove() } };
+    b.querySelector('[data-u]').onclick=function(){ if(installInApp(url)){ this.disabled=true; this.textContent='Downloading\u2026'; setTimeout(function(){b.remove()},1800) } else { say('Automatic install needs the newest app build.'); b.remove() } };
     b.querySelector('[data-l]').onclick=function(){lsSet('qd_skip',String(code));b.remove()};
     b.addEventListener('click',function(e){ if(e.target===b) b.remove() });
     document.body.appendChild(b);
   }
-  async function check(manual){
+  async function check(manual,install){
     try{
       var r=await fetch('https://api.github.com/repos/'+REPO+'/releases/latest',{headers:{Accept:'application/vnd.github+json'},cache:'no-store'});
       if(!r.ok) throw new Error('http '+r.status);
@@ -16565,7 +16689,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
       var code=mc?parseInt(mc[1],10):0, vn=mn?mn[1]:'';
       var apk=(j.assets||[]).filter(function(a){return /\.apk$/i.test(a.name)})[0];
       var url=apk?apk.browser_download_url:j.html_url;
-      if(code>cur){ upd={vn:vn,url:url,code:code}; paintSd(); if(manual||lsGet('qd_skip')!==String(code)) banner(vn,url,code); }
+      if(code>cur){ upd={vn:vn,url:url,code:code}; paintSd(); if(install){ if(!installInApp(url)) say('Automatic install needs the newest app build.'); } else if(manual||lsGet('qd_skip')!==String(code)) banner(vn,url,code); }
       else { upd=null; checked=true; paintSd(); if(manual) say('You have the latest version (v'+window.qdVersionName+')'); }
     }catch(e){ if(manual) say('Could not check for updates. Check your internet connection.'); }
   }
@@ -16579,11 +16703,11 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
       st.textContent='#sdUpd{flex:0 0 auto;margin:0 0 0 auto;width:44px;height:44px;border-radius:14px;border:0;background:rgba(128,128,128,.16);color:var(--text);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;position:relative;padding:0}#sdUpd:hover{background:rgba(128,128,128,.28)}#sdUpd svg{width:22px;height:22px}#sdUpd.new{background:var(--accent,#6366f1);color:#fff}#sdUpd.new::after{content:"";position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;background:#f43f5e;border:2px solid var(--card,#fff);box-sizing:content-box}';
       document.head.appendChild(st);
       b=document.createElement('button'); b.type='button'; b.id='sdUpd';
-      b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V5M7.5 9.5 12 5l4.5 4.5M5 19h14"/></svg>';
+      b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8.5 12.5 12 16l3.5-3.5"/></svg>';
       b.onclick=function(){
-        if(upd){ banner(upd.vn,upd.url,upd.code) }
-        else if(NATIVE){check(true)}
-        else{openLink('https://github.com/'+REPO+'/releases/latest')}
+        if(!NATIVE){ say('Updates install inside the Android app. Open Quill Docs there to update.'); return }
+        if(upd){ if(!installInApp(upd.url)) say('Automatic install needs the newest app build.'); return }
+        say('Checking for updates\u2026'); check(true,true);
       };
       foot.appendChild(b);
     }
@@ -16615,7 +16739,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
       off();return r};
     w.__qd=1;window[name]=w;
   }
-  function init(){['loadData','refreshNow','flushPending','mirrorSync'].forEach(wrap)}
+  function init(){['loadData','refreshNow'].forEach(wrap)}
   if(document.readyState==='complete')init();else window.addEventListener('load',init);
   setTimeout(init,1500);
 })();
@@ -17464,6 +17588,62 @@ window.qsLabel=function(){var u=QS.user();return u?'Account & sync \u00b7 '+u.em
 })();
 })();
 
+</script>
+<script>
+/* ---- Settings: Help + Contact ---- */
+/* Set this to the address that should receive messages. Left empty, the message is shared/copied instead. */
+window.QD_CONTACT_EMAIL = window.QD_CONTACT_EMAIL || 'Contact.injamam@gmail.com';
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var kind='Suggestion',KEY='cl_contactDraft';
+  function say(t){try{if(window.PF&&PF.toast)return PF.toast(t);}catch(e){}try{toast(t)}catch(e){}}
+  function upd(){var m=$('ctMsg');if(!m)return;$('ctCount').textContent=m.value.length;$('ctSend').disabled=!m.value.trim();
+    try{localStorage.setItem(KEY,JSON.stringify({k:kind,m:m.value,e:$('ctMail').value}))}catch(e){}}
+  function init(){
+    var m=$('ctMsg');if(!m||m.__ct)return;m.__ct=1;
+    try{var d=JSON.parse(localStorage.getItem(KEY)||'null');if(d){m.value=d.m||'';$('ctMail').value=d.e||'';kind=d.k||kind;}}catch(e){}
+    document.querySelectorAll('#settingsOverlay .ct-seg button').forEach(function(b){
+      var on=b.dataset.ct===kind;b.classList.toggle('on',on);b.setAttribute('aria-checked',on?'true':'false');
+      b.addEventListener('click',function(){kind=b.dataset.ct;
+        document.querySelectorAll('#settingsOverlay .ct-seg button').forEach(function(x){var o=x===b;x.classList.toggle('on',o);x.setAttribute('aria-checked',o?'true':'false')});
+        m.placeholder=kind==='Problem'?'Describe what went wrong\u2026':kind==='Question'?'What would you like to know?\u2026':'Write your suggestion here\u2026';upd();});
+    });
+    m.addEventListener('input',upd);$('ctMail').addEventListener('input',upd);
+    $('ctSend').addEventListener('click',send);
+    var hf=$('hpFull');if(hf)hf.addEventListener('click',function(){
+      try{closeSettings()}catch(e){}
+      setTimeout(function(){try{var b=$('sdHelpBtn');if(b)b.click();}catch(e){}},60);});
+    upd();
+  }
+  async function send(){
+    var msg=$('ctMsg').value.trim();if(!msg)return;
+    var mail=$('ctMail').value.trim(),subject='Quill Docs \u2013 '+kind;
+    var body=msg+(mail?'\n\nReply to: '+mail:'')+'\n\n\u2014\nSent from Quill Docs';
+    var done=function(note){$('ctMsg').value='';try{localStorage.removeItem(KEY)}catch(e){}upd();$('ctNote').textContent=note;say(note);};
+    if(window.QD_CONTACT_EMAIL){
+      var btn=$('ctSend');btn.disabled=true;$('ctNote').textContent='Sending\u2026';
+      try{
+        if(navigator.onLine===false)throw new Error('offline');
+        var r=await fetch('https://formsubmit.co/ajax/'+encodeURIComponent(window.QD_CONTACT_EMAIL),{
+          method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+          body:JSON.stringify({_subject:subject,_template:'table',_captcha:'false',Type:kind,Message:msg,Email:mail||'(not given)',_replyto:mail||undefined})});
+        var j=await r.json().catch(function(){return {}});
+        if(!r.ok||String(j.success)==='false')throw new Error(j.message||'failed');
+        return done('Message sent. Thank you!');
+      }catch(e){
+        $('ctNote').textContent=(navigator.onLine===false?'You are offline. ':'Could not send right now. ')+'Your message is saved here \u2014 try again in a moment.';
+        say('Message not sent');
+      }finally{btn.disabled=!$('ctMsg').value.trim();}
+      return;
+    }
+    try{if(navigator.share){await navigator.share({title:subject,text:body});return done('Thanks for your message.');}}catch(e){if(e&&e.name==='AbortError')return;}
+    try{await navigator.clipboard.writeText(subject+'\n\n'+body);return done('Message copied. Paste it into your email or chat to send it.');}catch(e){}
+    $('ctNote').textContent='Could not send from here. Your message is saved on this device.';
+  }
+  var _open=window.stOpen;
+  window.stOpen=function(name){var r=_open.apply(this,arguments);if(name==='contact'||name==='help')init();return r;};
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+})();
 </script>
 </body>
 </html>
