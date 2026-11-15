@@ -37,6 +37,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import androidx.webkit.WebViewAssetLoader;
 
 import java.io.File;
@@ -52,6 +54,7 @@ public class MainActivity extends Activity {
     private WebView web;
     private WebView printWeb;
     private ValueCallback<Uri[]> filePathCallback;
+    private BroadcastReceiver apkReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,9 @@ public class MainActivity extends Activity {
         s.setDomStorageEnabled(true);
         s.setDatabaseEnabled(true);
         s.setAllowFileAccess(false);
-        s.setAllowContentAccess(true);
+        s.setAllowContentAccess(false);
+        s.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+        if (Build.VERSION.SDK_INT >= 26) s.setSafeBrowsingEnabled(true);
         s.setMediaPlaybackRequiresUserGesture(false);
         s.setSupportZoom(false);
         s.setBuiltInZoomControls(false);
@@ -89,13 +94,13 @@ public class MainActivity extends Activity {
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 Uri u = request.getUrl();
                 String host = u.getHost() == null ? "" : u.getHost();
-                if (host.equals("appassets.androidplatform.net")) return false;
                 String scheme = u.getScheme() == null ? "" : u.getScheme();
+                if (host.equals("appassets.androidplatform.net") && scheme.equals("https")) return false;
                 if (scheme.equals("http") || scheme.equals("https") || scheme.equals("mailto") || scheme.equals("tel")) {
                     try { startActivity(new Intent(Intent.ACTION_VIEW, u)); } catch (Exception ignored) {}
-                    return true;
                 }
-                return false;
+                /* never load anything else (data:, file:, javascript:, intent: ...) inside the WebView, which has the native bridge */
+                return true;
             }
         });
 
@@ -117,9 +122,9 @@ public class MainActivity extends Activity {
         web.setDownloadListener((url, userAgent, contentDisposition, mimeType, contentLength) -> {
             String name = URLUtil.guessFileName(url, contentDisposition, mimeType);
             if (url.startsWith("blob:")) {
-                String js = "(function(){fetch('" + url + "').then(function(r){return r.blob();}).then(function(b){"
+                String js = "(function(){fetch(" + JSONObject.quote(url) + ").then(function(r){return r.blob();}).then(function(b){"
                         + "var fr=new FileReader();fr.onloadend=function(){var d=fr.result;"
-                        + "QuillAndroid.saveBase64(d.substring(d.indexOf(',')+1),'" + (mimeType == null ? "application/octet-stream" : mimeType.replace("'", "")) + "','" + name.replace("'", "") + "');};"
+                        + "QuillAndroid.saveBase64(d.substring(d.indexOf(',')+1)," + JSONObject.quote(mimeType == null ? "application/octet-stream" : mimeType) + "," + JSONObject.quote(name) + ");};"
                         + "fr.readAsDataURL(b);});})();";
                 web.evaluateJavascript(js, null);
             } else if (url.startsWith("data:")) {
@@ -223,11 +228,13 @@ public class MainActivity extends Activity {
                     rq.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                     rq.setDestinationInExternalFilesDir(MainActivity.this, Environment.DIRECTORY_DOWNLOADS, "QuillDocs-update.apk");
                     final long id = dm.enqueue(rq);
+                    if (apkReceiver != null) { try { unregisterReceiver(apkReceiver); } catch (Exception ignored) {} apkReceiver = null; }
                     BroadcastReceiver r = new BroadcastReceiver() {
                         @Override
                         public void onReceive(Context c, Intent i) {
                             if (i.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1) != id) return;
                             try { unregisterReceiver(this); } catch (Exception ignored) {}
+                            apkReceiver = null;
                             Uri apk = dm.getUriForDownloadedFile(id);
                             if (apk == null) { toast("Update download failed"); return; }
                             Intent in = new Intent(Intent.ACTION_VIEW);
@@ -236,8 +243,9 @@ public class MainActivity extends Activity {
                             startActivity(in);
                         }
                     };
+                    apkReceiver = r;
                     if (Build.VERSION.SDK_INT >= 33)
-                        registerReceiver(r, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), Context.RECEIVER_EXPORTED);
+                        registerReceiver(r, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), Context.RECEIVER_NOT_EXPORTED);
                     else
                         registerReceiver(r, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
                     toast("Downloading update\u2026");
@@ -305,7 +313,14 @@ public class MainActivity extends Activity {
                             v.postDelayed(poll[0], 200);
                         }
                     });
-                    pw.loadDataWithBaseURL("https://appassets.androidplatform.net/", html, "text/html", "UTF-8", null);
+                    /* Document HTML is untrusted: give it its own origin (no access to the app's storage/tokens)
+                       and a CSP that allows fonts/styles but no network requests for data. */
+                    final String csp = "<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; script-src 'unsafe-inline'; "
+                            + "style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src data: blob:\">";
+                    String safeHtml = html == null ? "" : html;
+                    java.util.regex.Matcher hm = java.util.regex.Pattern.compile("<head[^>]*>", java.util.regex.Pattern.CASE_INSENSITIVE).matcher(safeHtml);
+                    safeHtml = hm.find() ? safeHtml.substring(0, hm.end()) + csp + safeHtml.substring(hm.end()) : csp + safeHtml;
+                    pw.loadDataWithBaseURL("https://print.quill.invalid/", safeHtml, "text/html", "UTF-8", null);
                 } catch (Exception e) {
                     toast("Print failed: " + e);
                 }
@@ -380,7 +395,15 @@ public class MainActivity extends Activity {
         @Override public int update(Uri uri, ContentValues v, String s, String[] a) { return 0; }
     }
 
+    private static String cleanName(String n) {
+        if (n == null) n = "";
+        n = n.replaceAll("[\\\\/:*?\"<>|\\p{Cntrl}]", "-").replaceAll("^\\.+", "").trim();
+        if (n.length() > 120) n = n.substring(0, 120);
+        return n.isEmpty() ? "document" : n;
+    }
+
     private void saveBytes(byte[] bytes, String mime, String name) throws Exception {
+        name = cleanName(name);
         if (mime == null || mime.isEmpty()) mime = "application/octet-stream";
         if (Build.VERSION.SDK_INT >= 29) {
             ContentValues v = new ContentValues();
@@ -449,6 +472,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        if (apkReceiver != null) { try { unregisterReceiver(apkReceiver); } catch (Exception ignored) {} apkReceiver = null; }
         if (web != null) { web.destroy(); web = null; }
         super.onDestroy();
     }
