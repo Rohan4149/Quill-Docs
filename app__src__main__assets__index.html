@@ -6786,13 +6786,13 @@ function wdLineSplit(el,Pp,ph,mt,mb,opts){
       if((eb0-r.top)/lh0<1.7){var fb3=wdFirstBelow(atoms,start,B-lh0,sc,er.top);if(fb3){hit=fb3.i;r=fb3.r}}
       if((r.top-et0)/lh0<1.7)return false}
     /* walk on if this line already sits at or past the next page's margin line: look at the following page instead */
-    if(r.top>=T-0.5){start=hit;var jj=j;while(r&&r.top>=(jj+1)*Pp+mt-0.5&&jj<j+60){jj++}
+    if(r.top>=T-1.5){start=hit;var jj=j;while(r&&r.top>=(jj+1)*Pp+mt-1.5&&jj<j+60){jj++}
       var nB=jj*Pp+ph-wdMb(mb,jj);if(t+h<=nB+0.5)break;
       /* find first atom beyond the boundary of page jj */
       var fb2=wdFirstBelow(atoms,hit,nB,sc,er.top);var found=fb2?fb2.i:-1;if(fb2)r=fb2.r;
-      if(found<0)break;hit=found;B=nB;T=(jj+1)*Pp+mt;if(r.top>=T-0.5){start=hit;continue}}
+      if(found<0)break;hit=found;B=nB;T=(jj+1)*Pp+mt;if(r.top>=T-1.5){start=hit;continue}}
     var a=atoms[hit],sp=document.createElement('span');sp.setAttribute('data-wdsp','1');sp.setAttribute('contenteditable','false');
-    sp.style.cssText='display:inline-block;width:0;height:0;pointer-events:none;user-select:none;-webkit-user-select:none';
+    sp.style.cssText='display:inline-block;vertical-align:top;width:100%;height:0;margin:0;padding:0;border:0;pointer-events:none;user-select:none;-webkit-user-select:none';
     var tgt=a[0];if(a[1]>0)tgt=a[0].splitText(a[1]);
     tgt.parentNode.insertBefore(sp,tgt);
     var d=Math.max(0,T-r.top)+(r.bottom-r.top)*0.85,tr=0,nr;
