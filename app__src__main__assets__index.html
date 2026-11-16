@@ -16195,11 +16195,17 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
       +'<div style="font-size:.86em;opacity:.8;margin-top:14px;line-height:1.45">A newer version of Quill Docs is ready. Tap <b>Update</b> to download and install it over the current app. Your documents are kept.</div>'
       +'<div style="display:flex;gap:10px;margin-top:18px"><button type="button" data-l style="flex:1;height:44px;border-radius:999px;border:1px solid rgba(128,128,128,.3);background:transparent;color:inherit;font-weight:800;cursor:pointer">Later</button>'
       +'<button type="button" data-u style="flex:1;height:44px;border-radius:999px;border:0;background:var(--accent,#6366f1);color:#fff;font-weight:800;cursor:pointer">Update</button></div></div>';
-    b.querySelector('[data-u]').onclick=function(){ if(installInApp(url)){ this.disabled=true; this.textContent='Downloading\u2026'; setTimeout(function(){b.remove()},1800) } else { say('Automatic install needs the newest app build.'); b.remove() } };
+    (function(){var box=b.firstChild,last=box.lastChild;
+      var info=document.createElement('div');info.style.cssText='font-size:.78em;opacity:.7;margin-top:10px';info.textContent='Installed build '+cur+' \u00B7 latest build '+code;box.insertBefore(info,last);
+      if(lsGet('qd_try')===String(code)){var w=document.createElement('div');w.style.cssText='font-size:.8em;margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(245,158,11,.14);line-height:1.45';
+        w.textContent='You already tried installing build '+code+' and this app is still on build '+cur+'. Android refused it. That usually means the new APK is signed with a different key, or has the same version number. See the steps in the release notes, or uninstall once and install the APK fresh (export your documents first).';box.insertBefore(w,last)}})();
+    b.querySelector('[data-u]').onclick=function(){ lsSet('qd_try',String(code)); if(installInApp(url)){ this.disabled=true; this.textContent='Downloading\u2026'; setTimeout(function(){b.remove()},1800) } else { say('Automatic install needs the newest app build.'); b.remove() } };
     b.querySelector('[data-l]').onclick=function(){lsSet('qd_skip',String(code));b.remove()};
     b.addEventListener('click',function(e){ if(e.target===b) b.remove() });
     document.body.appendChild(b);
   }
+  /* dotted version compare: 1.15 vs 1.9 -> 1; equal -> 0 */
+  function vcmp(a,b){var x=String(a||'').split('.'),y=String(b||'').split('.'),n=Math.max(x.length,y.length),i,p,q;for(i=0;i<n;i++){p=parseInt(x[i],10)||0;q=parseInt(y[i],10)||0;if(p!==q)return p>q?1:-1}return 0}
   async function check(manual,install){
     try{
       var r=await fetch('https://api.github.com/repos/'+REPO+'/releases/latest',{headers:{Accept:'application/vnd.github+json'},cache:'no-store'});
@@ -16209,8 +16215,10 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
       var code=mc?parseInt(mc[1],10):0, vn=mn?mn[1]:'';
       var apk=(j.assets||[]).filter(function(a){return /\.apk$/i.test(a.name)})[0];
       var url=apk?apk.browser_download_url:j.html_url;
-      if(code>cur){ upd={vn:vn,url:url,code:code}; paintSd(); if(install){ if(!installInApp(url)) say('Automatic install needs the newest app build.'); } else if(manual||lsGet('qd_skip')!==String(code)) banner(vn,url,code); }
-      else { upd=null; checked=true; paintSd(); if(manual) say('You have the latest version (v'+window.qdVersionName+')'); }
+      /* if the release names the same (or an older) version than the installed app, never offer it: stops endless update prompts when the build number in the notes and the APK disagree */
+      var sameName=!!(vn&&window.qdVersionName&&vcmp(window.qdVersionName,vn)>=0);
+      if(code>cur&&!sameName){ upd={vn:vn,url:url,code:code}; paintSd(); if(install){ if(!installInApp(url)) say('Automatic install needs the newest app build.'); } else if(manual||lsGet('qd_skip')!==String(code)) banner(vn,url,code); }
+      else { upd=null; checked=true; try{localStorage.removeItem('qd_try')}catch(_){} paintSd(); if(manual) say('You have the latest version (v'+window.qdVersionName+')'); }
     }catch(e){ if(manual) say('Could not check for updates. Check your internet connection.'); }
   }
   /* sidebar entry: pill next to Settings that shows the version and turns into "Update available" */
@@ -16226,7 +16234,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
       b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8.5 12.5 12 16l3.5-3.5"/></svg>';
       b.onclick=function(){
         if(!NATIVE){ say('Updates install inside the Android app. Open Quill Docs there to update.'); return }
-        if(upd){ if(!installInApp(upd.url)) say('Automatic install needs the newest app build.'); return }
+        if(upd){ lsSet('qd_try',String(upd.code)); if(!installInApp(upd.url)) say('Automatic install needs the newest app build.'); return }
         say('Checking for updates\u2026'); check(true,true);
       };
       foot.appendChild(b);
