@@ -237,6 +237,11 @@ public class MainActivity extends Activity {
                             apkReceiver = null;
                             Uri apk = dm.getUriForDownloadedFile(id);
                             if (apk == null) { toast("Update download failed"); return; }
+                            String why = checkUpdateApk(new java.io.File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "QuillDocs-update.apk").getAbsolutePath());
+                            if (why != null) {
+                                new android.app.AlertDialog.Builder(MainActivity.this).setTitle("Update can't be installed").setMessage(why).setPositiveButton("OK", null).show();
+                                return;
+                            }
                             Intent in = new Intent(Intent.ACTION_VIEW);
                             in.setDataAndType(apk, "application/vnd.android.package-archive");
                             in.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -393,6 +398,35 @@ public class MainActivity extends Activity {
         @Override public Uri insert(Uri uri, ContentValues v) { return null; }
         @Override public int delete(Uri uri, String s, String[] a) { return 0; }
         @Override public int update(Uri uri, ContentValues v, String s, String[] a) { return 0; }
+    }
+
+    /* Checks the downloaded update before the installer opens, so a stale or wrongly signed APK is explained instead of looping. Returns a message, or null if it looks fine. */
+    private java.util.Set<String> signerHashes(android.content.pm.PackageInfo p) throws Exception {
+        java.util.Set<String> out = new java.util.HashSet<>();
+        android.content.pm.Signature[] sigs = null;
+        if (Build.VERSION.SDK_INT >= 28) { if (p.signingInfo != null) sigs = p.signingInfo.getApkContentsSigners(); }
+        else sigs = p.signatures;
+        if (sigs != null) {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
+            for (android.content.pm.Signature sg : sigs) out.add(android.util.Base64.encodeToString(md.digest(sg.toByteArray()), android.util.Base64.NO_WRAP));
+        }
+        return out;
+    }
+
+    private String checkUpdateApk(String path) {
+        try {
+            android.content.pm.PackageManager pm = getPackageManager();
+            int flags = Build.VERSION.SDK_INT >= 28 ? android.content.pm.PackageManager.GET_SIGNING_CERTIFICATES : android.content.pm.PackageManager.GET_SIGNATURES;
+            android.content.pm.PackageInfo np = pm.getPackageArchiveInfo(path, flags);
+            if (np == null) return "The downloaded update file is not a valid app. Check the APK attached to the GitHub release.";
+            android.content.pm.PackageInfo cp = pm.getPackageInfo(getPackageName(), flags);
+            long nc = Build.VERSION.SDK_INT >= 28 ? np.getLongVersionCode() : np.versionCode;
+            long cc = Build.VERSION.SDK_INT >= 28 ? cp.getLongVersionCode() : cp.versionCode;
+            if (nc <= cc) return "The APK on GitHub is build " + nc + " (version " + np.versionName + "), but this app is already build " + cc + " (version " + cp.versionName + ").\n\nAttach a newer APK to the release, or fix the number in the release notes.";
+            java.util.Set<String> a = signerHashes(np), b = signerHashes(cp);
+            if (!a.isEmpty() && !b.isEmpty() && !a.equals(b)) return "The update is signed with a different key than this app, so Android will refuse to install it over the current app.\n\nUninstall Quill Docs once (export your documents first), then install the new APK. After that, sign every release with the same keystore.";
+        } catch (Exception ignored) { }
+        return null;
     }
 
     private static String cleanName(String n) {
