@@ -1,0 +1,13 @@
+{
+  "minVersion": 16,
+  "version": 16,
+  "versionName": "1.17",
+  "message": "A new version of Quill Docs is ready. Update now to get the latest improvements.",
+  "notes": [
+    "Updates now download and install inside the app",
+    "Premium in-app dialogs instead of browser pop-ups",
+    "Smaller app: unused fonts removed"
+  ],
+  "htmlUrl": "https://raw.githubusercontent.com/Rohan4149/Quill-Docs/main/index.html",
+  "url": "https://github.com/Rohan4149/Quill-Docs/releases/latest"
+}
