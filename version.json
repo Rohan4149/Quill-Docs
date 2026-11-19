@@ -1,7 +1,7 @@
 {
   "minVersion": 16,
-  "version": 17,
-  "versionName": "1.18",
+  "version": 19,
+  "versionName": "1.20",
   "message": "A new version of Quill Docs is ready. Update now to get the latest improvements.",
   "notes": [
     "Updates now download and install inside the app",
