@@ -3,27 +3,35 @@
 <head>
 <script id="appCoreJs">
 /* >>> Bump this number on every release (same as versionCode in app/build.gradle) <<< */
-window.APP_VERSION=17;
-window.APP_VERSION_NAME='1.18';
+window.APP_VERSION=19;
+window.APP_VERSION_NAME='1.20';
 (function(){
   /* ---- in-app update bootstrap: if a newer downloaded copy of the app is stored, run it instead ---- */
   var ov=0;try{ov=+localStorage.getItem('ota_ver')||0}catch(e){}
   window.APP_EFFECTIVE=Math.max(window.APP_VERSION,ov);
   if(ov>window.APP_VERSION){
     var done='';try{done=sessionStorage.getItem('ota_applied')}catch(e){}
-    if(done!==String(ov)&&window.indexedDB){
+    if(done!==String(ov)){
+      /* A newer copy was downloaded earlier. Switch off the rest of this page before any other script runs, then replace it with the saved copy.
+         If the saved copy is missing or damaged, forget it and start normally with the app's built-in version. */
+      var rescue=function(){try{localStorage.removeItem('ota_ver')}catch(e){}try{sessionStorage.setItem('ota_applied',String(ov))}catch(e){}location.reload()};
       try{
+        if(!window.indexedDB)throw 0;
+        /* make the rest of this page inert text so none of its scripts run, and hide it */
+        document.documentElement.style.display='none';document.write('<plaintext>');
         var rq=indexedDB.open('quillOta',1);
         rq.onupgradeneeded=function(){rq.result.createObjectStore('k')};
+        rq.onerror=rescue;
         rq.onsuccess=function(){try{
           var g=rq.result.transaction('k','readonly').objectStore('k').get('html');
+          g.onerror=rescue;
           g.onsuccess=function(){var v=g.result;
             if(v&&v.html&&v.version>window.APP_VERSION&&/<\/html>\s*$/i.test(v.html)){
               try{sessionStorage.setItem('ota_applied',String(v.version))}catch(e){}
               document.open();document.write(v.html);document.close();
-            }};
-        }catch(e){}};
-      }catch(e){}
+            }else rescue()};
+        }catch(e){rescue()}};
+      }catch(e){rescue()}
     }
   }
 
@@ -7282,19 +7290,32 @@ function all(){var rb=document.getElementById('wdRib');rb.querySelectorAll('.wd-
 var rb=document.getElementById('wdRib');if(rb){rb.addEventListener('wheel',function(e){if(rb.scrollWidth>rb.clientWidth&&Math.abs(e.deltaY)>Math.abs(e.deltaX)){rb.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});all();new MutationObserver(all).observe(rb,{childList:true,subtree:true})}
 })();
 
+function tabletFit(){try{return matchMedia('(pointer:coarse)').matches&&Math.min(screen.width,screen.height)>=600}catch(_){return false}}
 function fitZoom(){
   var web=D.view==='web';
   if(web){paper.style.transform='';zbox.style.height='';var sw=stage.clientWidth-16;zbox.style.width=Math.min(900,sw)+'px';$('wdStZoom').textContent='Web';return}
   var p=pxDims();
-  if(fitMode){var _ph=$('wdOverlay').classList.contains('qd-phone');zoom=Math.max(.25,Math.min(1.5,(_ph?stage.clientWidth*.834:stage.clientWidth-16)/p.w))}
+  if(fitMode){var _ph=$('wdOverlay').classList.contains('qd-phone');
+    if(tabletFit()){var _bw=Math.min(stage.clientWidth,Math.min(screen.width,screen.height))-16;zoom=Math.max(.25,Math.min(1.5,_bw/p.w))}
+    else zoom=Math.max(.25,Math.min(1.5,(_ph?stage.clientWidth*.834:stage.clientWidth-16)/p.w))}
   paper.style.transform='scale('+zoom+')';
   zbox.style.width=Math.round(p.w*zoom)+'px';
   zbox.style.height=Math.round(ed.offsetHeight*zoom)+'px';
   $('wdStZoom').textContent=Math.round(zoom*100)+'%';
   try{window.wdDrawRuler()}catch(_){}
 }
-function setZoom(z,fit){fitMode=!!fit;var lo=.25;try{if($('wdOverlay').classList.contains('qd-phone')&&D&&D.view!=='web')lo=Math.max(.25,stage.clientWidth*.834/pxDims().w)}catch(_){}zoom=Math.max(lo,Math.min(3,z));fitZoom()}
-window.__wdZoom={get:function(){return{z:zoom,fit:fitMode}},set:function(z,f){setZoom(z,f)}};
+function setZoom(z,fit){fitMode=!!fit;var lo=.25;try{if(!tabletFit()&&$('wdOverlay').classList.contains('qd-phone')&&D&&D.view!=='web')lo=Math.max(.25,stage.clientWidth*.834/pxDims().w)}catch(_){}zoom=Math.max(lo,Math.min(3,z));fitZoom()}
+window.__wdZoom={get:function(){return{z:zoom,fit:fitMode}},set:function(z,f){setZoom(z,f)},tablet:tabletFit};
+(function(){
+  function land(){try{return screen.orientation&&screen.orientation.type?screen.orientation.type.indexOf('landscape')===0:Math.abs(window.orientation||0)===90}catch(_){return false}}
+  var last=land();
+  function rot(){var l=land();if(l===last)return;last=l;
+    if(!D||!$('wdOverlay').classList.contains('open')||!tabletFit())return;
+    fitMode=true;fitZoom();setTimeout(function(){fitMode=true;fitZoom()},150);setTimeout(function(){fitMode=true;fitZoom()},450)}
+  window.addEventListener('orientationchange',rot);
+  window.addEventListener('resize',function(){setTimeout(rot,60)});
+  try{screen.orientation&&screen.orientation.addEventListener('change',rot)}catch(_){}
+})();
 window.addEventListener('resize',function(){if(D&&$('wdOverlay').classList.contains('open'))fitZoom()});
 
 /* ---------- ribbon state ---------- */
@@ -15125,7 +15146,7 @@ function sched(){clearTimeout(t);t=setTimeout(save,500)}
 function restore(){var id=window.__wdDocId,o=$('wdOverlay');if(!o||id==null)return;var v=all()[id]||{z:1,fit:1,ruler:0,marks:0,grid:0};busy=1;
   function want(cls,on,sel){if(o.classList.contains(cls)!==!!on){var b=document.querySelector(sel);if(b)b.click()}}
   try{want('wd-ruler',v.ruler,'.wd-x[data-x="ruler"]');want('wd-marks',v.marks,'#wdMarksB');want('wd-grid',v.grid,'.wd-x[data-x="grid"]');
-    if(window.__wdZoom&&o.dataset.view!=='web')window.__wdZoom.set(v.z||1,!!v.fit)}catch(_){}
+    if(window.__wdZoom&&o.dataset.view!=='web')(window.__wdZoom.tablet&&window.__wdZoom.tablet())?window.__wdZoom.set(1,true):window.__wdZoom.set(v.z||1,!!v.fit)}catch(_){}
   setTimeout(function(){busy=0},300)}
 function init(){var o=$('wdOverlay');if(!o){setTimeout(init,300);return}
   var was=o.classList.contains('open');
@@ -18454,7 +18475,7 @@ body{font-family:'Manrope','Inter','Segoe UI',-apple-system,system-ui,var(--qx-m
    version.json: version (latest), minVersion (older builds are forced to update), versionName, message, notes[], htmlUrl. */
 (function(){
   var CHECK_URL='https://raw.githubusercontent.com/Rohan4149/Quill-Docs/main/version.json';
-  var HTML_URL='https://raw.githubusercontent.com/Rohan4149/Quill-Docs/main/index.html';
+  var HTML_URL='https://raw.githubusercontent.com/Rohan4149/Quill-Docs/main/app__src__main__assets__index.html';
   var KEY='fu_req',SKIP='fu_skip';
   function cur(){return window.APP_EFFECTIVE||window.APP_VERSION||0}
   window.qdVersionName=String(window.APP_VERSION_NAME||'');
@@ -18489,10 +18510,10 @@ body{font-family:'Manrope','Inter','Segoe UI',-apple-system,system-ui,var(--qx-m
     rq.onsuccess=function(){var tx=rq.result.transaction('k','readwrite');tx.objectStore('k').put({version:ver,html:html},'html');
       tx.oncomplete=function(){res()};tx.onerror=function(){rej(tx.error)}}})}
   function close(){var o=document.getElementById('fuOverlay');if(!o)return;o.classList.remove('on');setTimeout(function(){o.remove();document.body.style.overflow=''},200)}
-  function download(info,ui){
-    ui.go.disabled=true;if(ui.later)ui.later.disabled=true;ui.bar.style.display='block';ui.fill.style.width='0';ui.st.textContent='Starting download\u2026';ui.go.textContent='Updating\u2026';
-    return fetch(info.htmlUrl+(info.htmlUrl.indexOf('?')>-1?'&':'?')+'t='+Date.now(),{cache:'no-store'}).then(function(r){
-      if(!r.ok)throw new Error('Server error '+r.status);
+  /* fetch one URL as text, with progress */
+  function fetchText(url,info,ui){
+    return fetch(url+(url.indexOf('?')>-1?'&':'?')+'t='+Date.now(),{cache:'no-store'}).then(function(r){
+      if(!r.ok){var er=new Error('HTTP '+r.status);er.status=r.status;throw er}
       var total=info.size||+r.headers.get('content-length')||0,got=0,chunks=[];
       if(!r.body||!r.body.getReader)return r.text();
       var rd=r.body.getReader(),dec=new TextDecoder('utf-8');
@@ -18503,15 +18524,38 @@ body{font-family:'Manrope','Inter','Segoe UI',-apple-system,system-ui,var(--qx-m
         ui.fill.style.width=(total?pc:Math.min(95,got/2e5))+'%';
         ui.st.textContent='Downloading\u2026 '+(total?pc+'%':(got/1048576).toFixed(1)+' MB');
         return pump()})})();
+    });
+  }
+  /* if the app file is not at the address in version.json, look for it in the repo itself */
+  function findInRepo(info){
+    var m=/raw\.githubusercontent\.com\/([^\/]+)\/([^\/]+)\/([^\/]+)\//.exec(info.htmlUrl||HTML_URL);
+    if(!m)return Promise.reject(new Error('no repo address'));
+    return fetch('https://api.github.com/repos/'+m[1]+'/'+m[2]+'/contents/?ref='+m[3],{cache:'no-store'}).then(function(r){
+      if(!r.ok)throw new Error('repo list HTTP '+r.status);return r.json()}).then(function(list){
+      var f=(list||[]).filter(function(x){return x&&x.type==='file'&&/(^|__)index\.html$/i.test(x.name)});
+      f.sort(function(a,b){return (a.name==='index.html'?-1:0)-(b.name==='index.html'?-1:0)||a.name.length-b.name.length});
+      if(!f.length)throw new Error('index.html not found in repo');
+      return f[0].download_url});
+  }
+  function download(info,ui){
+    ui.go.disabled=true;if(ui.later)ui.later.disabled=true;ui.bar.style.display='block';ui.fill.style.width='0';ui.st.textContent='Starting download\u2026';ui.go.textContent='Updating\u2026';
+    return fetchText(info.htmlUrl,info,ui).catch(function(e){
+      if(e&&e.status&&e.status!==404&&e.status!==403)throw e;
+      ui.st.textContent='Looking for the update file\u2026';
+      return findInRepo(info).then(function(u){return fetchText(u,info,ui)});
     }).then(function(html){
-      if(!/<\/html>\s*$/i.test(html))throw new Error('Download incomplete');
+      if(!/<\/html>\s*$/i.test(html))throw new Error('file is incomplete');
+      if(html.indexOf('window.APP_VERSION=')<0)throw new Error('not a Quill Docs file');
       ui.st.textContent='Installing\u2026';ui.fill.style.width='100%';
       return putIdb(html,info.version).then(function(){try{localStorage.setItem('ota_ver',String(info.version));localStorage.removeItem(SKIP)}catch(e){}
         ui.st.textContent='Updated. Restarting\u2026';
-        setTimeout(function(){try{sessionStorage.setItem('ota_applied',String(info.version))}catch(e){}document.open();document.write(html);document.close()},600)})
+        /* restart with a clean reload: the very first script of the page then loads the saved update before anything else runs */
+        try{sessionStorage.removeItem('ota_applied')}catch(e){}
+        setTimeout(function(){location.reload()},600)})
     }).catch(function(e){
       ui.go.disabled=false;if(ui.later)ui.later.disabled=false;ui.go.textContent='Try again';ui.bar.style.display='none';ui.fill.style.width='0';
-      ui.st.textContent='Update failed. Check your connection and try again.'});
+      var why=String(e&&e.message||e||'').slice(0,80);
+      ui.st.textContent='Update failed'+(why?' ('+why+')':'')+'. Check your connection and try again.'});
   }
   function show(info){
     if(document.getElementById('fuOverlay')||!document.body)return;
